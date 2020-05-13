@@ -1,14 +1,52 @@
 body {
     font-family: 'Montserrat', sans-serif;
+    margin:0;
 }
 
 .field-card {
     display: table;
-    margin: 1em;
+    margin: 1rem;
     box-shadow: 3px 4px 7px 0px #0005;
-    padding: 1em 2em;
+    padding: 1rem 2em;
 }
 
 li {
     list-style: none;
+}
+
+#topbar {
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    background-color: #90DDF0;
+}
+
+#topbar p {
+    display: inline-block;
+    margin-top: 1em;
+    margin-right: 2rem;
+    margin-bottom: 0.5em;
+    text-decoration: underline;
+}
+
+.clickable {
+    user-select: none;
+    cursor: pointer;
+}
+
+#logo-img, #avatar-img {
+    height: 2em;
+}
+
+#logo-img {
+    float: left;
+    margin-right: 2em;
+    border: 3px solid #2C666E;
+    border-radius: 0.5em;
+    padding: 2px;
+}
+
+#avatar-img {
+    float: right;
+    border: 3px solid #2C666E;
+    border-radius: 2em;
 }
