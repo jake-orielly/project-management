@@ -3,15 +3,22 @@ body {
     margin:0;
 }
 
-.field-card {
-    display: table;
-    margin: 1rem;
-    box-shadow: 3px 4px 7px 0px #0005;
-    padding: 1rem 2em;
+ul {
+    padding-left: 0;
 }
 
 li {
     list-style: none;
+}
+
+.field-card, .dashboard-card{
+    display: table;
+    box-shadow: 1px 1px 3px 0px #0005;
+}
+
+.field-card {
+    margin: 1rem;
+    padding: 1rem 2em;
 }
 
 #topbar {
@@ -49,4 +56,42 @@ li {
     float: right;
     border: 3px solid #2C666E;
     border-radius: 2em;
+}
+
+#inbox, #taskList, #calendar {
+    display: inline-block;
+    margin-left: 2em;
+    border: 3px solid #2C666E;
+    border-radius: 1em;
+    width: 35%;
+    height: 35%;
+    overflow-y: auto;
+}
+
+#inbox .title, #taskList .title, #calendar .title {
+    margin-left: 1em;
+    text-decoration: underline;
+}
+
+.dashboard-card {
+    display: inline-block;
+    width: 80%;
+    margin-left: 10%;
+    margin-bottom: 1em;
+    padding: 0;
+}
+
+.dashboard-card p {
+    padding-left: 1em;
+}
+
+#calendar-table {
+    display: flex;
+    justify-content: center;
+}
+
+.calendar-cell {
+    border: 2px solid #2C666E;
+    width: 2em;
+    height: 2em;
 }

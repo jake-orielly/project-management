@@ -12,11 +12,45 @@
         <div id="app">
             <div id="topbar">
                 <img src="logo.png" id="logo-img">
-                <p class="clickable">Dashboard</p>
-                <p class="clickable">New Form</p>
+                <p class="clickable" @click="setTab('dashboard')">Dashboard</p>
+                <p class="clickable" @click="setTab('myForms')">My Forms</p>
                 <img src="avatar.png" id="avatar-img">
             </div>
-            <div id="form-creation">
+            <div v-if="currTab == 'dashboard'" id="dashboard">
+                <div id="inbox">
+                    <p class="title">Inbox</p>
+                    <ul>
+                        <li v-for="item in inbox">
+                            <div class="dashboard-card">
+                                <p>{{item.description}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="calendar">
+                    <p class="title">Calendar</p>
+                    <div id="calendar-table-container">
+                        <table id="calendar-table">
+                            <tr v-for="option in [...Array(6).keys()]">
+                                <td v-for="option in [...Array(7).keys()]">
+                                    <div class="calendar-cell"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div id="taskList">
+                    <p class="title">My Tasks</p>
+                    <ul>
+                        <li v-for="task in taskList">
+                            <div class="dashboard-card">
+                                <p>{{task.description}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div v-if="currTab == 'myForms'" id="form-creation">
                 Add a field:
                 <br>
                 Type:
@@ -60,7 +94,7 @@
                     <ul v-for="option in field.options">
                         <li>{{option}}</li>
                     </ul>
-                    <ul v-for="property in Object.keys(field.slider)">
+                    <ul v-for="property in (field.slider ? Object.keys(field.slider) : [])">
                         <li>{{caps(property) + ": " + field.slider[property]}}</li>
                     </ul>
                 </div>
