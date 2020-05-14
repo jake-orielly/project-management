@@ -18,7 +18,17 @@ var app = new Vue({
                 from: 'Andy Dwyer',
                 arrived: new Date(2020, 5, 12)  
             }
-        ]
+        ],
+        taskList: [
+            {
+                description: 'Design Dashboard',
+                from: 'Ann Perkins',
+                arrived: new Date(2020, 5, 13),
+                due: new Date(2020, 5, 17)
+            }
+        ],
+        days: ["Mo","Tu","We","Th","Fr","Sa","Su"],
+        weekendClass: "weekend-cell"
     },
     methods: {
         fieldAdd: function() {

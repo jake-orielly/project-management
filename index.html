@@ -31,11 +31,18 @@
                     <p class="title">Calendar</p>
                     <div id="calendar-table-container">
                         <table id="calendar-table">
-                            <tr v-for="option in [...Array(6).keys()]">
-                                <td v-for="option in [...Array(7).keys()]">
-                                    <div class="calendar-cell"></div>
-                                </td>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th v-for="day in days">{{day}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="option in [...Array(6).keys()]">
+                                    <td v-for="option in [...Array(7).keys()]">
+                                        <div class="calendar-cell" v-bind:class="[option >= 5? weekendClass : '']"></div>
+                                    </td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>

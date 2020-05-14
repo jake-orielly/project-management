@@ -85,7 +85,8 @@ li {
     padding-left: 1em;
 }
 
-#calendar-table {
+
+#calendar-table-container {
     display: flex;
     justify-content: center;
 }
@@ -94,4 +95,9 @@ li {
     border: 2px solid #2C666E;
     width: 2em;
     height: 2em;
+}
+
+.weekend-cell {
+    border: 2px solid grey;
+    background-color:lightgrey;
 }
