@@ -52,10 +52,19 @@ li {
     padding: 2px;
 }
 
-#avatar-img {
+#user-name, #avatar-img {
     float: right;
+}
+
+#avatar-img {
     border: 3px solid #2C666E;
-    border-radius: 2em;
+    border-radius: 2rem;
+}
+
+#topbar #user-name {
+    margin-top: 0.75rem;
+    margin-right: 0.75rem;
+    text-decoration: none;
 }
 
 #inbox, #taskList, #calendar {
@@ -85,7 +94,6 @@ li {
     padding-left: 1em;
 }
 
-
 #calendar-table-container {
     display: flex;
     justify-content: center;
@@ -95,9 +103,19 @@ li {
     border: 2px solid #2C666E;
     width: 2em;
     height: 2em;
+    text-align: center;
+}
+
+.past-cell {
+    background-color: #ebebeb;
 }
 
 .weekend-cell {
     border: 2px solid grey;
     background-color:lightgrey;
+}
+
+.blank-cell {
+    border: none;
+    background-color:white;
 }

@@ -15,6 +15,7 @@
                 <p class="clickable" @click="setTab('dashboard')">Dashboard</p>
                 <p class="clickable" @click="setTab('myForms')">My Forms</p>
                 <img src="avatar.png" id="avatar-img">
+                <p id="user-name">Ann Perkins</p>
             </div>
             <div v-if="currTab == 'dashboard'" id="dashboard">
                 <div id="inbox">
@@ -37,9 +38,15 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="option in [...Array(6).keys()]">
-                                    <td v-for="option in [...Array(7).keys()]">
-                                        <div class="calendar-cell" v-bind:class="[option >= 5? weekendClass : '']"></div>
+                                <tr v-for="row in [...Array(6).keys()]">
+                                    <td v-for="col in [...Array(7).keys()]">
+                                        <div class="calendar-cell" 
+                                        v-bind:class="[
+                                            (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
+                                            calendarToDate(row,col) > monthLength)? blankDateClass : '',
+                                            (new Date() > new Date(2020, 4, calendarToDate(row,col)) ? pastDateClass : '')]">
+                                            {{(calendarToDate(row,col) > 0 && calendarToDate(row,col) <= monthLength ? calendarToDate(row,col) : '')}}
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

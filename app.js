@@ -11,26 +11,39 @@ var app = new Vue({
             {
                 description: 'Give Estimate',
                 from: 'Ann Perkins',
-                arrived: new Date(2020, 5, 13)  
+                arrived: new Date(2020, 4, 13)  
             },
             {
                 description: 'Confirm Completion',
                 from: 'Andy Dwyer',
-                arrived: new Date(2020, 5, 12)  
+                arrived: new Date(2020, 4, 12)  
             }
         ],
         taskList: [
             {
                 description: 'Design Dashboard',
                 from: 'Ann Perkins',
-                arrived: new Date(2020, 5, 13),
-                due: new Date(2020, 5, 17)
+                arrived: new Date(2020, 4, 13),
+                due: new Date(2020, 4, 17)
             }
         ],
-        days: ["Mo","Tu","We","Th","Fr","Sa","Su"],
-        weekendClass: "weekend-cell"
+        calendarDays: 31,
+        days: ["Su","Mo","Tu","We","Th","Fr","Sa"],
+        weekendClass: "weekend-cell",
+        blankDateClass: "blank-cell",
+        pastDateClass: "past-cell",
+        monthOffset: 5,
+        monthLength: 31
+    },
+    computed: {
+        dailyWorkload() {
+            return [];
+        }
     },
     methods: {
+        calendarToDate(row,col) {
+            return row * 7 + col - this.monthOffset + 1;
+        },
         fieldAdd: function() {
             let newField = {
                 label: document.getElementById("field-label").value,
