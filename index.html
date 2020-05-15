@@ -34,7 +34,7 @@
                         <table id="calendar-table">
                             <thead>
                                 <tr>
-                                    <th v-for="day in days">{{day}}</th>
+                                    <th v-for="day in daysOfWeek">{{day}}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,8 +44,9 @@
                                         v-bind:class="[
                                             (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
                                             calendarToDate(row,col) > monthLength)? blankDateClass : '',
-                                            (new Date() > new Date(2020, 4, calendarToDate(row,col)) ? pastDateClass : '')]">
-                                            {{(calendarToDate(row,col) > 0 && calendarToDate(row,col) <= monthLength ? calendarToDate(row,col) : '')}}
+                                            (new Date() > new Date(2020, 4, calendarToDate(row,col), 23) ? pastDateClass : ''),
+                                            workloadClasses(calendarToDate(row,col))]">
+                                            {{(calendarToDate(row,col) > 0 && calendarToDate(row,col) <= monthLength ? calendarToDate(row,col) :'')}}
                                         </div>
                                     </td>
                                 </tr>

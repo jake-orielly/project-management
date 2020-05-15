@@ -106,6 +106,18 @@ li {
     text-align: center;
 }
 
+.green-day {
+    background-color: green;
+}
+
+.yellow-day {
+    background-color: gold;
+}
+
+.red-day {
+    background-color: red;
+}
+
 .past-cell {
     background-color: #ebebeb;
 }
