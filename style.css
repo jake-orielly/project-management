@@ -16,9 +16,53 @@ li {
     box-shadow: 1px 1px 3px 0px #0005;
 }
 
+#field-input-container {
+    display: inline-block;
+    margin-left: 2em;
+    margin-top: 1em;
+    padding: 1rem;
+    border: 3px solid #2C666E;
+    border-radius: 1rem;
+}
+
+#field-input-container p {
+    margin: 0.25rem;
+}
+
 .field-card {
     margin: 1rem;
     padding: 1rem 2em;
+}
+
+.field-type {
+    font-style: italic;
+}
+
+#form-container {
+    text-align: center;
+    margin-top:2rem;
+}
+
+#form-content {
+    display: inline-block;
+    position: relative;
+    border: 3px solid #2C666E;
+    border-radius: 1rem;
+    padding: 2rem;
+    overflow-y:auto;
+    min-width:80%;
+    min-height:30%;
+    max-height: 60%;
+}
+
+#form-title {
+    font-size: 1.5rem;
+}
+
+.save-icon {
+    position: absolute;
+    right: 3rem;
+    font-size: 2rem;
 }
 
 #topbar {

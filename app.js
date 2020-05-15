@@ -6,7 +6,7 @@ var app = new Vue({
         fieldTypes: ['text','number','date','dropdown','slider'],
         numDropdownFields: 0,
         fields: [],
-        currTab: "dashboard",
+        currTab: "myForms",
         inbox: [
             {
                 description: 'Give Estimate',

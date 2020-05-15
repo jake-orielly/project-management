@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
     <body>
@@ -66,52 +67,64 @@
                 </div>
             </div>
             <div v-if="currTab == 'myForms'" id="form-creation">
-                Add a field:
-                <br>
-                Type:
-                <select id="field-dropdown" v-model="currField">
-                    <option v-bind:value="field" v-for="field in fieldTypes">{{caps(field)}}</option>
-                </select>
-                <br>
-                Label: 
-                <input type="text" id="field-label">
-                <ul v-if="currField == 'dropdown'">
-                    <li>
-                        <button id="dropdown-add" @click="dropdownAdd">Add Dropdown Option</button>
-                    </li>
-                    <li v-for="option in [...Array(numDropdownFields).keys()]">
-                        <input type="text" class="currDropdownOption" placeholder="New Dropdown Option">
-                    </li>
-                </ul>
-                <div v-if="currField == 'slider'">
+                <div id="field-input-container">
+                    <p>Add a field:</p>
                     <p>
-                        Min: 
-                        <input type="number" id="slider-min">
+                        Type:
+                        <select id="field-dropdown" v-model="currField">
+                            <option v-bind:value="field" v-for="field in fieldTypes">{{caps(field)}}</option>
+                        </select>
                     </p>
                     <p>
-                        Max
-                        <input type="number" id="slider-max">
+                        Label: 
+                        <input type="text" id="field-label">
                     </p>
-                    <p>
-                        Step
-                        <input type="number" id="slider-step">
-                    </p>
-                    <p>
-                        Initial
-                        <input type="number" id="slider-initial">
-                    </p>
+                    <ul v-if="currField == 'dropdown'">
+                        <li>
+                            <button id="dropdown-add" @click="dropdownAdd">Add Dropdown Option</button>
+                        </li>
+                        <li v-for="option in [...Array(numDropdownFields).keys()]">
+                            <input type="text" class="currDropdownOption" placeholder="New Dropdown Option">
+                        </li>
+                    </ul>
+                    <div v-if="currField == 'slider'">
+                        <p>
+                            Min: 
+                            <input type="number" id="slider-min">
+                        </p>
+                        <p>
+                            Max
+                            <input type="number" id="slider-max">
+                        </p>
+                        <p>
+                            Step
+                            <input type="number" id="slider-step">
+                        </p>
+                        <p>
+                            Initial
+                            <input type="number" id="slider-initial">
+                        </p>
+                    </div>
+                    <br>
+                    <button id="field-add" @click="fieldAdd">Add</button>
                 </div>
-                <br>
-                <button id="field-add" @click="fieldAdd">Add</button>
-                <div v-for="field in fields" class="field-card">
-                    <p>{{caps(field.label)}}</p>
-                    <p>{{caps(field.type)}}</p>
-                    <ul v-for="option in field.options">
-                        <li>{{option}}</li>
-                    </ul>
-                    <ul v-for="property in (field.slider ? Object.keys(field.slider) : [])">
-                        <li>{{caps(property) + ": " + field.slider[property]}}</li>
-                    </ul>
+                <div id="form-container">
+                    <div id="form-content">
+                        <input placeholder="Form Title" type="text" id="form-title">
+                        <i class="fa fa-save save-icon" style="font-size:2rem;"></i>
+                        <p v-if="fields.length == 0">Add some content to your form!</p>
+                        <div v-for="field in fields" class="field-card">
+                            <p>{{caps(field.label)}}
+                                <span class="field-type">{{"(" + caps(field.type) + ")"}}</span>
+                            </p>
+                            <ul v-for="option in field.options">
+                                <li>{{option}}</li>
+                            </ul>
+                            <ul v-for="property in (field.slider ? Object.keys(field.slider) : [])">
+                                <li>{{caps(property) + ": " + field.slider[property]}}</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
           </div>
