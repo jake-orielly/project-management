@@ -66,7 +66,7 @@
                     </ul>
                 </div>
             </div>
-            <div v-if="currTab == 'myForms'" id="form-creation">
+            <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
                 <div id="field-input-container">
                     <p>Add a field:</p>
                     <p>
@@ -110,8 +110,9 @@
                 </div>
                 <div id="form-container">
                     <div id="form-content">
-                        <input placeholder="Form Title" type="text" id="form-title">
-                        <i class="fa fa-save save-icon" style="font-size:2rem;"></i>
+                        <input placeholder="Form Title" type="text" id="form-title" v-model="formTitle">
+                        <i class="fa fa-eye eye-icon" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
+                        <i class="fa fa-save save-icon" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
                         <p v-if="fields.length == 0">Add some content to your form!</p>
                         <div v-for="field in fields" class="field-card">
                             <p>{{caps(field.label)}}
@@ -125,6 +126,26 @@
                             </ul>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div id="form-preview-modal" v-if="formPreview">
+                <i class="fa fa-times form-preview-close" style="font-size:2rem; color:#2C666E;" @click="closeFormPreview"></i>
+                <p class="title">{{formTitle}}</p>
+                <div v-for="field in fields" class="form-field">
+                    <p> {{field.label}}
+                        <input v-if="field.type == 'text'" type="text">
+                        <input v-if="field.type == 'number'" type="number">
+                        <input v-if="field.type == 'date'" type="date">
+                        <select v-if="field.type == 'dropdown'">
+                            <option v-for="option in field.options" value="option">{{option}}</option>
+                        </select>
+                        <input v-if="field.type == 'slider'" type="range" 
+                            :min="field.slider.min" 
+                            :max="field.slider.max" 
+                            :value="field.slider.initial" 
+                            :step="field.slider.step" 
+                            class="slider" id="myRange">
+                    </p>
                 </div>
             </div>
           </div>

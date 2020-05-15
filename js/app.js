@@ -19,6 +19,8 @@ var app = new Vue({
         monthStartDayOfWeek: 4  ,
         today: new Date(),
         workload: [],
+        formTitle: "",
+        formPreview: false,
     },
     mounted() {
         this.updateWorkload();
@@ -54,7 +56,6 @@ var app = new Vue({
                         currDay++;
                     }
                     else {
-                        console.log(workload)
                         for (let j = currDay; j >= this.today.getDate(); j--) {
                             if (this.isWeekend(j)) {
                                 j--;
@@ -73,6 +74,17 @@ var app = new Vue({
             }
 
             this.workload = workload;
+        },
+        saveForm() {
+            let form = {};
+            form.title = this.formTitle;
+            form.fields = this.fields.slice();
+        },
+        openFormPreview() {
+            this.formPreview = true;
+        },
+        closeFormPreview() {
+            this.formPreview = false;
         },
         isWeekend(day) {
             let dayOfWeek = this.daysOfWeek[(this.monthStartDayOfWeek + day) % this.daysOfWeek.length];
