@@ -1,0 +1,120 @@
+<html>
+    <head>
+    <title>Development Version</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+</head>
+
+    <body>
+        <div id="app">
+            <div id="topbar">
+                <img src="logo.png" id="logo-img">
+                <p class="clickable" @click="setTab('dashboard')">Dashboard</p>
+                <p class="clickable" @click="setTab('myForms')">My Forms</p>
+                <img src="avatar.png" id="avatar-img">
+                <p id="user-name">Ann Perkins</p>
+            </div>
+            <div v-if="currTab == 'dashboard'" id="dashboard">
+                <div id="inbox">
+                    <p class="title">Inbox</p>
+                    <ul>
+                        <li v-for="item in inbox">
+                            <div class="dashboard-card">
+                                <p>{{item.description}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div id="calendar">
+                    <p class="title">Calendar</p>
+                    <div id="calendar-table-container">
+                        <table id="calendar-table">
+                            <thead>
+                                <tr>
+                                    <th v-for="day in daysOfWeek">{{day}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="row in [...Array(6).keys()]">
+                                    <td v-for="col in [...Array(7).keys()]">
+                                        <div class="calendar-cell" 
+                                        v-bind:class="[
+                                            (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
+                                            calendarToDate(row,col) > monthLength)? blankDateClass : '',
+                                            (new Date() > new Date(2020, 4, calendarToDate(row,col), 23) ? pastDateClass : ''),
+                                            workloadClasses(calendarToDate(row,col))]">
+                                            {{(calendarToDate(row,col) > 0 && calendarToDate(row,col) <= monthLength ? calendarToDate(row,col) :'')}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div id="taskList">
+                    <p class="title">My Tasks</p>
+                    <ul>
+                        <li v-for="task in taskList">
+                            <div class="dashboard-card">
+                                <p>{{task.description}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div v-if="currTab == 'myForms'" id="form-creation">
+                Add a field:
+                <br>
+                Type:
+                <select id="field-dropdown" v-model="currField">
+                    <option v-bind:value="field" v-for="field in fieldTypes">{{caps(field)}}</option>
+                </select>
+                <br>
+                Label: 
+                <input type="text" id="field-label">
+                <ul v-if="currField == 'dropdown'">
+                    <li>
+                        <button id="dropdown-add" @click="dropdownAdd">Add Dropdown Option</button>
+                    </li>
+                    <li v-for="option in [...Array(numDropdownFields).keys()]">
+                        <input type="text" class="currDropdownOption" placeholder="New Dropdown Option">
+                    </li>
+                </ul>
+                <div v-if="currField == 'slider'">
+                    <p>
+                        Min: 
+                        <input type="number" id="slider-min">
+                    </p>
+                    <p>
+                        Max
+                        <input type="number" id="slider-max">
+                    </p>
+                    <p>
+                        Step
+                        <input type="number" id="slider-step">
+                    </p>
+                    <p>
+                        Initial
+                        <input type="number" id="slider-initial">
+                    </p>
+                </div>
+                <br>
+                <button id="field-add" @click="fieldAdd">Add</button>
+                <div v-for="field in fields" class="field-card">
+                    <p>{{caps(field.label)}}</p>
+                    <p>{{caps(field.type)}}</p>
+                    <ul v-for="option in field.options">
+                        <li>{{option}}</li>
+                    </ul>
+                    <ul v-for="property in (field.slider ? Object.keys(field.slider) : [])">
+                        <li>{{caps(property) + ": " + field.slider[property]}}</li>
+                    </ul>
+                </div>
+            </div>
+          </div>
+        <script type="text/javascript" src="app.js"></script>
+    </body>
+</html>

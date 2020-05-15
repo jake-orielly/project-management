@@ -1,0 +1,23 @@
+#app {
+    text-align: center;
+}
+
+input {
+    margin: 0.5em;
+}
+
+.error {
+    color: #d91e27;
+}
+
+#login-container {
+    display: inline-block;
+    margin-top: 15%;
+    border: 2px solid #2C666E;
+    border-radius: 1em;
+    padding: 1em;
+}
+
+#login-status-text {
+    min-height: 1.5rem;
+}
