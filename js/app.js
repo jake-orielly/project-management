@@ -7,41 +7,8 @@ var app = new Vue({
         numDropdownFields: 0,
         fields: [],
         currTab: "myForms",
-        inbox: [
-            {
-                description: 'Give Estimate',
-                from: 'Ann Perkins',
-                arrived: new Date(2020, 4, 13)  
-            },
-            {
-                description: 'Confirm Completion',
-                from: 'Andy Dwyer',
-                arrived: new Date(2020, 4, 12)  
-            }
-        ],
-        taskList: [
-            {
-                description: 'Marketing Campaign',
-                from: 'Leslie Knope',
-                estimate:25,
-                arrived: new Date(2020, 4, 12),
-                due: new Date(2020, 4, 19)
-            },
-            {
-                description: 'Design Dashboard',
-                from: 'Ann Perkins',
-                estimate:25,
-                arrived: new Date(2020, 4, 13),
-                due: new Date(2020, 4, 23)
-            },
-            {
-                description: 'Prototype Mockups',
-                from: 'Ron Swanson',
-                estimate:8,
-                arrived: new Date(2020, 4, 11),
-                due: new Date(2020, 4, 15)
-            }
-        ],
+        inbox: annInbox,
+        taskList: annTaskList,
         calendarDays: 31,
         daysOfWeek: ["Su","Mo","Tu","We","Th","Fr","Sa"],
         weekendClass: "weekend-cell",
