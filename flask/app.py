@@ -27,5 +27,17 @@ class GetForm(Resource):
             results.append(json.dumps(i))
         return {"Message":results}
 
+@api.route('/get-user-forms/<user>')
+class GetUserForms(Resource):
+    def get(self, user):
+        client = MongoClient(mongo_URL)
+        db=client.user_forms
+        collection = db[user]
+        cursor = collection.find({}, {'_id': False})
+        results = []
+        for i in cursor:
+            results.append(json.dumps(i))
+        return {"Message":results}
+
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',debug=True)
