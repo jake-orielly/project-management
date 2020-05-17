@@ -1,12 +1,22 @@
 function getForm(form) {
-    return genericRequest("http://vps:5000/get-form/" + form)
+    return genericRequest("http://vps:5000/get-form/" + form, "GET")
 }
 
 function getUserForms(user) {
-    return genericRequest("http://vps:5000/get-user-forms/" + user)
+    return genericRequest("http://vps:5000/get-user-forms/" + user, "GET")
 }
 
-function genericRequest(url) {
+function login(username,password) {
+	return genericRequest("http://vps:5000/login", "POST",
+		{
+			"user":username,
+			"password":password
+		}
+	)
+}
+
+
+function genericRequest(url,type,body) {
     var request = new XMLHttpRequest();
 
     return new Promise(function (resolve, reject) {
@@ -22,7 +32,7 @@ function genericRequest(url) {
 				});
 			}
         };
-        request.open("GET", url, true);
-        request.send();
+        request.open(type, url, true);
+        request.send(body);
 	});
 }
