@@ -68,7 +68,7 @@
                 </div>
             </div>
             <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
-                <div id="field-input-container">
+                <div id="field-input-container" v-if="!formSaved">
                     <p>Add a field:</p>
                     <p>
                         Type:
@@ -110,7 +110,7 @@
                     <button id="field-add" @click="fieldAdd">Add</button>
                 </div>
                 <div id="form-container">
-                    <div id="form-content">
+                    <div id="form-content" v-if="!formSaved">
                         <input placeholder="Form Title" type="text" id="form-title" v-model="formTitle">
                         <i class="fa fa-eye eye-icon" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
                         <i class="fa fa-save save-icon" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
@@ -126,6 +126,9 @@
                                 <li>{{caps(property) + ": " + field.slider[property]}}</li>
                             </ul>
                         </div>
+                    </div>
+                    <div v-if="formSaved">
+                        <p>Your form has been saved to the database.</p>
                     </div>
                 </div>
             </div>

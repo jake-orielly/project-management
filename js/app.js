@@ -21,6 +21,7 @@ var app = new Vue({
         workload: [],
         formTitle: "",
         formPreview: false,
+        formSaved: false
     },
     mounted() {
         this.updateWorkload();
@@ -79,6 +80,11 @@ var app = new Vue({
             let form = {};
             form.title = this.formTitle;
             form.fields = this.fields.slice();
+            postForm(form).then(
+                response => {
+                    this.formSaved = true;
+                }
+            );
         },
         openFormPreview() {
             this.formPreview = true;

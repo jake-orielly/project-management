@@ -16,10 +16,20 @@ var app = new Vue({
             let username = document.getElementById("username").value;
             let password = document.getElementById("password").value;
 
-            if (username == "ann.perkins" && password == "opendoor4")
-                window.location.href = "./dashboard.html";
-            else
-                this.loginStatus = "failed";
+            postLogin(username,password).then(
+                response => {
+                    let result = JSON.parse(response.responseText).message;
+                    console.log(result)
+                    if (result == "success") {
+                        if (username == "ann.perkins")
+                            window.location.href = "./dashboard.html";
+                        else if (username == "leslie.knope")
+                            window.location.href = "./my-team.html";
+                    }
+                    else
+                        this.loginStatus = "failed";
+                }
+            )
         },
     }
 })
