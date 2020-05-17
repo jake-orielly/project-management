@@ -25,7 +25,7 @@ class GetForm(Resource):
         results = []
         for i in cursor:
             results.append(json.dumps(i))
-        return {"Message":results}
+        return {"data":results}
 
 @api.route('/get-user-forms/<user>')
 class GetUserForms(Resource):
@@ -37,7 +37,20 @@ class GetUserForms(Resource):
         results = []
         for i in cursor:
             results.append(json.dumps(i))
-        return {"Message":results}
+        return {"data":results}
+
+@api.route('/login')
+class Login(Resource):
+    def post(self):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+        db_user = collection.find_one({"user": req_data["user"]}, {'_id': False})
+        if (db_user["password"] == req_data["password"]):
+            return {"message":"success"}
+        else:
+            return {"message":"failure"}
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',debug=True)
