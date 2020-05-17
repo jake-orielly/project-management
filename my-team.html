@@ -1,0 +1,21 @@
+<html>
+    <head>
+    <title>Development Version</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router/dist/vue-router.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+    <body>
+        <div id="app">
+            <p @click="getForms('ann_perkins')">Ann Perkins</p>
+            <p v-for="form in forms" @click="requestForm(form.formId)">{{form.name}}</p>
+        </div>
+        <script type="text/javascript" src="./js/my-team.js"></script>
+        <script type="text/javascript" src="./js/requests.js"></script>
+    </body>
+</html>
