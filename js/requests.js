@@ -19,7 +19,11 @@ function postForm(form) {
 
 function submitResponse(form,response) {
 	let data = JSON.stringify(response);
-	return genericRequest("http://vps:5000/submit-response/" + form, "POST",data)
+	return genericRequest("http://vps:5000/responses/" + form, "POST",data)
+}
+
+function getResponses(form){
+	return genericRequest("http://vps:5000/responses/" + form, "GET")
 }
 
 function genericRequest(url,type,body) {

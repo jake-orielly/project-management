@@ -34,6 +34,8 @@ var app = new Vue({
             for (let i of fields)
                 response.push(i.value);
             submitResponse(this.currForm,response);
+            this.formPreview = false;
+            this.currForm = "";
         },
         openFormPreview() {
             this.formPreview = true;

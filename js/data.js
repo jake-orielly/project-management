@@ -1,16 +1,3 @@
-let annInbox = [
-    {
-        description: 'Give Estimate',
-        from: 'Ann Perkins',
-        arrived: new Date(2020, 4, 13)  
-    },
-    {
-        description: 'Confirm Completion',
-        from: 'Andy Dwyer',
-        arrived: new Date(2020, 4, 12)  
-    }
-]
-
 let annTaskList = [
     {
         description: 'Marketing Campaign',

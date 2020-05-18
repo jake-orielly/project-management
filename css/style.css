@@ -19,6 +19,11 @@ button {
     font-family: 'Montserrat', sans-serif;
 }
 
+textarea {
+    width: 20rem;
+    height: 4rem;
+}
+
 .field-card, .dashboard-card{
     display: table;
     box-shadow: 1px 1px 3px 0px #0005;
@@ -206,4 +211,8 @@ button {
 .blank-cell {
     border: none;
     background-color:white;
+}
+
+#submission-response-text {
+    margin: 2em;
 }

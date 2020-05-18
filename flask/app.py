@@ -28,8 +28,15 @@ class RetrieveForm(Resource):
             results.append(json.dumps(i))
         return {"data":results}
 
-@api.route('/submit-response/<form_title>')
-class SubmitForm(Resource):
+@api.route('/responses/<form_title>')
+class Responses(Resource):
+    def get(self,form_title):
+        client = MongoClient(mongo_URL)
+        db=client.project_management
+        collection = db.ann_perkins_forms
+        cursor = collection.find_one({"title": form_title})
+        return {"data":json.dumps(cursor["responses"])}
+        
     def post(self,form_title):
         client = MongoClient(mongo_URL)
         db=client.project_management

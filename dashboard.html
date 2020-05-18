@@ -25,7 +25,7 @@
                     <ul>
                         <li v-for="item in inbox">
                             <div class="dashboard-card">
-                                <p>{{item.description}}</p>
+                                <p @click="openInboxItem(item)">{{item.description}}</p>
                             </div>
                         </li>
                     </ul>
@@ -139,6 +139,7 @@
                     <p> {{field.label}}
                         <input v-if="field.type == 'text'" type="text">
                         <input v-if="field.type == 'number'" type="number">
+                        <textarea v-if="field.type == 'text (long)'" type="number"></textarea>
                         <input v-if="field.type == 'date'" type="date">
                         <select v-if="field.type == 'dropdown'">
                             <option v-for="option in field.options" value="option">{{option}}</option>

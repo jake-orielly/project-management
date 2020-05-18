@@ -3,12 +3,12 @@ var app = new Vue({
     data: {
         message: 'Hello Vue!',
         currField: '',
-        fieldTypes: ['text','number','date','dropdown','slider'],
+        fieldTypes: ['text','number','text (long)','date','dropdown','slider'],
         numDropdownFields: 0,
         fields: [],
-        currTab: "myForms",
-        inbox: annInbox,
-        taskList: annTaskList,
+        currTab: "dashboard",
+        inbox: [],
+        taskList: [],
         calendarDays: 31,
         daysOfWeek: ["Su","Mo","Tu","We","Th","Fr","Sa"],
         weekendClass: "weekend-cell",
@@ -25,6 +25,7 @@ var app = new Vue({
     },
     mounted() {
         this.updateWorkload();
+        this.updateInbox();
     },
     methods: {
         updateWorkload() {
@@ -36,11 +37,10 @@ var app = new Vue({
             taskList = taskList.sort(
                 (a,b) => a.due < b.due ? -1 : 1
             )
-
             for (let i = 0; i < this.monthLength; i++)  
                 workload.push(8);
             while (taskList.length) {
-                currTask = taskList.shift();
+                currTask = Object.assign({}, taskList.shift());
                 while (currTask.estimate > 0) {
                     if (this.isWeekend(currDay)) {
                         currDay++;
@@ -73,7 +73,6 @@ var app = new Vue({
                     }
                 }
             }
-
             this.workload = workload;
         },
         saveForm() {
@@ -107,6 +106,38 @@ var app = new Vue({
         },
         calendarToDate(row,col) {
             return row * 7 + col - this.monthOffset + 1;
+        },
+        openInboxItem(item) {
+            this.taskList.push(
+                {
+                    description: (item.response[0]),
+                    from: 'Leslie Knope',
+                    due: new Date(item.response[1]),
+                    estimate:4
+                },
+            )
+            this.inbox.splice(this.inbox.indexOf(item),1);
+            this.updateWorkload();
+        },
+        updateInbox() {
+            getUserForms("ann_perkins").then(
+                response => {
+                    let responseData = JSON.parse(response.responseText).data;
+                    for (let form of responseData) {
+                        let responses = JSON.parse(form).responses;
+                        let fieldLabels = [];
+                        for (let field of JSON.parse(form).fields)
+                            fieldLabels.push(field.label);
+                        for (let r of responses)
+                        this.inbox.push({
+                            "description": "Give Estimate",
+                            "from": "Leslie Knope",
+                            "form":fieldLabels,
+                            "response":r
+                        })
+                    }
+                }
+            )
         },
         fieldAdd: function() {
             let newField = {
