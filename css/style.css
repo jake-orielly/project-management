@@ -163,6 +163,10 @@ textarea {
     text-decoration: underline;
 }
 
+#estimate-container {
+    padding: 1em;
+}
+
 .dashboard-card {
     display: inline-block;
     width: 80%;

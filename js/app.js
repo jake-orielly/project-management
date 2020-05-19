@@ -21,7 +21,8 @@ var app = new Vue({
         workload: [],
         formTitle: "",
         formPreview: false,
-        formSaved: false
+        formSaved: false,
+        estimating: undefined,
     },
     mounted() {
         this.updateWorkload();
@@ -108,15 +109,20 @@ var app = new Vue({
             return row * 7 + col - this.monthOffset + 1;
         },
         openInboxItem(item) {
+            this.estimating = item;
+        },
+        submitEstimate() {
             this.taskList.push(
-                {
-                    description: (item.response[0]),
-                    from: 'Leslie Knope',
-                    due: new Date(item.response[1]),
-                    estimate:4
-                },
+                new InboxItem
+                (
+                    this.estimating.response[0],
+                    'Leslie Knope',
+                    new Date(this.estimating.response[1]),
+                    document.getElementById("estimate-input").value
+                ),
             )
-            this.inbox.splice(this.inbox.indexOf(item),1);
+            this.inbox.splice(this.inbox.indexOf(this.estimating),1);
+            this.estimating = undefined;
             this.updateWorkload();
         },
         updateInbox() {
@@ -178,3 +184,12 @@ var app = new Vue({
         }
     }
 })
+
+class InboxItem {
+    constructor(description,from,due,estimate) {
+        this.description = description;
+        this.from = from;
+        this.due = due;
+        this.estimate = estimate;
+    }
+}
