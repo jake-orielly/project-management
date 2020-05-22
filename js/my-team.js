@@ -30,9 +30,9 @@ var app = new Vue({
         },
         submitForm() {
             let fields = document.querySelectorAll('input,select');
-            let response = [];
+            let response = {};
             for (let i of fields)
-                response.push(i.value);
+                response[i] = i.value;
             submitResponse(this.currForm,response);
             this.formPreview = false;
             this.currForm = "";
