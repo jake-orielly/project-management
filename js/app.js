@@ -23,6 +23,7 @@ var app = new Vue({
         formPreview: false,
         formSaved: false,
         estimating: undefined,
+        dayShowing: undefined
     },
     mounted() {
         this.updateWorkload();
@@ -39,7 +40,7 @@ var app = new Vue({
                 (a,b) => a.due < b.due ? -1 : 1
             )
             for (let i = 0; i < this.monthLength; i++)  
-                workload.push({remaining:8});
+                workload.push({remaining:8,tasks:[]});
             while (taskList.length) {
                 currTask = Object.assign({}, taskList.shift());
                 while (currTask.estimate > 0) {
@@ -47,15 +48,13 @@ var app = new Vue({
                         currDay++;
                     }
                     else if (workload[currDay].remaining > currTask.estimate) {
-                        workload[currDay][currTask.description] = parseInt(currTask.estimate);
-                        console.log(workload[currDay][currTask.description] + " : " + currDay + " A")
+                        workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
                         workload[currDay].remaining -= currTask.estimate;
                         currTask.estimate = 0;
                     }
                     else if (currTask.due.getDate() + 1 > currDay) {
                         if (workload[currDay].remaining) {
-                            workload[currDay][currTask.description] = parseInt(workload[currDay].remaining - 1);
-                            console.log(workload[currDay][currTask.description] + " : " + currDay + " B")
+                            workload[currDay].tasks.push({name:currTask.description, time:parseInt(workload[currDay].remaining - 1)});
                             currTask.estimate -= (workload[currDay].remaining - 1);
                             workload[currDay].remaining = 1;
                         }
@@ -68,18 +67,16 @@ var app = new Vue({
                             }
                             else if (currTask.due.getDate() + 1 == currDay) {
                                 console.log(currTask.due.getDate(), currDay)
-                                workload[currDay][currTask.description] = parseInt(currTask.estimate);
+                                workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
                                 workload[j].remaining -= currTask.estimate;
                                 currTask.estimate = 0;
-                                console.log(workload[currDay][currTask.description] + " : " + currDay + " : " + workload[j].remaining + " D");
                                 break;
                             }
                             else if (workload[j].remaining > 0) {
                                 availibleHours = workload[j].remaining;
-                                workload[currDay][currTask.description] = parseInt(availibleHours);
+                                workload[currDay].tasks.push({name:currTask.description, time:availibleHours});
                                 workload[j].remaining = Math.max(0, workload[j].remaining - currTask.estimate);
                                 currTask.estimate -= availibleHours;
-                                console.log(workload[currDay][currTask.description] + " : " + currDay + " : " + workload[j].remaining + " C")
                                 if (currTask.estimate <= 0)
                                     break;
                             }
@@ -105,6 +102,12 @@ var app = new Vue({
         },
         closeFormPreview() {
             this.formPreview = false;
+        },
+        showDay(row,col) {
+            this.dayShowing = this.calendarToDate(row,col);
+        },
+        hideDay() {
+            this.dayShowing = undefined;
         },
         isWeekend(day) {
             let dayOfWeek = this.daysOfWeek[(this.monthStartDayOfWeek + day) % this.daysOfWeek.length];

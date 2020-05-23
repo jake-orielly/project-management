@@ -184,6 +184,10 @@ textarea {
     justify-content: center;
 }
 
+#calendar-table td {
+    position: relative;
+}
+
 .calendar-cell {
     border: 2px solid #2C666E;
     width: 2em;
@@ -215,6 +219,30 @@ textarea {
 .blank-cell {
     border: none;
     background-color:white;
+}
+
+.date-info {
+    position: absolute;
+    background-color: white;
+    top: 0;
+    left: 3em;
+    border: 2px solid #2C666E;
+    z-index: 10;
+    white-space: nowrap;
+}
+
+.date-info-inner {
+    position: relative;
+    display: inline-block;
+    padding: 0.5em 1em;
+}
+
+.date-info-inner .fa {
+    font-size: 1.5rem;
+    color: rgb(44, 102, 110);
+    position: absolute;
+    top: 0;
+    right: 3px;
 }
 
 #submission-response-text {

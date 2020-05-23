@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
     <body>
         <div id="app">
             <div id="topbar">
@@ -50,13 +49,22 @@
                             <tbody>
                                 <tr v-for="row in [...Array(6).keys()]">
                                     <td v-for="col in [...Array(7).keys()]">
-                                        <div class="calendar-cell" 
+                                        <div @click="showDay(row,col)" class="calendar-cell clickable" 
                                         v-bind:class="[
                                             (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
                                             calendarToDate(row,col) > monthLength)? blankDateClass : '',
                                             (new Date() > new Date(2020, 4, calendarToDate(row,col), 23) ? pastDateClass : ''),
                                             workloadClasses(calendarToDate(row,col))]">
                                             {{(calendarToDate(row,col) > 0 && calendarToDate(row,col) <= monthLength ? calendarToDate(row,col) :'')}}
+                                        </div>
+                                        <div class="date-info" 
+                                        v-if="dayShowing == calendarToDate(row,col) && workload[calendarToDate(row,col)].tasks.length">
+                                            <div class="date-info-inner">
+                                                <p v-for="task in workload[calendarToDate(row,col)].tasks">
+                                                    {{task.name + ": " + task.time + " hours"}}
+                                                </p>
+                                                <i class="fa fa-times clickable" @click="hideDay"></i>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
