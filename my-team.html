@@ -20,12 +20,12 @@
                 <p id="user-name">Leslie Knope</p>
             </div>
             <div id="team-container" v-if="!formPreview">
-                <p @click="getForms('ann_perkins')">
+                <p class="clickable" @click="toggleForms('ann_perkins')">
                     Ann Perkins
                     <i class="fa fa-plus" v-if="forms.length == 0"></i>
                     <i class="fa fa-minus" v-if="forms.length != 0"></i>
                 </p>
-                <p v-for="form in forms" @click="requestForm(form.name)">{{form.name}}</p>
+                <p class="clickable" v-for="form in forms" @click="requestForm(form.name)">{{form.name}}</p>
             </div>
             <div id="form-preview-modal" v-if="formPreview && !responseSubmitted">
                 <i class="fa fa-times form-preview-close" style="font-size:2rem; color:#2C666E;" @click="closeFormPreview"></i>

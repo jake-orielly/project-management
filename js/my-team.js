@@ -6,6 +6,12 @@ var app = new Vue({
         currForm: "",
     },
     methods: {
+        toggleForms(user) {
+            if (this.forms.length == 0)
+                this.getForms(user)
+            else
+                this.forms = []
+        },
         getForms(user) {
             getUserForms(user).then(
                 response => {
