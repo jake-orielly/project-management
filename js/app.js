@@ -47,11 +47,13 @@ var app = new Vue({
                         currDay++;
                     }
                     else if (workload[currDay].remaining >= currTask.estimate) {
+                        workload[currDay][currTask.description] = parseInt(currTask.estimate);
                         workload[currDay].remaining -= currTask.estimate;
                         currTask.estimate = 0;
                     }
                     else if (currTask.due.getDate() > currDay) {
                         if (workload[currDay].remaining) {
+                            workload[currDay][currTask.description] = parseInt(currTask.estimate);
                             currTask.estimate -= (workload[currDay].remaining - 1);
                             workload[currDay].remaining = 1;
                         }
@@ -64,6 +66,7 @@ var app = new Vue({
                             }
                             else if (workload[j].remaining > 0) {
                                 availibleHours = workload[j].remaining;
+                                workload[currDay][currTask.description] = parseInt(availibleHours);
                                 workload[j].remaining = Math.max(0, workload[j].remaining - currTask.estimate);
                                 currTask.estimate -= availibleHours;
                                 if (currTask.estimate <= 0)
