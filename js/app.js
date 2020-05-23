@@ -39,21 +39,21 @@ var app = new Vue({
                 (a,b) => a.due < b.due ? -1 : 1
             )
             for (let i = 0; i < this.monthLength; i++)  
-                workload.push(8);
+                workload.push({remaining:8});
             while (taskList.length) {
                 currTask = Object.assign({}, taskList.shift());
                 while (currTask.estimate > 0) {
                     if (this.isWeekend(currDay)) {
                         currDay++;
                     }
-                    else if (workload[currDay] >= currTask.estimate) {
-                        workload[currDay] -= currTask.estimate;
+                    else if (workload[currDay].remaining >= currTask.estimate) {
+                        workload[currDay].remaining -= currTask.estimate;
                         currTask.estimate = 0;
                     }
                     else if (currTask.due.getDate() > currDay) {
-                        if (workload[currDay]) {
-                            currTask.estimate -= (workload[currDay] - 1);
-                            workload[currDay] = 1;
+                        if (workload[currDay].remaining) {
+                            currTask.estimate -= (workload[currDay].remaining - 1);
+                            workload[currDay].remaining = 1;
                         }
                         currDay++;
                     }
@@ -62,9 +62,9 @@ var app = new Vue({
                             if (this.isWeekend(j)) {
                                 j--;
                             }
-                            else if (workload[j] > 0) {
-                                availibleHours = workload[j];
-                                workload[j] = Math.max(0, workload[j] - currTask.estimate);
+                            else if (workload[j].remaining > 0) {
+                                availibleHours = workload[j].remaining;
+                                workload[j].remaining = Math.max(0, workload[j].remaining - currTask.estimate);
                                 currTask.estimate -= availibleHours;
                                 if (currTask.estimate <= 0)
                                     break;
@@ -97,7 +97,11 @@ var app = new Vue({
             return (dayOfWeek == "Sa" || dayOfWeek == "Su");
         },
         workloadClasses(day) {
-            let hours = this.workload[day]
+            let hours;
+            if (this.workload[day])
+                hours = this.workload[day].remaining;
+            else
+                return;
             if (hours <= 0)
                 return "red-day"
             else if (hours <= 1)
