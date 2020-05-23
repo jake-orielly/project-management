@@ -46,14 +46,16 @@ var app = new Vue({
                     if (this.isWeekend(currDay)) {
                         currDay++;
                     }
-                    else if (workload[currDay].remaining >= currTask.estimate) {
+                    else if (workload[currDay].remaining > currTask.estimate) {
                         workload[currDay][currTask.description] = parseInt(currTask.estimate);
+                        console.log(workload[currDay][currTask.description] + " : " + currDay + " A")
                         workload[currDay].remaining -= currTask.estimate;
                         currTask.estimate = 0;
                     }
-                    else if (currTask.due.getDate() > currDay) {
+                    else if (currTask.due.getDate() + 1 > currDay) {
                         if (workload[currDay].remaining) {
-                            workload[currDay][currTask.description] = parseInt(currTask.estimate);
+                            workload[currDay][currTask.description] = parseInt(workload[currDay].remaining - 1);
+                            console.log(workload[currDay][currTask.description] + " : " + currDay + " B")
                             currTask.estimate -= (workload[currDay].remaining - 1);
                             workload[currDay].remaining = 1;
                         }
@@ -64,11 +66,20 @@ var app = new Vue({
                             if (this.isWeekend(j)) {
                                 j--;
                             }
+                            else if (currTask.due.getDate() + 1 == currDay) {
+                                console.log(currTask.due.getDate(), currDay)
+                                workload[currDay][currTask.description] = parseInt(currTask.estimate);
+                                workload[j].remaining -= currTask.estimate;
+                                currTask.estimate = 0;
+                                console.log(workload[currDay][currTask.description] + " : " + currDay + " : " + workload[j].remaining + " D");
+                                break;
+                            }
                             else if (workload[j].remaining > 0) {
                                 availibleHours = workload[j].remaining;
                                 workload[currDay][currTask.description] = parseInt(availibleHours);
                                 workload[j].remaining = Math.max(0, workload[j].remaining - currTask.estimate);
                                 currTask.estimate -= availibleHours;
+                                console.log(workload[currDay][currTask.description] + " : " + currDay + " : " + workload[j].remaining + " C")
                                 if (currTask.estimate <= 0)
                                     break;
                             }

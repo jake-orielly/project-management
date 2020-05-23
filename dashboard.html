@@ -26,14 +26,14 @@
                         <ul>
                             <li v-for="item in inbox">
                                 <div class="dashboard-card">
-                                    <p @click="openInboxItem(item)">{{item.description}}</p>
+                                    <p @click="openInboxItem(item)">{{item.description + " : " + item.response[1]}}</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
                     <div id="estimate-container" v-if="estimating != undefined">
                         <p class="title">Estimate Task</p>
-                        <p>{{estimating.description}}</p>
+                        <p>{{estimating.response[0]}}</p>
                         <p><input type="number" id="estimate-input"></p>
                         <button @click="submitEstimate">Submit</button>
                     </div>
