@@ -27,7 +27,7 @@
                 </p>
                 <p class="clickable" v-for="form in forms" @click="requestForm(form.name)">{{form.name}}</p>
             </div>
-            <div id="form-preview-modal" v-if="formPreview && !responseSubmitted">
+            <div id="form-preview-modal" v-if="formPreview">
                 <i class="fa fa-times form-preview-close" style="font-size:2rem; color:#2C666E;" @click="closeFormPreview"></i>
                 <p class="title">{{formTitle}}</p>
                 <div v-for="field in fields" class="form-field">
