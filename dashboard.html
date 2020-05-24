@@ -25,7 +25,7 @@
                         <ul>
                             <li v-for="item in inbox">
                                 <div class="dashboard-card">
-                                    <p @click="openInboxItem(item)">{{item.description + " : " + item.response[1]}}</p>
+                                    <p @click="openInboxItem(item)">{{item.description}}</p>
                                 </div>
                             </li>
                         </ul>
@@ -40,7 +40,7 @@
                 <div id="calendar">
                     <p class="title">Calendar</p>
                     <div id="calendar-table-container">
-                        <table id="calendar-table">
+                        <table id="calendar-table" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th v-for="day in daysOfWeek">{{day}}</th>
@@ -48,7 +48,7 @@
                             </thead>
                             <tbody>
                                 <tr v-for="row in [...Array(6).keys()]">
-                                    <td v-for="col in [...Array(7).keys()]">
+                                    <td v-for="col in [...Array(7).keys()]" v-bind:class="[ dayHighlighted[calendarToDate(row,col)] ? dayHighlightedClass : '']">
                                         <div @click="showDay(row,col)" class="calendar-cell clickable" 
                                         v-bind:class="[
                                             (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
@@ -75,7 +75,7 @@
                 <div id="taskList">
                     <p class="title">My Tasks</p>
                     <ul>
-                        <li v-for="task in taskList">
+                        <li v-for="task in taskList" @click="taskClick(task)">
                             <div class="dashboard-card">
                                 <p>{{task.description}}</p>
                             </div>

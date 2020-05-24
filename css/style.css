@@ -186,10 +186,25 @@ textarea {
 
 #calendar-table td {
     position: relative;
+    padding: 0.2em;
+    margin: 0;
+}
+
+.cell-highlighted {
+    background-color: #90DDF0;
+}
+
+.cell-highlighted:first-of-type {
+    border-left: 2px solid #2C666E;
+}
+
+.cell-highlighted .calendar-cell {
+    border: none;
 }
 
 .calendar-cell {
     border: 2px solid #2C666E;
+    background-color: white;
     width: 2em;
     height: 2em;
     text-align: center;

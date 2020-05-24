@@ -23,13 +23,21 @@ var app = new Vue({
         formPreview: false,
         formSaved: false,
         estimating: undefined,
-        dayShowing: undefined
+        dayShowing: undefined,
+        dayHighlighted: {},
+        dayHighlightedClass: 'cell-highlighted'
     },
     mounted() {
         this.updateWorkload();
         this.updateInbox();
     },
     methods: {
+        taskClick(task) {
+            this.dayHighlighted = {};
+            for (let i = 0; i < this.workload.length; i++)
+                if (this.workload[i].tasks.filter(item => item.name == task.description).length)
+                    this.dayHighlighted[i] = true;
+        },
         updateWorkload() {
             let workload = [];
             let taskList = this.taskList.slice();
