@@ -13,9 +13,17 @@ input {
 #login-container {
     display: inline-block;
     margin-top: 15%;
-    border: 2px solid #2C666E;
+    border: 4px solid #2C666E;
     border-radius: 1em;
-    padding: 1em;
+    padding: 3em 1em 0;
+}
+
+#login-container, #login-container * {
+    font-size: 1.5rem;
+}
+
+#login-container button {
+    margin-top: 2rem;
 }
 
 #login-status-text {
