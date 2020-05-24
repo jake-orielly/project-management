@@ -22,6 +22,10 @@ input {
     font-size: 1.5rem;
 }
 
+#login-container p {
+    text-decoration: underline;
+}
+
 #login-container button {
     margin-top: 2rem;
 }

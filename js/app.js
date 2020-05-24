@@ -49,8 +49,9 @@ var app = new Vue({
             )
             for (let i = 0; i < this.monthLength; i++)  
                 workload.push({remaining:8,tasks:[]});
-            while (taskList.length) {
-                currTask = Object.assign({}, taskList.shift());
+            for (let i of taskList) {
+                currTask = Object.assign({}, i);
+                i.danger = false;
                 while (currTask.estimate > 0) {
                     if (this.isWeekend(currDay)) {
                         currDay++;
@@ -74,9 +75,9 @@ var app = new Vue({
                                 j--;
                             }
                             else if (currTask.due.getDate() + 1 == currDay) {
-                                console.log(currTask.due.getDate(), currDay)
                                 workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
                                 workload[j].remaining -= currTask.estimate;
+                                i.danger = true;
                                 currTask.estimate = 0;
                                 break;
                             }
@@ -131,7 +132,7 @@ var app = new Vue({
                 return "red-day"
             else if (hours <= 1)
                 return "yellow-day"
-            else if (hours < 6)
+            else if (hours < 8)
                 return "green-day";
         },
         calendarToDate(row,col) {
@@ -168,7 +169,8 @@ var app = new Vue({
                             "description": "Give Estimate",
                             "from": "Leslie Knope",
                             "form":fieldLabels,
-                            "response":r
+                            "response":r,
+                            "title":JSON.parse(form).title
                         })
                     }
                 }
@@ -220,5 +222,6 @@ class InboxItem {
         this.from = from;
         this.due = due;
         this.estimate = estimate;
+        this.danger = false;
     }
 }

@@ -173,6 +173,12 @@ textarea {
     margin-left: 10%;
     margin-bottom: 1em;
     padding: 0;
+    border: 2px solid #2C666E;
+    border-radius: 0.5em;
+}
+
+.card-danger {
+    border: 2px solid red;
 }
 
 .dashboard-card p {
@@ -192,10 +198,6 @@ textarea {
 
 .cell-highlighted {
     background-color: #90DDF0;
-}
-
-.cell-highlighted:first-of-type {
-    border-left: 2px solid #2C666E;
 }
 
 .cell-highlighted .calendar-cell {

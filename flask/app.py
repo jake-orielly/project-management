@@ -60,7 +60,7 @@ class Login(Resource):
         else:
             return {"message":"failure"}
 
-@api.route('/forms/', defaults={'user': None})
+@api.route('/forms', defaults={'user': None})
 @api.route('/forms/<user>')
 class Forms(Resource):
     def get(self, user):

@@ -25,7 +25,7 @@
                         <ul>
                             <li v-for="item in inbox">
                                 <div class="dashboard-card">
-                                    <p @click="openInboxItem(item)">{{item.description}}</p>
+                                    <p @click="openInboxItem(item)">{{item.description}}: {{item.title}}</p>
                                 </div>
                             </li>
                         </ul>
@@ -76,7 +76,7 @@
                     <p class="title">My Tasks</p>
                     <ul>
                         <li v-for="task in taskList" @click="taskClick(task)">
-                            <div class="dashboard-card">
+                            <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
                                 <p>{{task.description}}</p>
                             </div>
                         </li>
@@ -127,7 +127,7 @@
                 </div>
                 <div id="form-container">
                     <div id="form-content" v-if="!formSaved">
-                        <input placeholder="Form Title" type="text" id="form-title" v-model="formTitle">
+                        <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="formTitle">
                         <i class="fa fa-eye eye-icon" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
                         <i class="fa fa-save save-icon" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
                         <p v-if="fields.length == 0">Add some content to your form!</p>
