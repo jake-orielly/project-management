@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 function retrieveForm(formName) {
 	let data = JSON.stringify({title:formName});
     return genericRequest("http://vps:5000/retrieve-form", "POST", data)
@@ -25,6 +26,25 @@ function submitResponse(form,response) {
 function getResponses(form){
 	return genericRequest("http://vps:5000/responses/" + form, "GET")
 }
+=======
+function getForm(form) {
+    return genericRequest("http://vps:5000/get-form/" + form, "GET")
+}
+
+function getUserForms(user) {
+    return genericRequest("http://vps:5000/get-user-forms/" + user, "GET")
+}
+
+function login(username,password) {
+	return genericRequest("http://vps:5000/login", "POST",
+		{
+			"user":username,
+			"password":password
+		}
+	)
+}
+
+>>>>>>> 53e381ce67521172c2fbe9e14c6caf7bf206d7f2
 
 function genericRequest(url,type,body) {
     var request = new XMLHttpRequest();

@@ -1,8 +1,11 @@
 from flask import Flask, request
 from flask_cors import CORS
+from werkzeug.utils import cached_property
 from flask_restplus import Resource, Api
 import json
 from pymongo import MongoClient
+
+import config
 
 app = Flask(__name__) 
 api = Api(app)
@@ -81,4 +84,4 @@ class Forms(Resource):
         return {"message":"success"}
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0',debug=True)
+    app.run(host= '0.0.0.0',port=config.port,debug=True)

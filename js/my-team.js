@@ -2,6 +2,7 @@ var app = new Vue({
     el: '#app',
     data: {
         forms: [],
+<<<<<<< HEAD
         formPreview: false,
         currForm: "",
     },
@@ -12,10 +13,15 @@ var app = new Vue({
             else
                 this.forms = []
         },
+=======
+    },
+    methods: {
+>>>>>>> 53e381ce67521172c2fbe9e14c6caf7bf206d7f2
         getForms(user) {
             getUserForms(user).then(
                 response => {
                     let responseData = JSON.parse(response.responseText).data;
+<<<<<<< HEAD
                     for (let form of responseData) {
                         this.forms.push({name:JSON.parse(form).title});
                     }
@@ -49,5 +55,20 @@ var app = new Vue({
         closeFormPreview() {
             this.formPreview = false;
         },
+=======
+                    let reponseForms = JSON.parse(responseData);
+                    for (let formName in reponseForms)
+                        this.forms.push({name:formName,formId:reponseForms[formName]});
+                }
+            )
+        },
+        requestForm(formId) {
+            getForm(formId).then(
+                response => {
+                    console.log(response);
+                }
+            )
+        }
+>>>>>>> 53e381ce67521172c2fbe9e14c6caf7bf206d7f2
     }
 })

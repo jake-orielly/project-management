@@ -4,3 +4,8 @@ services:
     image: frontend
     ports:
       - "8080:80"
+  api:
+    image: api
+    ports:
+      - "5000:5000"
+    
