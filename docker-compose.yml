@@ -5,7 +5,10 @@ services:
     ports:
       - "8080:80"
   api:
-    image: api
     ports:
       - "5000:5000"
-    
+    expose:
+      - "5000"
+    image: api
+  mongodb:
+    image: mongo

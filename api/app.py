@@ -8,10 +8,10 @@ from pymongo import MongoClient
 import config
 
 app = Flask(__name__) 
-api = Api(app)
 CORS(app)
+api = Api(app)
 
-mongo_URL = "0.0.0.0:27017"
+mongo_URL = "mongodb:27017"
 
 @api.route('/is-alive')
 class isAlive(Resource):
