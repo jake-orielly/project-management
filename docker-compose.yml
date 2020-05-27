@@ -12,3 +12,7 @@ services:
     image: api
   mongodb:
     image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb-storage:/data/db
