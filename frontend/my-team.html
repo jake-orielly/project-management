@@ -33,14 +33,14 @@
                 <div v-for="field in fields" class="form-field">
                     <p> 
                         {{field.label}}
-                        <input v-if="field.type == 'text'" type="text">
-                        <input v-if="field.type == 'number'" type="number">
-                        <textarea v-if="field.type == 'text (long)'" type="number"></textarea>
-                        <input v-if="field.type == 'date'" type="date">
-                        <select v-if="field.type == 'dropdown'">
+                        <input v-if="field.type == 'text'" :data-label="toLabel(field.label)" type="text">
+                        <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
+                        <textarea v-if="field.type == 'text (long)'" :data-label="toLabel(field.label)" type="number"></textarea>
+                        <input v-if="field.type == 'date'" :data-label="toLabel(field.label)" type="date">
+                        <select v-if="field.type == 'dropdown'" :data-label="toLabel(field.label)">
                             <option v-for="option in field.options" :value="option">{{option}}</option>
                         </select>
-                        <input v-if="field.type == 'slider'" type="range" 
+                        <input v-if="field.type == 'slider'" :data-label="toLabel(field.label)" type="range" 
                             :min="field.slider.min" 
                             :max="field.slider.max" 
                             :value="field.slider.initial" 

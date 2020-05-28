@@ -36,9 +36,11 @@ var app = new Vue({
         },
         submitForm() {
             let fields = document.querySelectorAll('input,select');
-            let response = [];
-            for (let i of fields)
-                response.push(i.value);
+            let response = {};
+            for (let i of fields) {
+                response[i.dataset.label] = i.value;
+            }
+            console.log(response)
             submitResponse(this.currForm,response);
             this.formPreview = false;
             this.currForm = "";
@@ -49,5 +51,8 @@ var app = new Vue({
         closeFormPreview() {
             this.formPreview = false;
         },
+        toLabel(s) {
+            return s.replace(/ /g,'_').toLowerCase();
+        }
     }
 })

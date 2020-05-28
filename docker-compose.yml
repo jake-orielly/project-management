@@ -4,6 +4,8 @@ services:
     image: frontend
     ports:
       - "8080:80"
+    volumes:
+      - ./frontend:/usr/local/apache2/htdocs
   api:
     ports:
       - "5000:5000"

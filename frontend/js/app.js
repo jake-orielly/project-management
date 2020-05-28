@@ -145,9 +145,9 @@ var app = new Vue({
             this.taskList.push(
                 new InboxItem
                 (
-                    this.estimating.response[0],
+                    this.estimating.response.description,
                     'Leslie Knope',
-                    new Date(this.estimating.response[1]),
+                    new Date(this.estimating.response.due_date),
                     document.getElementById("estimate-input").value
                 ),
             )
