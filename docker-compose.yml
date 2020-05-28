@@ -1,0 +1,16 @@
+version: '3'
+services:
+  frontend:
+    image: frontend
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/local/apache2/htdocs/
+  api:
+    image: api
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongodb-storage:/data/db/

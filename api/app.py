@@ -1,14 +1,17 @@
 from flask import Flask, request
 from flask_cors import CORS
+from werkzeug.utils import cached_property
 from flask_restplus import Resource, Api
 import json
 from pymongo import MongoClient
 
-app = Flask(__name__) 
-api = Api(app)
-CORS(app)
+import config
 
-mongo_URL = "0.0.0.0:27017"
+app = Flask(__name__) 
+CORS(app)
+api = Api(app)
+
+mongo_URL = "mongodb:27017"
 
 @api.route('/is-alive')
 class isAlive(Resource):
@@ -60,7 +63,7 @@ class Login(Resource):
         else:
             return {"message":"failure"}
 
-@api.route('/forms/', defaults={'user': None})
+@api.route('/forms', defaults={'user': None})
 @api.route('/forms/<user>')
 class Forms(Resource):
     def get(self, user):
@@ -81,4 +84,4 @@ class Forms(Resource):
         return {"message":"success"}
 
 if __name__ == '__main__':
-    app.run(host= '0.0.0.0',debug=True)
+    app.run(host= '0.0.0.0',port=config.port,debug=True)

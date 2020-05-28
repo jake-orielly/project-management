@@ -1,3 +1,5 @@
+let baseUrl = "http://api";
+
 function retrieveForm(formName) {
 	let data = JSON.stringify({title:formName});
     return genericRequest("http://vps:5000/retrieve-form", "POST", data)
@@ -9,7 +11,7 @@ function getUserForms(user) {
 
 function postLogin(username,password) {
 	let data = JSON.stringify({"user":username,"password":password});
-	return genericRequest("http://vps:5000/login", "POST",data)
+	return genericRequest(baseUrl + ":5000/login", "POST",data)
 }
 
 function postForm(form) {
