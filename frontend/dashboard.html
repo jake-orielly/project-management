@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-
     <body>
         <div id="app">
             <div id="topbar">
@@ -26,14 +25,14 @@
                         <ul>
                             <li v-for="item in inbox">
                                 <div class="dashboard-card">
-                                    <p @click="openInboxItem(item)">{{item.description}}</p>
+                                    <p @click="openInboxItem(item)">{{item.description}}: {{item.title}}</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
                     <div id="estimate-container" v-if="estimating != undefined">
                         <p class="title">Estimate Task</p>
-                        <p>{{estimating.description}}</p>
+                        <p>{{estimating.response.description}}</p>
                         <p><input type="number" id="estimate-input"></p>
                         <button @click="submitEstimate">Submit</button>
                     </div>
@@ -41,7 +40,7 @@
                 <div id="calendar">
                     <p class="title">Calendar</p>
                     <div id="calendar-table-container">
-                        <table id="calendar-table">
+                        <table id="calendar-table" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th v-for="day in daysOfWeek">{{day}}</th>
@@ -49,14 +48,23 @@
                             </thead>
                             <tbody>
                                 <tr v-for="row in [...Array(6).keys()]">
-                                    <td v-for="col in [...Array(7).keys()]">
-                                        <div class="calendar-cell" 
+                                    <td v-for="col in [...Array(7).keys()]" v-bind:class="[ dayHighlighted[calendarToDate(row,col)] ? dayHighlightedClass : '']">
+                                        <div @click="showDay(row,col)" class="calendar-cell clickable" 
                                         v-bind:class="[
                                             (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
                                             calendarToDate(row,col) > monthLength)? blankDateClass : '',
                                             (new Date() > new Date(2020, 4, calendarToDate(row,col), 23) ? pastDateClass : ''),
                                             workloadClasses(calendarToDate(row,col))]">
                                             {{(calendarToDate(row,col) > 0 && calendarToDate(row,col) <= monthLength ? calendarToDate(row,col) :'')}}
+                                        </div>
+                                        <div class="date-info" 
+                                        v-if="dayShowing == calendarToDate(row,col) && workload[calendarToDate(row,col)].tasks.length">
+                                            <div class="date-info-inner">
+                                                <p v-for="task in workload[calendarToDate(row,col)].tasks">
+                                                    {{task.name + ": " + task.time + " hours"}}
+                                                </p>
+                                                <i class="fa fa-times clickable" @click="hideDay"></i>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -67,8 +75,8 @@
                 <div id="taskList">
                     <p class="title">My Tasks</p>
                     <ul>
-                        <li v-for="task in taskList">
-                            <div class="dashboard-card">
+                        <li v-for="task in taskList" @click="taskClick(task)">
+                            <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
                                 <p>{{task.description}}</p>
                             </div>
                         </li>
@@ -119,7 +127,7 @@
                 </div>
                 <div id="form-container">
                     <div id="form-content" v-if="!formSaved">
-                        <input placeholder="Form Title" type="text" id="form-title" v-model="formTitle">
+                        <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="formTitle">
                         <i class="fa fa-eye eye-icon" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
                         <i class="fa fa-save save-icon" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
                         <p v-if="fields.length == 0">Add some content to your form!</p>
@@ -162,6 +170,7 @@
                 </div>
             </div>
           </div>
+        <script type="text/javascript" src="./js/config.js"></script>
         <script type="text/javascript" src="./js/requests.js"></script>
         <script type="text/javascript" src="js/data.js"></script>
         <script type="text/javascript" src="js/app.js"></script>

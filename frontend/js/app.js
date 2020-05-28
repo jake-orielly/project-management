@@ -23,12 +23,21 @@ var app = new Vue({
         formPreview: false,
         formSaved: false,
         estimating: undefined,
+        dayShowing: undefined,
+        dayHighlighted: {},
+        dayHighlightedClass: 'cell-highlighted'
     },
     mounted() {
         this.updateWorkload();
         this.updateInbox();
     },
     methods: {
+        taskClick(task) {
+            this.dayHighlighted = {};
+            for (let i = 0; i < this.workload.length; i++)
+                if (this.workload[i].tasks.filter(item => item.name == task.description).length)
+                    this.dayHighlighted[i] = true;
+        },
         updateWorkload() {
             let workload = [];
             let taskList = this.taskList.slice();
@@ -39,21 +48,24 @@ var app = new Vue({
                 (a,b) => a.due < b.due ? -1 : 1
             )
             for (let i = 0; i < this.monthLength; i++)  
-                workload.push(8);
-            while (taskList.length) {
-                currTask = Object.assign({}, taskList.shift());
+                workload.push({remaining:8,tasks:[]});
+            for (let i of taskList) {
+                currTask = Object.assign({}, i);
+                i.danger = false;
                 while (currTask.estimate > 0) {
                     if (this.isWeekend(currDay)) {
                         currDay++;
                     }
-                    else if (workload[currDay] >= currTask.estimate) {
-                        workload[currDay] -= currTask.estimate;
+                    else if (workload[currDay].remaining > currTask.estimate) {
+                        workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
+                        workload[currDay].remaining -= currTask.estimate;
                         currTask.estimate = 0;
                     }
-                    else if (currTask.due.getDate() > currDay) {
-                        if (workload[currDay]) {
-                            currTask.estimate -= (workload[currDay] - 1);
-                            workload[currDay] = 1;
+                    else if (currTask.due.getDate() + 1 > currDay) {
+                        if (workload[currDay].remaining) {
+                            workload[currDay].tasks.push({name:currTask.description, time:parseInt(workload[currDay].remaining - 1)});
+                            currTask.estimate -= (workload[currDay].remaining - 1);
+                            workload[currDay].remaining = 1;
                         }
                         currDay++;
                     }
@@ -62,9 +74,17 @@ var app = new Vue({
                             if (this.isWeekend(j)) {
                                 j--;
                             }
-                            else if (workload[j] > 0) {
-                                availibleHours = workload[j];
-                                workload[j] = Math.max(0, workload[j] - currTask.estimate);
+                            else if (currTask.due.getDate() + 1 == currDay) {
+                                workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
+                                workload[j].remaining -= currTask.estimate;
+                                i.danger = true;
+                                currTask.estimate = 0;
+                                break;
+                            }
+                            else if (workload[j].remaining > 0) {
+                                availibleHours = workload[j].remaining;
+                                workload[currDay].tasks.push({name:currTask.description, time:availibleHours});
+                                workload[j].remaining = Math.max(0, workload[j].remaining - currTask.estimate);
                                 currTask.estimate -= availibleHours;
                                 if (currTask.estimate <= 0)
                                     break;
@@ -92,17 +112,27 @@ var app = new Vue({
         closeFormPreview() {
             this.formPreview = false;
         },
+        showDay(row,col) {
+            this.dayShowing = this.calendarToDate(row,col);
+        },
+        hideDay() {
+            this.dayShowing = undefined;
+        },
         isWeekend(day) {
             let dayOfWeek = this.daysOfWeek[(this.monthStartDayOfWeek + day) % this.daysOfWeek.length];
             return (dayOfWeek == "Sa" || dayOfWeek == "Su");
         },
         workloadClasses(day) {
-            let hours = this.workload[day]
+            let hours;
+            if (this.workload[day])
+                hours = this.workload[day].remaining;
+            else
+                return;
             if (hours <= 0)
                 return "red-day"
             else if (hours <= 1)
                 return "yellow-day"
-            else if (hours < 6)
+            else if (hours < 8)
                 return "green-day";
         },
         calendarToDate(row,col) {
@@ -115,9 +145,9 @@ var app = new Vue({
             this.taskList.push(
                 new InboxItem
                 (
-                    this.estimating.response[0],
+                    this.estimating.response.description,
                     'Leslie Knope',
-                    new Date(this.estimating.response[1]),
+                    new Date(this.estimating.response.due_date),
                     document.getElementById("estimate-input").value
                 ),
             )
@@ -139,7 +169,8 @@ var app = new Vue({
                             "description": "Give Estimate",
                             "from": "Leslie Knope",
                             "form":fieldLabels,
-                            "response":r
+                            "response":r,
+                            "title":JSON.parse(form).title
                         })
                     }
                 }
@@ -191,5 +222,6 @@ class InboxItem {
         this.from = from;
         this.due = due;
         this.estimate = estimate;
+        this.danger = false;
     }
 }

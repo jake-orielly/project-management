@@ -12,14 +12,15 @@
         <div id="app">
             <div id="login-container">
                 <p>Login</p>
-                <input type="text" placeholder="Username" id="username">
+                <input type="text" autocomplete="off" placeholder="Username" id="username">
                 <br>
-                <input type="password" placeholder="Password" id="password">
+                <input type="password" autocomplete="off" placeholder="Password" id="password">
                 <br>
                 <button @click="login">Login</button>
                 <p :class="[(loginStatus == 'failed' ? 'error' : '')]" id="login-status-text">{{loginStatusText}}</p>
             </div>
         </div>
+        <script type="text/javascript" src="./js/config.js"></script>
         <script type="text/javascript" src="js/requests.js"></script>
         <script type="text/javascript" src="js/login.js"></script>
     </body>

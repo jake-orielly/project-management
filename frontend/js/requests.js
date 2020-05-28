@@ -1,31 +1,31 @@
-let baseUrl = "http://api";
+const baseURL = "http://vps:" + flaskPort;
 
 function retrieveForm(formName) {
 	let data = JSON.stringify({title:formName});
-    return genericRequest("http://vps:5000/retrieve-form", "POST", data)
+    return genericRequest(baseURL + "/retrieve-form", "POST", data)
 }
 
 function getUserForms(user) {
-    return genericRequest("http://vps:5000/forms/" + user, "GET")
+    return genericRequest(baseURL + "/forms/" + user, "GET")
 }
 
 function postLogin(username,password) {
 	let data = JSON.stringify({"user":username,"password":password});
-	return genericRequest(baseUrl + ":5000/login", "POST",data)
+	return genericRequest(baseURL + "/login", "POST",data)
 }
 
 function postForm(form) {
 	let data = JSON.stringify(form);
-	return genericRequest("http://vps:5000/forms", "POST",data)
+	return genericRequest(baseURL + "/forms", "POST",data)
 }
 
 function submitResponse(form,response) {
 	let data = JSON.stringify(response);
-	return genericRequest("http://vps:5000/responses/" + form, "POST",data)
+	return genericRequest(baseURL + "/responses/" + form, "POST",data)
 }
 
 function getResponses(form){
-	return genericRequest("http://vps:5000/responses/" + form, "GET")
+	return genericRequest(baseURL + "/responses/" + form, "GET")
 }
 
 function genericRequest(url,type,body) {
