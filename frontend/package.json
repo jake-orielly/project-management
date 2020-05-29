@@ -4,11 +4,13 @@
   "description": "Project management prototype frontend",
   "main": "server.js",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "node-sass":""
   },
   "devDependencies": {},
   "scripts": {
     "test": "test",
+    "sass": "node-sass public/scss -o public/css",
     "start": "node server.js"
   },
   "repository": {

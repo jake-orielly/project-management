@@ -9,4 +9,6 @@ RUN npm install
 COPY . .
 
 EXPOSE 8080
+
+RUN npm run sass
 CMD [ "node", "server.js" ]

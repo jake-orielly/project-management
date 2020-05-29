@@ -1,3 +1,5 @@
 .env
+*.css
+*.pyc
 mongodb-storage/
 node_modules/
