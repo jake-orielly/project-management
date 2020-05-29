@@ -1,4 +1,4 @@
-const baseURL = "http://vps:" + flaskPort;
+const baseURL = "http://23.254.164.217:" + flaskPort;
 
 function retrieveForm(formName) {
 	let data = JSON.stringify({title:formName});
