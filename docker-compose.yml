@@ -3,7 +3,7 @@ services:
   frontend:
     image: frontend
     ports:
-      - "${FRONTEND_PORT}:80"
+      - "${FRONTEND_PORT}:8080"
     volumes:
       - ./frontend:/usr/local/apache2/htdocs
   api:
