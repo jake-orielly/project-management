@@ -3,18 +3,18 @@ services:
   frontend:
     image: frontend
     ports:
-      - "8080:80"
+      - "8081:80"
     volumes:
       - ./frontend:/usr/local/apache2/htdocs
   api:
     ports:
-      - "5000:5000"
+      - "5001:5000"
     expose:
-      - "5000"
+      - "5001"
     image: api
   mongodb:
     image: mongo
-    ports:
-      - "27017:27017"
+      ports:
+        - "27018:27017"
     volumes:
       - ./mongodb-storage:/data/db
