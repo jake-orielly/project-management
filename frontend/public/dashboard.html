@@ -104,6 +104,21 @@
                             <input type="text" class="currDropdownOption" placeholder="New Dropdown Option">
                         </li>
                     </ul>
+                    <ul v-if="currField == 'multi-select'">
+                        <li>
+                            <button id="dropdown-add" @click="multiSelectAdd">Add Selection Option</button>
+                        </li>
+                        <li v-for="selection in [...Array(numMultiSelectFields).keys()]" 
+                        draggable 
+                        @dragstart='onDragMultiSelect(field)' 
+                        @dragenter='onDragEnterMultiSelect($event)' 
+                        @dragover.prevent 
+                        @dragenter.prevent>
+                            <input type="checkbox" class="multi-select-input">
+                            <input type="text" class="multi-select-label" placeholder="New Item Label">
+                            <i class="fa fa-bars clickable"></i>
+                        </li>
+                    </ul>
                     <div v-if="currField == 'slider'">
                         <p>
                             Min: 
@@ -131,7 +146,12 @@
                         <i class="fa fa-eye eye-icon" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
                         <i class="fa fa-save save-icon" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
                         <p v-if="fields.length == 0">Add some content to your form!</p>
-                        <div v-for="field in fields" class="field-card" draggable @dragstart='onDrag(field)' @dragenter='onDragEnter($event)' @dragover.prevent @dragenter.prevent>
+                        <div v-for="field in fields" class="field-card" 
+                        draggable 
+                        @dragstart='onDrag(field)' 
+                        @dragenter='onDragEnter($event)' 
+                        @dragover.prevent 
+                        @dragenter.prevent>
                             <div class="field-card-inner">
                                 <input class="field-label" v-model="field.label" @input="resizeInput(field)">
                                 <span class="field-type">{{"(" + caps(field.type) + ")"}}</span>

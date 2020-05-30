@@ -5,6 +5,7 @@ var app = new Vue({
         currField: '',
         fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],
         numDropdownFields: 0,
+        numMultiSelectFields: 0,
         fields: [],
         currTab: "dashboard",
         inbox: [],
@@ -198,6 +199,12 @@ var app = new Vue({
                 this.draggingPos = targetPos;
             }
         },
+        onDragMultiSelect(item) {
+            
+        },
+        onDragEnterMultiSelect(event) {
+            
+        },
         updateInbox() {
             getUserForms("ann_perkins").then(
                 response => {
@@ -231,6 +238,12 @@ var app = new Vue({
                 this.numDropdownFields = 0;
                 
             }
+            else if (this.currField == "multi-select") {
+                newField.options = [];
+                for (let i of document.getElementsByClassName("multi-select-input"))
+                    newField.options.push(i.value);
+                this.numMultiSelectFields = 0;
+            }
             else if (this.currField == 'slider') {
                 newField.slider = {};
                 newField.slider.min = document.getElementById("slider-min").value;
@@ -250,6 +263,9 @@ var app = new Vue({
         },
         dropdownAdd: function() {
             this.numDropdownFields++;
+        },
+        multiSelectAdd: function() {
+            this.numMultiSelectFields++;
         },
         caps: function(text) {
             if (!text)
