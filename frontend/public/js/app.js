@@ -5,22 +5,8 @@ var app = new Vue({
         currField: '',
         fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],
         numDropdownFields: 0,
-        fields: [
-            {
-                label: "asdfsadf",
-                type: "text"
-            },
-            {
-                label: "qwerqwer",
-                type: "text"
-            },
-            {
-                label: "zxczxvc",
-                type: "text"
-            },
-
-        ],
-        currTab: "myForms",
+        fields: [],
+        currTab: "dashboard",
         inbox: [],
         taskList: [],
         calendarDays: 31,
@@ -189,7 +175,6 @@ var app = new Vue({
                 }
         },
         onDragEnter(event) {
-            console.log(1)
             let targetInner, targetLabel, targetPos, targetField;
             // Get the value of the input element we're dragging to
             if (event.target.classList.contains("field-card"))
