@@ -155,6 +155,12 @@ var app = new Vue({
             this.estimating = undefined;
             this.updateWorkload();
         },
+        editField(field) {
+            console.log(field)
+        },
+        deleteField(field) {
+            app.fields.splice(app.fields.indexOf(field),1);
+        },
         updateInbox() {
             getUserForms("ann_perkins").then(
                 response => {

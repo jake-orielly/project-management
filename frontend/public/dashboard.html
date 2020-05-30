@@ -134,6 +134,9 @@
                         <div v-for="field in fields" class="field-card">
                             <p>{{caps(field.label)}}
                                 <span class="field-type">{{"(" + caps(field.type) + ")"}}</span>
+                                <i class="fa fa-bars clickable move-bars"></i>
+                                <i class="fa fa-pencil clickable" @click="editField(field)"></i>
+                                <i class="fa fa-times clickable" @click="deleteField(field)"></i>
                             </p>
                             <ul v-for="option in field.options">
                                 <li>{{option}}</li>
