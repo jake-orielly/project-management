@@ -7,7 +7,6 @@
     "express": "^4.17.1",
     "node-sass":""
   },
-  "devDependencies": {},
   "scripts": {
     "test": "test",
     "sass": "node-sass public/scss -o public/css",
