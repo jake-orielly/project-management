@@ -5,8 +5,22 @@ var app = new Vue({
         currField: '',
         fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],
         numDropdownFields: 0,
-        fields: [],
-        currTab: "dashboard",
+        fields: [
+            {
+                label: "asdfsadf",
+                type: "text"
+            },
+            {
+                label: "qwerqwer",
+                type: "text"
+            },
+            {
+                label: "zxczxvc",
+                type: "text"
+            },
+
+        ],
+        currTab: "myForms",
         inbox: [],
         taskList: [],
         calendarDays: 31,
@@ -25,7 +39,9 @@ var app = new Vue({
         estimating: undefined,
         dayShowing: undefined,
         dayHighlighted: {},
-        dayHighlightedClass: 'cell-highlighted'
+        dayHighlightedClass: 'cell-highlighted',
+        draggingPos: undefined,
+        draggingField: undefined,
     },
     mounted() {
         this.updateWorkload();
@@ -156,7 +172,6 @@ var app = new Vue({
             this.updateWorkload();
         },
         resizeInput(field) {
-            console.log(1)
             let fieldIndex = this.fields.indexOf(field);
             let inputs = document.getElementsByClassName("field-label");
             let currInput = inputs[fieldIndex];
@@ -164,6 +179,39 @@ var app = new Vue({
         },
         deleteField(field) {
             app.fields.splice(app.fields.indexOf(field),1);
+        },
+        onDrag(item) {
+            for (let i = 0; i < this.fields.length; i++)
+                if (this.fields[i] == item) {
+                    this.draggingPos = i;
+                    this.draggingField = this.fields[i];
+                    break;
+                }
+        },
+        onDragEnter(event) {
+            console.log(1)
+            let targetInner, targetLabel, targetPos, targetField;
+            // Get the value of the input element we're dragging to
+            if (event.target.classList.contains("field-card"))
+                targetInner = event.target.getElementsByClassName("field-card-inner")[0];
+            else if (event.target.classList.contains("field-card-inner"))
+                targetInner = event.target;
+            else
+                targetInner = event.target.parentElement;
+            targetLabel = targetInner.getElementsByTagName("input")[0].value;
+
+            // Find it's position in fields
+            for (let i = 0; i < this.fields.length; i++)
+                if (this.fields[i].label == targetLabel) {
+                    targetPos = i;
+                    break;
+                }
+            
+            if (targetPos != this.draggingPos) {
+                this.fields.splice(this.draggingPos,1);
+                this.fields = this.fields.slice(0,targetPos).concat([this.draggingField]).concat(this.fields.slice(targetPos));
+                this.draggingPos = targetPos;
+            }
         },
         updateInbox() {
             getUserForms("ann_perkins").then(
