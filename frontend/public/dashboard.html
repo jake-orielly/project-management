@@ -132,10 +132,10 @@
                         <i class="fa fa-save save-icon" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
                         <p v-if="fields.length == 0">Add some content to your form!</p>
                         <div v-for="field in fields" class="field-card">
-                            <p>{{caps(field.label)}}
+                            <p>
+                                <input class="field-label" v-model="field.label" @input="resizeInput(field)">
                                 <span class="field-type">{{"(" + caps(field.type) + ")"}}</span>
                                 <i class="fa fa-bars clickable move-bars"></i>
-                                <i class="fa fa-pencil clickable" @click="editField(field)"></i>
                                 <i class="fa fa-times clickable" @click="deleteField(field)"></i>
                             </p>
                             <ul v-for="option in field.options">

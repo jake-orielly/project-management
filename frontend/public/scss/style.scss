@@ -28,12 +28,6 @@ textarea {
     display: table;
     box-shadow: 1px 1px 3px 0px #0005;
 }
-
-.field-card li {
-    list-style-type: disc;
-    text-align: left;
-}
-
 #field-input-container {
     display: inline-block;
     margin-left: 2em;
@@ -50,6 +44,16 @@ textarea {
 .field-card {
     margin: 1rem;
     padding: 1rem 2em;
+
+    li {
+        list-style-type: disc;
+        text-align: left;
+    }
+
+    input {
+        border:none;
+        font-size: 1.2rem;
+    }
 }
 
 .field-type {

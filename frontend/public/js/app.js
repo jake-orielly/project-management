@@ -3,7 +3,7 @@ var app = new Vue({
     data: {
         message: 'Hello Vue!',
         currField: '',
-        fieldTypes: ['text','number','text (long)','date','dropdown','slider'],
+        fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],
         numDropdownFields: 0,
         fields: [],
         currTab: "dashboard",
@@ -155,8 +155,12 @@ var app = new Vue({
             this.estimating = undefined;
             this.updateWorkload();
         },
-        editField(field) {
-            console.log(field)
+        resizeInput(field) {
+            console.log(1)
+            let fieldIndex = this.fields.indexOf(field);
+            let inputs = document.getElementsByClassName("field-label");
+            let currInput = inputs[fieldIndex];
+            currInput.style.width = (field.label.length * 0.95 + 2) + "ch";
         },
         deleteField(field) {
             app.fields.splice(app.fields.indexOf(field),1);
