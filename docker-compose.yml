@@ -18,3 +18,8 @@ services:
       - "${MONGODB_PORT}:27017"
     volumes:
       - ./mongodb-storage:/data/db
+  cypress:
+    image: cypress/included:3.2.0
+    volumes: 
+      - ./cypress_volume/cypress:/cypress
+      - ./cypress_volume/cypress.json:/cypress.json
