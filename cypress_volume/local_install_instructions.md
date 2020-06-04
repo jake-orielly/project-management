@@ -6,7 +6,8 @@ npm install cypress
 
 
 ## Edit project-management/cypress_volume/cypress.json
-    "baseUrl": "http://vps:8081"
+    "baseUrl": "http://vps:8081",
+    "integrationFolder":"integration"
 (whatever url you want to test against)
 
 ## Run in terminal

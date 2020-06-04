@@ -1,5 +1,4 @@
 {
   "baseUrl": "http://frontend:8080",
-  "video": true,
-  "integrationFolder":"integration"
+  "video": true
 }
