@@ -1,6 +1,6 @@
 describe('Basic login test', () => {
     it('Checks if we can load the page', () => {
-        cy.visit(cy.visit(Cypress.config().baseUrl))
+        cy.visit(Cypress.config().baseUrl)
 
         // Check if there's an input field
         cy.get('#login-container').should('be.visible')
