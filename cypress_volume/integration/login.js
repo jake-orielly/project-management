@@ -1,6 +1,6 @@
 describe('Basic login test', () => {
     it('Checks if we can load the page', () => {
-        cy.visit('http://frontend:8080')
+        cy.visit(cy.visit(Cypress.config().baseUrl))
 
         // Check if there's an input field
         cy.get('#login-container').should('be.visible')
