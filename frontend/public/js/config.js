@@ -1,1 +1,5 @@
-let flaskPort = 5001;
+export default {
+    flaskPort() {
+        return 5001
+    },
+}

@@ -23,24 +23,19 @@ function getResponses(form){
 }
 */
 
-import config from '../js/requests.js';
+import config from '../js/config.js';
 
 export default {
     components: {
-        config
-    },
-    data () {
-        return {
-            baseURL: "http://23.254.164.217:5001"
-        }
+        'config': config
     },
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});
-        return this.genericRequest(this.baseURL + "/login", "POST",data)
+        return this.genericRequest("/login", "POST",data)
     },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();
-    
+        const baseUrl = "http://23.254.164.217:" + config.flaskPort();
         return new Promise(function (resolve, reject) {
             request.onreadystatechange = function() {
                 if (request.readyState !== 4) return;
@@ -54,7 +49,7 @@ export default {
                     });
                 }
             };
-            request.open(type, url, true);
+            request.open(type, baseUrl + url, true);
             request.send(body);
         });
     }
