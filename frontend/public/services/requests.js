@@ -6,25 +6,25 @@ export default {
     },
     retrieveForm(formName) {
         let data = JSON.stringify({title:formName});
-        return genericRequest(baseURL + "/retrieve-form", "POST", data)
+        return this.genericRequest("/retrieve-form", "POST", data)
     },
     getUserForms(user) {
-        return genericRequest(baseURL + "/forms/" + user, "GET")
+        return this.genericRequest("/forms/" + user, "GET")
     },
     postForm(form) {
         let data = JSON.stringify(form);
-        return genericRequest(baseURL + "/forms", "POST",data)
+        return this.genericRequest("/forms", "POST",data)
     },
     submitResponse(form,response) {
         let data = JSON.stringify(response);
-        return genericRequest(baseURL + "/responses/" + form, "POST",data)
+        return this.genericRequest("/responses/" + form, "POST",data)
     },
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});
         return this.genericRequest("/login", "POST",data)
     },
     getResponses(form){
-        return genericRequest(baseURL + "/responses/" + form, "GET")
+        return this.genericRequest("/responses/" + form, "GET")
     },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();
