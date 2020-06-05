@@ -5,10 +5,13 @@
   "main": "server.js",
   "dependencies": {
     "express": "^4.17.1",
-    "node-sass":""
+    "node-sass":"",
+    "vue-router": "^2.7.0"
   },
   "scripts": {
     "test": "test",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
     "sass": "node-sass public/scss -o public/css",
     "start": "node server.js"
   },
