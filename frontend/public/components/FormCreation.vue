@@ -56,7 +56,7 @@
                 form.fields = this.fields.slice();
                 requests.postForm(form).then(
                     () => {
-                        this.formSaved = true;
+                        this.$parent.formSaved = true;
                     }
                 );
             },
