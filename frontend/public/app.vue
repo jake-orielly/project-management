@@ -9,7 +9,7 @@
 
 <script>
     import './css/style.css'
-    import login from './login.vue';
+    import login from './components/login.vue';
 
     export default {
     components: {
