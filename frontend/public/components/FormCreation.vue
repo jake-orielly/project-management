@@ -2,8 +2,12 @@
     <div id="form-container">
         <div id="form-content" v-if="!$parent.formSaved">
             <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="$parent.formTitle">
-            <i class="fa fa-eye eye-icon clickable" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
-            <i class="fa fa-save save-icon clickable" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
+            <div @click="openFormPreview">
+                <i class="fa fa-eye eye-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
+            </div>
+            <div @click="saveForm">
+                <i class="fa fa-save save-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
+            </div>
             <p v-if="fields.length == 0">Add some content to your form!</p>
             <div v-for="field in fields" class="field-card" v-bind:key="field.label"
             draggable 
@@ -15,7 +19,9 @@
                     <input class="field-label" v-model="field.label" @input="resizeInput(field)">
                     <span class="field-type">{{"(" + $parent.caps(field.type) + ")"}}</span>
                     <i class="fa fa-bars clickable"></i>
-                    <i class="fa fa-times clickable" @click="deleteField(field)"></i>
+                    <div @click="deleteField(field)">
+                        <i class="fa fa-times clickable"></i>
+                    </div>
                     <ul v-for="option in field.options" v-bind:key="option">
                         <li>{{option}}</li>
                     </ul>
@@ -45,8 +51,6 @@
                 this.$parent.formPreview = true;
             },
             saveForm() {
-                /* eslint-disable */
-                console.log(1)
                 let form = {};
                 form.title = this.formTitle;
                 form.fields = this.fields.slice();

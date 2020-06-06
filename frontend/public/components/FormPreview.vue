@@ -1,6 +1,8 @@
 <template>
     <div id="form-preview-modal" v-if="$parent.formPreview">
-        <i class="fa fa-times" @click="closeFormPreview"></i>
+        <div @click="closeFormPreview">
+            <i class="fa fa-times"></i>
+        </div>
         <p class="title">{{$parent.formTitle}}</p>
         <div v-for="field in $parent.fields" class="form-field" v-bind:key="field.label">
             <p> {{field.label}}
