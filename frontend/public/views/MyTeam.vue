@@ -1,37 +1,26 @@
+<!-- eslint-disable -->
 <template>
     <div>
         <Banner></Banner>
         <div id="team-container" v-if="!formPreview">
-            <p class="clickable" @click="toggleForms('ann_perkins')">
+        <div class="clickable" @click="toggleForms('ann_perkins')">
+            <p>
                 Ann Perkins
-                <i class="fa fa-plus" v-if="forms.length == 0"></i>
-                <i class="fa fa-minus" v-if="forms.length != 0"></i>
+                <div v-if="!formsOpen">
+                    <p>
+                        <i class="fa fa-plus"></i>
+                    </p>
+                </div>
+                <div v-if="formsOpen">
+                    <p>
+                        <i class="fa fa-minus"></i>
+                    </p>
+                </div>
             </p>
             <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
         </div>
-        <div id="form-preview-modal" v-if="formPreview">
-            <i class="fa fa-times form-preview-close" style="font-size:2rem; color:#2C666E;" @click="closeFormPreview"></i>
-            <p class="title">{{formTitle}}</p>
-            <div v-for="field in fields" v-bind:key="field.label" class="form-field">
-                <p> 
-                    {{field.label}}
-                    <input v-if="field.type == 'text'" :data-label="toLabel(field.label)" type="text">
-                    <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
-                    <textarea v-if="field.type == 'text (long)'" :data-label="toLabel(field.label)" type="number"></textarea>
-                    <input v-if="field.type == 'date'" :data-label="toLabel(field.label)" type="date">
-                    <select v-if="field.type == 'dropdown'" :data-label="toLabel(field.label)">
-                        <option v-for="option in field.options" v-bind:key="option" :value="option">{{option}}</option>
-                    </select>
-                    <input v-if="field.type == 'slider'" :data-label="toLabel(field.label)" type="range" 
-                        :min="field.slider.min" 
-                        :max="field.slider.max" 
-                        :value="field.slider.initial" 
-                        :step="field.slider.step" 
-                        class="slider" id="myRange">
-                </p>
-            </div>
-            <button @click="submitForm">Submit</button>
         </div>
+        <FormDisplay v-bind:preview="false"></FormDisplay>
     </div>
 </template>
 
@@ -43,14 +32,17 @@
 
     import requests from '../services/requests.js';
     import Banner from '../components/Banner.vue';
+    import FormDisplay from '../components/FormDisplay.vue';
 
     export default {
         components: {
             Banner,
+            FormDisplay,
         },
         data () {
             return {
                 forms: [],
+                formsOpen: false,
                 formPreview: false,
                 currForm: "",
             }
@@ -59,10 +51,15 @@
         },
         methods: {
             toggleForms(user) {
-                if (this.forms.length == 0)
+                if (!this.formsOpen) {
                     this.getForms(user)
-                else
-                    this.forms = []
+                    this.formsOpen = true;
+                }
+                else {
+                    this.forms = [];
+                    this.formsOpen = false;
+                }
+                console.log(this.formsOpen)
             },
             getForms(user) {
                 requests.getUserForms(user).then(
@@ -71,6 +68,7 @@
                         for (let form of responseData) {
                             this.forms.push({name:JSON.parse(form).title});
                         }
+                        console.log(this.forms)
                     }
                 )
             },
@@ -85,17 +83,6 @@
                         this.openFormPreview()
                     }
                 )
-            },
-            submitForm() {
-                let fields = document.querySelectorAll('input,select');
-                let response = {};
-                for (let i of fields) {
-                    response[i.dataset.label] = i.value;
-                }
-                console.log(response)
-                requests.submitResponse(this.currForm,response);
-                this.formPreview = false;
-                this.currForm = "";
             },
             openFormPreview() {
                 this.formPreview = true;

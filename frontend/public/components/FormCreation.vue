@@ -1,7 +1,7 @@
 <template>
     <div id="form-container">
         <div id="form-content" v-if="!$parent.formSaved">
-            <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="formTitle">
+            <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="$parent.formTitle">
             <div @click="openFormPreview">
                 <i class="fa fa-eye eye-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
             </div>
@@ -51,7 +51,7 @@
             },
             saveForm() {
                 let form = {};
-                form.title = this.formTitle;
+                form.title = this.$parent.formTitle;
                 form.fields = this.$parent.fields.slice();
                 requests.postForm(form).then(
                     () => {

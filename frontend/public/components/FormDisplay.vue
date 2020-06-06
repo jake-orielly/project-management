@@ -21,11 +21,20 @@
                     class="slider" id="myRange">
             </p>
         </div>
+        <button v-if="!preview" @click="submitForm">Submit</button>
     </div>
 </template>
 
 <script>
+    import requests from '../services/requests.js';
+
     export default {
+        props: {
+            preview: {
+                type: Boolean,
+                required: true
+            },
+        },
         data() {
             return {
             }
@@ -33,6 +42,16 @@
         methods: {
             closeFormPreview() {
                 this.$parent.formPreview = false;
+            },
+            submitForm() {
+                let fields = document.querySelectorAll('input,select');
+                let response = {};
+                for (let i of fields) {
+                    response[i.dataset.label] = i.value;
+                }
+                requests.submitResponse(this.currForm,response);
+                this.formPreview = false;
+                this.currForm = "";
             },
         }
     }

@@ -10,7 +10,7 @@
             <FieldAdd></FieldAdd>
             <FormCreation></FormCreation>
         </div>
-        <FormPreview></FormPreview>
+        <FormDisplay v-bind:preview="true"></FormDisplay>
     </div>
 </template>
 
@@ -23,7 +23,7 @@
     import TaskList from '../components/TaskList.vue';
     import FieldAdd from '../components/FieldAdd.vue';
     import FormCreation from '../components/FormCreation.vue';
-    import FormPreview from '../components/FormPreview.vue';
+    import FormDisplay from '../components/FormDisplay.vue';
 
     export default {
         components: {
@@ -33,7 +33,7 @@
             TaskList,
             FieldAdd,
             FormCreation,
-            FormPreview
+            FormDisplay
         },
         data () {
             return {
