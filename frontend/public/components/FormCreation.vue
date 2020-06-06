@@ -2,10 +2,10 @@
     <div id="form-container">
         <div id="form-content" v-if="!$parent.formSaved">
             <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="$parent.formTitle">
-            <i class="fa fa-eye eye-icon" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
-            <i class="fa fa-save save-icon" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
-            <p v-if="$parent.fields.length == 0">Add some content to your form!</p>
-            <div v-for="field in $parent.fields" class="field-card" v-bind:key="field.label"
+            <i class="fa fa-eye eye-icon clickable" style="font-size:2rem; color:#2C666E;" @click="openFormPreview"></i>
+            <i class="fa fa-save save-icon clickable" style="font-size:2rem; color:#2C666E;" @click="saveForm"></i>
+            <p v-if="fields.length == 0">Add some content to your form!</p>
+            <div v-for="field in fields" class="field-card" v-bind:key="field.label"
             draggable 
             @dragstart='onDrag(field)' 
             @dragenter='onDragEnter($event)' 
@@ -32,10 +32,12 @@
 </template>
 
 <script>
+    import requests from '../services/requests.js';
+
     export default {
         data() {
             return {
-
+                fields: this.$parent.fields
             }
         },
         methods: {
@@ -43,10 +45,12 @@
                 this.$parent.formPreview = true;
             },
             saveForm() {
+                /* eslint-disable */
+                console.log(1)
                 let form = {};
                 form.title = this.formTitle;
                 form.fields = this.fields.slice();
-                this.$parent.requests.postForm(form).then(
+                requests.postForm(form).then(
                     () => {
                         this.formSaved = true;
                     }
@@ -65,10 +69,13 @@
                 // Get the value of the input element we're dragging to
                 if (event.target.classList.contains("field-card"))
                     targetInner = event.target.getElementsByClassName("field-card-inner")[0];
-                else if (event.target.classList.contains("field-card-inner"))
+                else {
                     targetInner = event.target;
-                else
-                    targetInner = event.target.parentElement;
+
+                    // If click and drag has unusual bugs it's probably this
+                    while (!targetInner.classList.contains("field-card-inner"))
+                        targetInner = targetInner.parentElement;
+                }
                 targetLabel = targetInner.getElementsByTagName("input")[0].value;
 
                 // Find it's position in fields
