@@ -8,6 +8,7 @@ RUN npm install
 RUN npm install -g @vue/cli @vue/cli-service-global
 RUN npm install vue-router
 RUN npm install sass-loader
+RUN npm install @fortawesome/fontawesome-free
 
 COPY . .
 
