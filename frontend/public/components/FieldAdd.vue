@@ -4,7 +4,7 @@
         <p>
             Type:
             <select id="field-dropdown" v-model="currField">
-                <option v-bind:value="field" v-for="field in fieldTypes" v-bind:key="field">{{caps(field)}}</option>
+                <option v-bind:value="field" v-for="field in fieldTypes" v-bind:key="field">{{$parent.caps(field)}}</option>
             </select>
         </p>
         <p>
