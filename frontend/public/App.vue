@@ -4,7 +4,6 @@
     </div>
 </template>
 
-<script src="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet"></script>
 <script type="text/javascript" src="./js/config.js"></script>
 
 <script>
@@ -31,3 +30,7 @@
         components: {Login,Dashboard,MyTeam},
     };
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+</style>
