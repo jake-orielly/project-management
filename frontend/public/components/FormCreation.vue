@@ -9,7 +9,7 @@
                 <i class="fa fa-save save-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
             </div>
             <p v-if="fields.length == 0">Add some content to your form!</p>
-            <div v-for="field in fields" class="field-card" v-bind:key="field.label"
+            <div v-for="field in fields" class="field-card" v-bind:key="fields.indexOf(field)"
             draggable 
             @dragstart='onDrag(field)' 
             @dragenter='onDragEnter($event)' 
