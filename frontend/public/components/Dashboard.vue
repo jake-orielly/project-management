@@ -1,12 +1,6 @@
 <template>
     <div>
-        <div id="topbar">
-            <img src="images/logo.png" id="logo-img">
-            <p class="clickable" @click="setTab('dashboard')">Dashboard</p>
-            <p class="clickable" @click="setTab('myForms')">My Forms</p>
-            <img src="images/avatar.png" id="avatar-img">
-            <p id="user-name">Ann Perkins</p>
-        </div>
+        <banner></banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <div id="inbox">
                 <div v-if="estimating == undefined">
@@ -188,11 +182,14 @@
 </template>
 
 <script>
-    import '../css/login.css'
+    import '../css/style.css'
     import requests from '../services/requests.js';
-    //import app_js from '../js/app.js'
+    import Banner from '../components/Banner.vue';
 
     export default {
+        components: {
+            Banner
+        },
         data () {
             return {
                 currTab: "dashboard",
@@ -454,9 +451,6 @@
             document.getElementById("field-dropdown").value = "";
             this.currField = "";
             document.getElementById("field-label").value = "";
-        },
-        setTab: function(newTab) {
-            this.currTab = newTab;
         },
         dropdownAdd: function() {
             this.numDropdownFields++;
