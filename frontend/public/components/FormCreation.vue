@@ -8,8 +8,8 @@
             <div @click="saveForm">
                 <i class="fa fa-save save-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
             </div>
-            <p v-if="fields.length == 0">Add some content to your form!</p>
-            <div v-for="field in fields" class="field-card" v-bind:key="fields.indexOf(field)"
+            <p v-if="$parent.fields.length == 0">Add some content to your form!</p>
+            <div v-for="field in $parent.fields" class="field-card" v-bind:key="$parent.fields.indexOf(field)"
             draggable 
             @dragstart='onDrag(field)' 
             @dragenter='onDragEnter($event)' 
@@ -43,17 +43,18 @@
     export default {
         data() {
             return {
-                fields: this.$parent.fields
             }
         },
         methods: {
             openFormPreview() {
+                /* eslint-disable */
+                console.log(this.$parent.fields)
                 this.$parent.formPreview = true;
             },
             saveForm() {
                 let form = {};
                 form.title = this.formTitle;
-                form.fields = this.fields.slice();
+                form.fields = this.$parent.fields.slice();
                 requests.postForm(form).then(
                     () => {
                         this.$parent.formSaved = true;
@@ -61,10 +62,11 @@
                 );
             },
             onDrag(item) {
-                for (let i = 0; i < this.fields.length; i++)
-                    if (this.fields[i] == item) {
+                console.log(this.$parent.fields)
+                for (let i = 0; i < this.$parent.fields.length; i++)
+                    if (this.$parent.fields[i] == item) {
                         this.draggingPos = i;
-                        this.draggingField = this.fields[i];
+                        this.draggingField = this.$parent.fields[i];
                         break;
                     }
             },
@@ -83,26 +85,26 @@
                 targetLabel = targetInner.getElementsByTagName("input")[0].value;
 
                 // Find it's position in fields
-                for (let i = 0; i < this.fields.length; i++)
-                    if (this.fields[i].label == targetLabel) {
+                for (let i = 0; i < this.$parent.fields.length; i++)
+                    if (this.$parent.fields[i].label == targetLabel) {
                         targetPos = i;
                         break;
                     }
                 
                 if (targetPos != this.draggingPos) {
-                    this.fields.splice(this.draggingPos,1);
-                    this.fields = this.fields.slice(0,targetPos).concat([this.draggingField]).concat(this.fields.slice(targetPos));
+                    this.$parent.fields.splice(this.draggingPos,1);
+                    this.$parent.fields = this.$parent.fields.slice(0,targetPos).concat([this.draggingField]).concat(this.$parent.fields.slice(targetPos));
                     this.draggingPos = targetPos;
                 }
             },
             resizeInput(field) {
-                let fieldIndex = this.fields.indexOf(field);
+                let fieldIndex = this.$parent.fields.indexOf(field);
                 let inputs = document.getElementsByClassName("field-label");
                 let currInput = inputs[fieldIndex];
                 currInput.style.width = (field.label.length * 0.95 + 2) + "ch";
             },
             deleteField(field) {
-                this.fields.splice(this.fields.indexOf(field),1);
+                this.$parent.fields.splice(this.$parent.fields.indexOf(field),1);
             },
         }
     }
