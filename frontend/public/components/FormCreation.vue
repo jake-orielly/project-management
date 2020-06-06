@@ -19,7 +19,7 @@
                     <input class="field-label" v-model="field.label" @input="resizeInput(field)">
                     <span class="field-type">{{"(" + $parent.caps(field.type) + ")"}}</span>
                     <i class="fa fa-bars clickable"></i>
-                    <div @click="deleteField(field)">
+                    <div class="close-container" @click="deleteField(field)">
                         <i class="fa fa-times clickable"></i>
                     </div>
                     <ul v-for="option in field.options" v-bind:key="option">
@@ -109,5 +109,15 @@
 </script>
 
 <style lang="scss" scoped>
+    .close-container {
+        display: inline-block;
+    }
 
+    .field-card-inner *{
+        margin-right: 0.5em;
+    }
+
+    .field-label {
+        margin-right: 0;
+    }
 </style>
