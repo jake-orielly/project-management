@@ -47,8 +47,6 @@
         },
         methods: {
             openFormPreview() {
-                /* eslint-disable */
-                console.log(this.$parent.fields)
                 this.$parent.formPreview = true;
             },
             saveForm() {
@@ -62,7 +60,6 @@
                 );
             },
             onDrag(item) {
-                console.log(this.$parent.fields)
                 for (let i = 0; i < this.$parent.fields.length; i++)
                     if (this.$parent.fields[i] == item) {
                         this.draggingPos = i;
