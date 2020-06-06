@@ -4,19 +4,21 @@
         <Banner v-bind:user="'Leslie Knope'"></Banner>
         <div id="team-container" v-if="!formPreview">
         <div class="clickable" @click="toggleForms('ann_perkins')">
-            <p>
-                Ann Perkins
+            <div class="user-forms-container">
+                <p>
+                    Ann Perkins
+                </p>
                 <div v-if="!formsOpen">
-                    <p>
+                    <span>
                         <i class="fa fa-plus"></i>
-                    </p>
+                    </span>
                 </div>
                 <div v-if="formsOpen">
-                    <p>
+                    <span>
                         <i class="fa fa-minus"></i>
-                    </p>
+                    </span>
                 </div>
-            </p>
+            </div>
             <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
         </div>
         </div>
@@ -96,3 +98,20 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    #team-container {
+        margin: 2em;
+        font-size: 1.5rem;
+    }
+
+    .user-forms-container {
+        display: inline-block;
+
+        * {
+            display: inline-block;
+            margin-left: 0.5rem;
+        }
+        
+    }
+</style>
