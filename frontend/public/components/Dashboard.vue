@@ -2,18 +2,9 @@
     <div>
         <banner></banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
-            <inbox></inbox>
-            <calendar></calendar>
-            <div id="taskList">
-                <p class="title">My Tasks</p>
-                <ul>
-                    <li v-for="task in taskList" @click="taskClick(task)" v-bind:key="task.name">
-                        <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
-                            <p>{{task.description}}</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+            <Inbox></Inbox>
+            <Calendar></Calendar>
+            <TaskList></TaskList>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
             <div id="field-input-container" v-if="!formSaved">
@@ -135,12 +126,14 @@
     import Banner from '../components/Banner.vue';
     import Calendar from '../components/Calendar.vue';
     import Inbox from '../components/Inbox.vue';
+    import TaskList from '../components/TaskList.vue';
 
     export default {
         components: {
             Banner,
             Calendar,
-            Inbox
+            Inbox,
+            TaskList
         },
         data () {
             return {
@@ -172,12 +165,6 @@
             this.updateInbox();
         },
         methods: {
-            taskClick(task) {
-            this.dayHighlighted = {};
-            for (let i = 0; i < this.workload.length; i++)
-                if (this.workload[i].tasks.filter(item => item.name == task.description).length)
-                    this.dayHighlighted[i] = true;
-        },
         updateWorkload() {
             let workload = [];
             let taskList = this.taskList.slice();
