@@ -1,39 +1,5 @@
 var app = new Vue({
     el: '#app',
-    data: {
-        message: 'Hello Vue!',
-        currField: '',
-        fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],
-        numDropdownFields: 0,
-        numMultiSelectFields: 0,
-        fields: [],
-        currTab: "dashboard",
-        inbox: [],
-        taskList: [],
-        calendarDays: 31,
-        daysOfWeek: ["Su","Mo","Tu","We","Th","Fr","Sa"],
-        weekendClass: "weekend-cell",
-        blankDateClass: "blank-cell",
-        pastDateClass: "past-cell",
-        monthOffset: 5,
-        monthLength: 31,
-        monthStartDayOfWeek: 4  ,
-        today: new Date(),
-        workload: [],
-        formTitle: "",
-        formPreview: false,
-        formSaved: false,
-        estimating: undefined,
-        dayShowing: undefined,
-        dayHighlighted: {},
-        dayHighlightedClass: 'cell-highlighted',
-        draggingPos: undefined,
-        draggingField: undefined,
-    },
-    mounted() {
-        this.updateWorkload();
-        this.updateInbox();
-    },
     methods: {
         taskClick(task) {
             this.dayHighlighted = {};
@@ -137,9 +103,6 @@ var app = new Vue({
                 return "yellow-day"
             else if (hours < 8)
                 return "green-day";
-        },
-        calendarToDate(row,col) {
-            return row * 7 + col - this.monthOffset + 1;
         },
         openInboxItem(item) {
             this.estimating = item;

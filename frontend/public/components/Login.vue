@@ -36,9 +36,9 @@
                         let result = JSON.parse(response.responseText).message;
                         if (result == "success") {
                             if (this.username == "ann.perkins")
-                                window.location.href = "./dashboard.html";
+                                this.$router.push('/dashboard')
                             else if (this.username == "leslie.knope")
-                                window.location.href = "./my-team.html";
+                                this.$router.push('/my-team')
                         }
                         else
                             this.loginStatus = "failed";
