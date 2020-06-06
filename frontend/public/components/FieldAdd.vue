@@ -15,7 +15,7 @@
             <li>
                 <button id="dropdown-add" @click="dropdownAdd">Add Dropdown Option</button>
             </li>
-            <li v-for="option in [...Array(numDropdownFields).keys()]" v-bind:key="option">
+            <li v-for="field in numDropdownFields" v-bind:key="field">
                 <input type="text" class="currDropdownOption" placeholder="New Dropdown Option">
             </li>
         </ul>
@@ -99,7 +99,7 @@
                     newField.slider.initial = document.getElementById("slider-initial").value;
                 }
 
-                this.fields.push(newField);
+                this.$parent.fields.push(newField);
 
                 document.getElementById("field-dropdown").value = "";
                 this.currField = "";
