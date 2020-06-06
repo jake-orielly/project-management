@@ -1,7 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <Banner></Banner>
+        <Banner v-bind:user="'Leslie Knope'"></Banner>
         <div id="team-container" v-if="!formPreview">
         <div class="clickable" @click="toggleForms('ann_perkins')">
             <p>

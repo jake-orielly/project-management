@@ -1,6 +1,6 @@
 <template>
     <div>
-        <banner></banner>
+        <Banner v-bind:user="'Ann Perkins'"></Banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
             <Calendar></Calendar>
