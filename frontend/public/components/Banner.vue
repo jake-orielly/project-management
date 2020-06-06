@@ -10,9 +10,6 @@
 
 <script>
     export default {
-        data () {
-           
-        },
         methods: {
             setTab: function(newTab) {
                 this.$parent.currTab = newTab;
