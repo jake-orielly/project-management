@@ -96,27 +96,7 @@
                 </div>
             </div>
         </div>
-        <div id="form-preview-modal" v-if="formPreview">
-            <i class="fa fa-times form-preview-close" style="font-size:2rem; color:#2C666E;" @click="closeFormPreview"></i>
-            <p class="title">{{formTitle}}</p>
-            <div v-for="field in fields" class="form-field" v-bind:key="field.label">
-                <p> {{field.label}}
-                    <input v-if="field.type == 'text'" type="text">
-                    <input v-if="field.type == 'number'" type="number">
-                    <textarea v-if="field.type == 'text (long)'" type="number"></textarea>
-                    <input v-if="field.type == 'date'" type="date">
-                    <select v-if="field.type == 'dropdown'">
-                        <option v-for="option in field.options" value="option" v-bind:key="option">{{option}}</option>
-                    </select>
-                    <input v-if="field.type == 'slider'" type="range" 
-                        :min="field.slider.min" 
-                        :max="field.slider.max" 
-                        :value="field.slider.initial" 
-                        :step="field.slider.step" 
-                        class="slider" id="myRange">
-                </p>
-            </div>
-        </div>
+        <FormPreview></FormPreview>
     </div>
 </template>
 
@@ -127,13 +107,15 @@
     import Calendar from '../components/Calendar.vue';
     import Inbox from '../components/Inbox.vue';
     import TaskList from '../components/TaskList.vue';
+    import FormPreview from '../components/FormPreview.vue';
 
     export default {
         components: {
             Banner,
             Calendar,
             Inbox,
-            TaskList
+            TaskList,
+            FormPreview
         },
         data () {
             return {
@@ -231,9 +213,6 @@
         },
         openFormPreview() {
             this.formPreview = true;
-        },
-        closeFormPreview() {
-            this.formPreview = false;
         },
         resizeInput(field) {
             let fieldIndex = this.fields.indexOf(field);
