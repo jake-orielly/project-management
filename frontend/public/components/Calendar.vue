@@ -9,8 +9,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="row in [...Array(6).keys()]" v-bind:key="row">
-                        <td v-for="col in [...Array(7).keys()]" v-bind:key="col" v-bind:class="[ $parent.dayHighlighted[calendarToDate(row,col)] ? $parent.dayHighlightedClass : '']">
+                    <tr v-for="row in [0,1,2,3,4,5]" v-bind:key="row">
+                        <td v-for="col in [0,1,2,3,4,5,6]" v-bind:key="col" v-bind:class="[ $parent.dayHighlighted[calendarToDate(row,col)] ? $parent.dayHighlightedClass : '']">
                             <div @click="showDay(row,col)" class="calendar-cell clickable" 
                                 v-bind:class="[
                                 (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
@@ -46,6 +46,10 @@
                 monthOffset: 5,
                 monthLength: 31,
                 monthStartDayOfWeek: 4,
+                calendarDays: 31,
+                weekendClass: "weekend-cell",
+                blankDateClass: "blank-cell",
+                pastDateClass: "past-cell",
             }
         },
         methods: {
