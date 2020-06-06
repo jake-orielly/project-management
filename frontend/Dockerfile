@@ -14,4 +14,7 @@ COPY . .
 EXPOSE 8080
 
 RUN npm run sass
-CMD [ "npm", "start" ]
+
+WORKDIR /usr/src/app/public
+
+CMD [ "vue", "serve" ]
