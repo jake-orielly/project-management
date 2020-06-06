@@ -1,7 +1,7 @@
 <template>
     <div id="form-preview-modal" v-if="$parent.formPreview">
-        <div @click="closeFormPreview">
-            <i class="fa fa-times"></i>
+        <div @click="closeFormPreview" class="close-container">
+            <i class="fa fa-times clickable"></i>
         </div>
         <p class="title">{{$parent.formTitle}}</p>
         <div v-for="field in $parent.fields" class="form-field" v-bind:key="field.label">
@@ -39,8 +39,10 @@
 </script>
 
 <style lang="scss" scoped>
-    .form-preview-close {
-        font-size:2rem;
+    .close-container {
+        text-align: right;
+        margin-right: 2rem;
+        font-size: 2rem;
         color:#2C666E;
     }
 </style>
