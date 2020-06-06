@@ -145,8 +145,6 @@
         data () {
             return {
                 currTab: "dashboard",
-                monthOffset: 5,
-                monthLength: 31,
                 currField: '',
                 fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],
                 numDropdownFields: 0,
@@ -158,13 +156,11 @@
                 weekendClass: "weekend-cell",
                 blankDateClass: "blank-cell",
                 pastDateClass: "past-cell",
-                monthStartDayOfWeek: 4  ,
                 today: new Date(),
                 workload: [],
                 formTitle: "",
                 formPreview: false,
                 formSaved: false,
-                dayShowing: undefined,
                 dayHighlighted: {},
                 dayHighlightedClass: 'cell-highlighted',
                 draggingPos: undefined,
@@ -176,12 +172,6 @@
             this.updateInbox();
         },
         methods: {
-            calendarToDate(row,col) {
-                return row * 7 + col - this.monthOffset + 1;
-            },
-            dayInMonth(row,col) {
-                return (this.calendarToDate(row,col) > 0 && this.calendarToDate(row,col) <= this.monthLength);
-            },
             taskClick(task) {
             this.dayHighlighted = {};
             for (let i = 0; i < this.workload.length; i++)
@@ -261,19 +251,6 @@
         },
         closeFormPreview() {
             this.formPreview = false;
-        },
-        workloadClasses(day) {
-            let hours;
-            if (this.workload[day])
-                hours = this.workload[day].remaining;
-            else
-                return;
-            if (hours <= 0)
-                return "red-day"
-            else if (hours <= 1)
-                return "yellow-day"
-            else if (hours < 8)
-                return "green-day";
         },
         resizeInput(field) {
             let fieldIndex = this.fields.indexOf(field);
