@@ -7,7 +7,7 @@
             <TaskList></TaskList>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
-            <FieldCreation></FieldCreation>
+            <FieldAdd></FieldAdd>
             <div id="form-container">
                 <div id="form-content" v-if="!formSaved">
                     <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="formTitle">
@@ -50,7 +50,7 @@
     import Calendar from '../components/Calendar.vue';
     import Inbox from '../components/Inbox.vue';
     import TaskList from '../components/TaskList.vue';
-    import FieldCreation from '../components/FieldCreation.vue';
+    import FieldAdd from '../components/FieldAdd.vue';
     import FormPreview from '../components/FormPreview.vue';
 
     export default {
@@ -59,7 +59,7 @@
             Calendar,
             Inbox,
             TaskList,
-            FieldCreation
+            FieldAdd,
             FormPreview
         },
         data () {
