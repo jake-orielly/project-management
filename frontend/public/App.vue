@@ -9,8 +9,9 @@
 
 <script>
     import './css/style.css'
-    import Login from './components/Login.vue';
-    import Dashboard from './components/Dashboard.vue';
+    import Login from './views/Login.vue';
+    import Dashboard from './views/Dashboard.vue';
+    import MyTeam from './views/MyTeam.vue';
 
     import Vue from 'vue'
     import VueRouter from 'vue-router'
@@ -19,13 +20,14 @@
 
     const routes = [
         { path: '/', component: Login },
-        { path: '/dashboard', component: Dashboard }
+        { path: '/dashboard', component: Dashboard },
+        { path: '/my-team', component: MyTeam }
     ];
 
     const router = new VueRouter({routes});
     export default {
         name: 'app',
         router,
-        components: {Login,Dashboard},
+        components: {Login,Dashboard,MyTeam},
     };
 </script>
