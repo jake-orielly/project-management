@@ -13,9 +13,9 @@
                         <td v-for="col in [0,1,2,3,4,5,6]" v-bind:key="col" v-bind:class="[ $parent.dayHighlighted[calendarToDate(row,col)] ? $parent.dayHighlightedClass : '']">
                             <div @click="showDay(row,col)" class="calendar-cell clickable" 
                                 v-bind:class="[
-                                (col == 0 || col == 6)? weekendClass : '',(calendarToDate(row,col) < 1 || 
+                                isWeekend(calendarToDate(row,col))? weekendClass : '',(calendarToDate(row,col) < 1 || 
                                 calendarToDate(row,col) > monthLength)? blankDateClass : '',
-                                (new Date() > new Date(2020, 4, calendarToDate(row,col), 23) ? pastDateClass : ''),
+                                (new Date() > new Date(2020, 5, calendarToDate(row,col), 23) ? pastDateClass : ''),
                                 workloadClasses(calendarToDate(row,col))]"
                             >
                                 {{dayInMonth(row,col) ? calendarToDate(row,col) :''}}
@@ -43,10 +43,9 @@
             return {
                 daysOfWeek: ["Su","Mo","Tu","We","Th","Fr","Sa"],
                 dayShowing: undefined,
-                monthOffset: 5,
-                monthLength: 31,
-                monthStartDayOfWeek: 4,
-                calendarDays: 31,
+                monthStartOffset: 1,
+                monthLength: 30,
+                calendarDays: 30,
                 weekendClass: "weekend-cell",
                 blankDateClass: "blank-cell",
                 pastDateClass: "past-cell",
@@ -60,11 +59,11 @@
                 this.dayShowing = undefined;
             },
             isWeekend(day) {
-                let dayOfWeek = this.daysOfWeek[(this.monthStartDayOfWeek + day) % this.daysOfWeek.length];
+                let dayOfWeek = this.daysOfWeek[(this.monthStartOffset - 1 + day) % this.daysOfWeek.length];
                 return (dayOfWeek == "Sa" || dayOfWeek == "Su");
             },
             calendarToDate(row,col) {
-                return row * 7 + col - this.monthOffset + 1;
+                return row * 7 + col - this.monthStartOffset + 1;
             },
             dayInMonth(row,col) {
                 return (this.calendarToDate(row,col) > 0 && this.calendarToDate(row,col) <= this.monthLength);
