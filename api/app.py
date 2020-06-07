@@ -78,9 +78,10 @@ class Forms(Resource):
         client = MongoClient(mongo_URL)
         db=client.project_management
         collection = db[user + "_forms"]
-        cursor = collection.find({}, {'_id': False})
+        cursor = collection.find({})
         results = []
         for i in cursor:
+            i["_id"] = str(i["_id"])
             results.append(json.dumps(i))
         return {"data":results}
     def post(self, user):

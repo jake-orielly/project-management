@@ -7,6 +7,7 @@
             <TaskList></TaskList>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
+            <FormList v-bind:targetUser="'ann_perkins'"></FormList>
             <FieldAdd></FieldAdd>
             <FormCreation></FormCreation>
         </div>
@@ -24,6 +25,7 @@
     import FieldAdd from '../components/FieldAdd.vue';
     import FormCreation from '../components/FormCreation.vue';
     import FormDisplay from '../components/FormDisplay.vue';
+    import FormList from '../components/FormList.vue';
 
     export default {
         components: {
@@ -33,7 +35,8 @@
             TaskList,
             FieldAdd,
             FormCreation,
-            FormDisplay
+            FormDisplay,
+            FormList
         },
         data () {
             return {
