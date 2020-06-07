@@ -49,9 +49,9 @@
                 for (let i of fields) {
                     response[i.dataset.label] = i.value;
                 }
-                requests.submitResponse(this.currForm,response);
-                this.formPreview = false;
-                this.currForm = "";
+                requests.submitResponse(this.$parent.currForm,response);
+                this.$parent.formPreview = false;
+                this.$parent.currForm = "";
             },
         }
     }
