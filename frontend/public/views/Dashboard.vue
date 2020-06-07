@@ -3,7 +3,7 @@
         <Banner v-bind:user="'Ann Perkins'"></Banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
-            <Calendar></Calendar>
+            <Calendar ref="calendar"></Calendar>
             <TaskList></TaskList>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
@@ -66,13 +66,13 @@
             taskList = taskList.sort(
                 (a,b) => a.due < b.due ? -1 : 1
             )
-            for (let i = 0; i < this.monthLength; i++)  
+            for (let i = 0; i < this.$refs.calendar.monthLength; i++)  
                 workload.push({remaining:8,tasks:[]});
             for (let i of taskList) {
                 currTask = Object.assign({}, i);
                 i.danger = false;
                 while (currTask.estimate > 0) {
-                    if (this.isWeekend(currDay)) {
+                    if (this.$refs.calendar.isWeekend(currDay)) {
                         currDay++;
                     }
                     else if (workload[currDay].remaining > currTask.estimate) {
@@ -90,7 +90,7 @@
                     }
                     else {
                         for (let j = currDay; j >= this.today.getDate(); j--) {
-                            if (this.isWeekend(j)) {
+                            if (this.$refs.calendar.isWeekend(j)) {
                                 j--;
                             }
                             else if (currTask.due.getDate() + 1 == currDay) {

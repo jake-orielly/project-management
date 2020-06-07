@@ -4,16 +4,17 @@
             <i class="fa fa-times clickable"></i>
         </div>
         <p class="title">{{$parent.formTitle}}</p>
-        <div v-for="field in $parent.fields" class="form-field" v-bind:key="field.label">
-            <p> {{field.label}}
-                <input v-if="field.type == 'text'" type="text">
-                <input v-if="field.type == 'number'" type="number">
-                <textarea v-if="field.type == 'text (long)'" type="number"></textarea>
-                <input v-if="field.type == 'date'" type="date">
-                <select v-if="field.type == 'dropdown'">
-                    <option v-for="option in field.options" value="option" v-bind:key="option">{{option}}</option>
+        <div v-for="field in $parent.fields" class="form-field" v-bind:key="$parent.fields.indexOf(field)">
+            <p> 
+                {{field.label}}
+                <input v-if="field.type == 'text'" :data-label="toLabel(field.label)" type="text">
+                <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
+                <textarea v-if="field.type == 'text (long)'" :data-label="toLabel(field.label)" type="number"></textarea>
+                <input v-if="field.type == 'date'" :data-label="toLabel(field.label)" type="date">
+                <select v-if="field.type == 'dropdown'" :data-label="toLabel(field.label)">
+                    <option v-for="option in field.options" v-bind:key="$parent.fields.indexOf(field) + ':' + field.options.indexOf(option)" :value="option">{{option}}</option>
                 </select>
-                <input v-if="field.type == 'slider'" type="range" 
+                <input v-if="field.type == 'slider'" :data-label="toLabel(field.label)" type="range" 
                     :min="field.slider.min" 
                     :max="field.slider.max" 
                     :value="field.slider.initial" 
@@ -46,13 +47,15 @@
             submitForm() {
                 let fields = document.querySelectorAll('input,select');
                 let response = {};
-                for (let i of fields) {
+                for (let i of fields)
                     response[i.dataset.label] = i.value;
-                }
                 requests.submitResponse(this.$parent.currForm,response);
                 this.$parent.formPreview = false;
                 this.$parent.currForm = "";
             },
+            toLabel(s) {
+                return s.replace(/ /g,'_').toLowerCase();
+            }
         }
     }
 </script>

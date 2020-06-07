@@ -3,7 +3,7 @@
         <div v-if="estimating == undefined">
             <p class="title">Inbox</p>
             <ul>
-                <li v-for="item in $parent.inbox" v-bind:key="item.title">
+                <li v-for="item in $parent.inbox" v-bind:key="$parent.inbox.indexOf(item)">
                     <div class="dashboard-card">
                         <p @click="openInboxItem(item)">{{item.description}}: {{item.title}}</p>
                     </div>
@@ -40,9 +40,9 @@
                         document.getElementById("estimate-input").value
                     ),
                 )
-                this.inbox.splice(this.inbox.indexOf(this.estimating),1);
+                this.$parent.inbox.splice(this.$parent.inbox.indexOf(this.estimating),1);
                 this.estimating = undefined;
-                this.updateWorkload();
+                this.$parent.updateWorkload();
             },
         }
     }

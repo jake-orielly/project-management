@@ -61,7 +61,6 @@
                     this.forms = [];
                     this.formsOpen = false;
                 }
-                console.log(this.formsOpen)
             },
             getForms(user) {
                 requests.getUserForms(user).then(
@@ -70,7 +69,6 @@
                         for (let form of responseData) {
                             this.forms.push({name:JSON.parse(form).title});
                         }
-                        console.log(this.forms)
                     }
                 )
             },
@@ -92,9 +90,6 @@
             closeFormPreview() {
                 this.formPreview = false;
             },
-            toLabel(s) {
-                return s.replace(/ /g,'_').toLowerCase();
-            }
         }
     }
 </script>
