@@ -4,9 +4,9 @@ export default {
     components: {
         'config': config
     },
-    retrieveForm(formName) {
-        let data = JSON.stringify({title:formName});
-        return this.genericRequest("/retrieve-form", "POST", data)
+    retrieveForm(inputData) {
+        let bodyData = JSON.stringify(inputData);
+        return this.genericRequest("/retrieve-form", "POST", bodyData)
     },
     getUserForms(user) {
         return this.genericRequest("/forms/" + user, "GET")

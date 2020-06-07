@@ -4,6 +4,7 @@ from werkzeug.utils import cached_property
 from flask_restplus import Resource, Api
 import json
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 import config
 
@@ -25,10 +26,17 @@ class RetrieveForm(Resource):
         db=client.project_management
         collection = db.ann_perkins_forms
         req_data = json.loads(request.data.decode("utf-8"))
-        cursor = collection.find({"title": req_data["title"]}, {'_id': False})
+
         results = []
-        for i in cursor:
-            results.append(json.dumps(i))
+
+        if "title" in req_data:
+            cursor = collection.find({"title": req_data["title"]}, {'_id': False})
+            for i in cursor:
+                results.append(json.dumps(i))
+        elif "id" in req_data:
+            found = [i for i in collection.find({"_id": ObjectId(req_data["id"])}, {'_id': False})]
+            results.append(json.dumps(found))
+
         return {"data":results}
 
 @api.route('/responses/<form_title>')

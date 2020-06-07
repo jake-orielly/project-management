@@ -74,7 +74,9 @@
             },
             requestForm(formName) {
                 this.currForm = formName;
-                requests.retrieveForm(formName).then(
+                requests.retrieveForm(
+                    {"title":formName}
+                ).then(
                     response => {
                         let responseText = JSON.parse(response.responseText);
                         let form = JSON.parse(responseText.data);

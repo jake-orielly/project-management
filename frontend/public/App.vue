@@ -11,6 +11,7 @@
     import Login from './views/Login.vue';
     import Dashboard from './views/Dashboard.vue';
     import MyTeam from './views/MyTeam.vue';
+    import Forms from './views/Forms.vue';
 
     import Vue from 'vue'
     import VueRouter from 'vue-router'
@@ -20,14 +21,15 @@
     const routes = [
         { path: '/', component: Login },
         { path: '/dashboard', component: Dashboard },
-        { path: '/my-team', component: MyTeam }
+        { path: '/my-team', component: MyTeam },
+        { path: '/forms/:formId', component: Forms}
     ];
 
     const router = new VueRouter({routes});
     export default {
         name: 'app',
         router,
-        components: {Login,Dashboard,MyTeam},
+        components: {Login,Dashboard,MyTeam,Forms},
     };
 </script>
 
