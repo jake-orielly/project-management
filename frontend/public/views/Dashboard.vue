@@ -144,3 +144,13 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    #dashboard {
+        height: 90vh;
+    
+        & div {
+            margin-top: 1rem;
+        }
+    }
+</style>
