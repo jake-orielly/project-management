@@ -21,12 +21,14 @@
                                 {{dayInMonth(row,col) ? calendarToDate(row,col) :''}}
                             </div>
                             <div class="date-info" 
-                            v-if="dayShowing == calendarToDate(row,col) && workload[calendarToDate(row,col)].tasks.length">
+                            v-if="dayShowing == calendarToDate(row,col) && $parent.workload[calendarToDate(row,col)].tasks.length">
                                 <div class="date-info-inner">
-                                    <p v-for="task in workload[calendarToDate(row,col)].tasks" v-bind:key="task.name">
+                                    <div class="close-icon-container" @click="hideDay">
+                                        <i class="fa fa-times clickable"></i>
+                                    </div>
+                                    <p v-for="task in $parent.workload[calendarToDate(row,col)].tasks" v-bind:key="task.name">
                                         {{task.name + ": " + task.time + " hours"}}
                                     </p>
-                                    <i class="fa fa-times clickable" @click="hideDay"></i>
                                 </div>
                             </div>
                         </td>
@@ -84,3 +86,9 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+    .close-icon-container {
+        text-align: right;
+    }
+</style>
