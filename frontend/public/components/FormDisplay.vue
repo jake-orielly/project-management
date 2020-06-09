@@ -1,6 +1,6 @@
 <template>
     <div id="form-preview-modal" v-if="$parent.formPreview">
-        <div @click="closeFormPreview" class="close-container">
+        <div v-if="preview" @click="closeFormPreview" class="close-container">
             <i class="fa fa-times clickable"></i>
         </div>
         <p class="title">{{$parent.formTitle}}</p>
@@ -49,6 +49,7 @@
                 let response = {};
                 for (let i of fields)
                     response[i.dataset.label] = i.value;
+                response["time"] = String(new Date());
                 requests.submitResponse(this.$parent.currForm,response);
                 this.$parent.formPreview = false;
                 this.$parent.currForm = "";
