@@ -11,6 +11,10 @@
             Label: 
             <input type="text" id="field-label">
         </p>
+        <p>
+            Mandatory:
+            <input type="checkbox" id="field-mandatory" checked>
+        </p>
         <ul v-if="currField == 'dropdown'">
             <li>
                 <button id="dropdown-add" @click="dropdownAdd">Add Dropdown Option</button>
@@ -73,9 +77,9 @@
             fieldAdd: function() {
                 let newField = {
                     label: document.getElementById("field-label").value,
-                    type: document.getElementById("field-dropdown").value
+                    type: document.getElementById("field-dropdown").value,
+                    mandatory: document.getElementById("field-mandatory").checked
                 };
-
                 if (this.currField == 'dropdown') {
                     newField.options = [];
                     for (let i of document.getElementsByClassName("currDropdownOption"))

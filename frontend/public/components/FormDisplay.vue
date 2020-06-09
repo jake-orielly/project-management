@@ -7,6 +7,7 @@
         <div v-for="field in $parent.fields" class="form-field" v-bind:key="$parent.fields.indexOf(field)">
             <p> 
                 {{field.label}}
+                <span v-if="field.mandatory">*</span>
                 <input v-if="field.type == 'text'" :data-label="toLabel(field.label)" type="text">
                 <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
                 <textarea v-if="field.type == 'text (long)'" :data-label="toLabel(field.label)" type="number"></textarea>
@@ -46,13 +47,24 @@
             },
             submitForm() {
                 let fields = document.querySelectorAll('input,select');
+                let parentField;
                 let response = {};
-                for (let i of fields)
+                let formComplete = true;
+                for (let i of fields) {
+                    parentField = this.$parent.fields.filter(field => field.label == i.dataset.label)[0];
+                    if (parentField.mandatory == true && !i.value) {
+                        formComplete = false;
+                        i.classList.add("incomplete-field");
+                        alert("Some mandatory fields incomplete")
+                    }
                     response[i.dataset.label] = i.value;
-                response["time"] = String(new Date());
-                requests.submitResponse(this.$parent.currForm,response);
-                this.$parent.formPreview = false;
-                this.$parent.currForm = "";
+                }
+                if (formComplete) {
+                    response["time"] = String(new Date());
+                    requests.submitResponse(this.$parent.currForm,response);
+                    this.$parent.formPreview = false;
+                    this.$parent.currForm = "";
+                }
             },
             toLabel(s) {
                 return s.replace(/ /g,'_').toLowerCase();
@@ -67,5 +79,10 @@
         margin-right: 2rem;
         font-size: 2rem;
         color:#2C666E;
+    }
+
+    .incomplete-field {
+        border: 1px solid black;
+        box-shadow: 2px 2px 8px 0px red;
     }
 </style>
