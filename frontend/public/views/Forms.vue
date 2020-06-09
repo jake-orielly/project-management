@@ -1,6 +1,7 @@
 <template>
     <div id="form-display-container">
         <FormDisplay v-bind:preview="false"></FormDisplay>
+        <p class="submit-text" v-if="!currForm">Your response has been submitted.</p>
     </div>
 </template>
 
@@ -43,5 +44,9 @@
 </script>
 
 <style lang="scss" scoped>
-
+    .submit-text {
+        text-align: center;
+        margin-top: 4em;
+        font-size: 1.5rem;
+    }
 </style>
