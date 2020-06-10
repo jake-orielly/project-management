@@ -8,7 +8,6 @@
             <div @click="saveForm">
                 <i class="fa fa-save save-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
             </div>
-            <p v-if="$parent.fields.length == 0">Add some content to your form!</p>
             <div v-for="field in $parent.fields" class="field-card" v-bind:key="$parent.fields.indexOf(field)"
             draggable 
             @dragstart='onDrag(field)' 
@@ -32,7 +31,7 @@
             </div>
         </div>
         <div v-if="$parent.formSaved">
-            <p>Your form has been saved to the database.</p>
+            <button @click="createForm">Create Form</button>
         </div>
     </div>
 </template>
@@ -56,6 +55,7 @@
                 requests.postForm(form).then(
                     () => {
                         this.$parent.formSaved = true;
+                        this.$parent.$refs.FormList.updateFormList(); 
                     }
                 );
             },
@@ -103,6 +103,25 @@
             deleteField(field) {
                 this.$parent.fields.splice(this.$parent.fields.indexOf(field),1);
             },
+            createForm() {
+                console.log(1)
+                this.$parent.fields = [
+                    {
+                        label: "Description",
+                        type: "text",
+                        mandatory: true,
+                        default: true
+                    },
+                    {
+                        label: "Due Date",
+                        type: "date",
+                        mandatory: true,
+                        default: true
+                    }
+                ]
+                this.$parent.formSaved = false;
+                this.$parent.formTitle = "";
+            }
         }
     }
 </script>

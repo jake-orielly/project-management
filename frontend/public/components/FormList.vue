@@ -26,16 +26,7 @@
             }
         },
         mounted() {
-            let parsedForm;
-            requests.getUserForms(this.targetUser).then(
-                response => {
-                    let responseData = JSON.parse(response.responseText).data;
-                    for (let form of responseData) {
-                        parsedForm = JSON.parse(form);
-                        this.forms.push({name:parsedForm.title,id:parsedForm._id});
-                    }
-                }
-            )
+            this.updateFormList();
         },
         methods: {
             copyUrl(form) {
@@ -47,6 +38,19 @@
                 document.execCommand('copy');
                 document.body.removeChild(el);
                 alert("Url copied to clipboard")
+            },
+            updateFormList() {
+                let parsedForm;
+                this.forms = [];
+                requests.getUserForms(this.targetUser).then(
+                    response => {
+                        let responseData = JSON.parse(response.responseText).data;
+                        for (let form of responseData) {
+                            parsedForm = JSON.parse(form);
+                            this.forms.push({name:parsedForm.title,id:parsedForm._id});
+                        }
+                    }
+                )
             }
         }
     }
