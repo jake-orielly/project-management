@@ -127,7 +127,8 @@
                             this.inbox.push({
                                 "description": "Give Estimate",
                                 "from": "Leslie Knope",
-                                "title":response.form_title
+                                "title":response.form_title,
+                                "fields":response
                             })
                         }
                     }

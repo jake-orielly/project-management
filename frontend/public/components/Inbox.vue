@@ -11,8 +11,10 @@
             </ul>
         </div>
         <div id="estimate-container" v-if="estimating != undefined">
-            <p class="title">Estimate Task</p>
             <p>{{estimating.description}}</p>
+            <p v-for="field in Object.keys(estimating.fields).filter(field => field != 'form_title')" v-bind:key="field">
+                {{fromLabel(field) + ': ' + estimating.fields[field]}}
+            </p>
             <p><input type="number" id="estimate-input"></p>
             <button @click="submitEstimate">Submit</button>
         </div>
@@ -44,6 +46,13 @@
                 this.estimating = undefined;
                 this.$parent.updateWorkload();
             },
+            fromLabel(s) {
+                s = s.replace(/_/g,' ')
+                s = s.split(' ');
+                for (let i = 0; i < s.length; i++)
+                    s[i] = s[i].substr(0,1).toUpperCase() + s[i].substr(1)
+                return s.join(' ');
+            }
         }
     }
 
