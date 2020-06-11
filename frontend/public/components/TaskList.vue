@@ -19,6 +19,7 @@
         },
         methods: {
             taskClick(task) {
+                console.log(task)
                 this.$parent.dayHighlighted = {};
                 for (let i = 0; i < this.$parent.workload.length; i++)
                     if (this.$parent.workload[i].tasks.filter(item => item.name == task.description).length)

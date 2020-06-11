@@ -25,8 +25,8 @@ export default {
         let data = JSON.stringify(response);
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + "ann.perkins", "POST",data)
     },
-    submitEstimate(user,hash) {
-        return this.genericRequest("/inbox/" + user + "?hash=" + hash, "PATCH")
+    submitEstimate(user,hash,estimate) {
+        return this.genericRequest("/inbox/" + user + "?hash=" + hash + "&estimate=" + estimate, "PATCH")
     },
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});

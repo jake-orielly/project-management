@@ -50,6 +50,7 @@ class Inbox(Resource):
 
     def patch(self,user):
         obj_hash  = request.args.get('hash', None)
+        estimate  = request.args.get('estimate', None)
 
         client = MongoClient(mongo_URL)
         db=client.users
@@ -65,6 +66,7 @@ class Inbox(Resource):
             return {"message":"Error: could not find item in task list"}
 
         task = cursor["inbox"][index]
+        task["estimate"] = estimate
         collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
 
         new_inbox = cursor["inbox"]

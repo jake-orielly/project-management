@@ -4,7 +4,7 @@
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
             <Calendar ref="calendar"></Calendar>
-            <TaskList></TaskList>
+            <TaskList ref="taskList"></TaskList>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
             <FormList v-bind:targetUser="'ann_perkins'" ref="FormList"></FormList>
@@ -121,6 +121,7 @@
                 this.workload = workload;
             },
             updateInbox() {
+                this.inbox = [];
                 requests.getInbox("ann.perkins").then(
                     response => {
                         let responseData = JSON.parse(JSON.parse(response.responseText).data);
@@ -135,11 +136,41 @@
                     }
                 )
             },
+            updateTaskList() {
+                this.taskList = [];
+                requests.getTasks("ann.perkins").then(
+                    response => {
+                        let responseData = JSON.parse(JSON.parse(response.responseText).data);
+                        for (let response of responseData) {
+                            this.taskList.push({
+                                "description": "Give Estimate",
+                                "from": "Leslie Knope",
+                                "title":response.form_title,
+                                "fields":response
+                            })
+                        }
+                    }
+                )
+            },
+            newTask(item) {
+                this.taskList.push(new TaskListItem(item))
+            },
             caps: function(text) {
                 if (!text)
                     return text;
                 return text[0].toUpperCase() + text.substr(1);
             }
+        }
+    }
+
+    class TaskListItem {
+        constructor(item) {
+            this.description = item.description;
+            this.fields = item.fields;
+            this.assigner = "TODO: assigner";
+            this.due = new Date(item.due_date);
+            this.estimate = item.estimate;
+            this.danger = false;
         }
     }
 </script>

@@ -12,8 +12,8 @@
         </div>
         <div id="estimate-container" v-if="estimating != undefined">
             <p>{{estimating.description}}</p>
-            <p v-for="field in Object.keys(estimating.fields).filter(field => field != 'form_title')" v-bind:key="field">
-                {{fromLabel(field) + ': ' + estimating.fields[field]}}
+            <p v-for="field in Object.keys(estimating.fields.fields)" v-bind:key="field">
+                {{fromLabel(field) + ': ' + estimating.fields.fields[field]}}
             </p>
             <p><input type="number" id="estimate-input"></p>
             <button @click="submitEstimate">Submit</button>
@@ -35,21 +35,13 @@
                 this.estimating = item;
             },
             submitEstimate() {
-                this.$parent.taskList.push(
-                    new InboxItem
-                    (
-                        this.estimating.description,
-                        'Leslie Knope',
-                        new Date(this.estimating.fields.due_date),
-                        document.getElementById("estimate-input").value
-                    ),
-                )
-                this.$parent.inbox.splice(this.$parent.inbox.indexOf(this.estimating),1);
-                this.$parent.updateWorkload();
-                requests.submitEstimate("ann.perkins",this.estimating.fields.hash).then(
-                    response => {
+                let estimateVal = document.getElementById("estimate-input").value;
+                requests.submitEstimate("ann.perkins",this.estimating.fields.hash,estimateVal).then(
+                    () => {
                         this.estimating = undefined;
-                        console.log(response)
+                        this.$parent.updateWorkload();
+                        this.$parent.updateInbox();
+                        this.$parent.updateTaskList();
                 })
             },
             fromLabel(s) {
@@ -61,14 +53,4 @@
             }
         }
     }
-
-class InboxItem {
-    constructor(description,from,due,estimate) {
-        this.description = description;
-        this.from = from;
-        this.due = due;
-        this.estimate = estimate;
-        this.danger = false;
-    }
-}
 </script>
