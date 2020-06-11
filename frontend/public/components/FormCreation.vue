@@ -104,7 +104,6 @@
                 this.$parent.fields.splice(this.$parent.fields.indexOf(field),1);
             },
             createForm() {
-                console.log(1)
                 this.$parent.fields = [
                     {
                         label: "Description",

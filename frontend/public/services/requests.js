@@ -15,9 +15,12 @@ export default {
         let data = JSON.stringify(form);
         return this.genericRequest("/forms", "POST",data)
     },
+    getInbox(user) {
+        return this.genericRequest("/inbox/" + user, "GET")
+    },
     submitResponse(form,response) {
         let data = JSON.stringify(response);
-        return this.genericRequest("/responses/" + form, "POST",data)
+        return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + "ann.perkins", "POST",data)
     },
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});

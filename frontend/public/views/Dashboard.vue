@@ -120,21 +120,14 @@
                 this.workload = workload;
             },
             updateInbox() {
-                requests.getUserForms("ann_perkins").then(
+                requests.getInbox("ann.perkins").then(
                     response => {
-                        let responseData = JSON.parse(response.responseText).data;
-                        for (let form of responseData) {
-                            let responses = JSON.parse(form).responses;
-                            let fieldLabels = [];
-                            for (let field of JSON.parse(form).fields)
-                                fieldLabels.push(field.label);
-                            for (let r of responses)
+                        let responseData = JSON.parse(JSON.parse(response.responseText).data);
+                        for (let response of responseData) {
                             this.inbox.push({
                                 "description": "Give Estimate",
                                 "from": "Leslie Knope",
-                                "form":fieldLabels,
-                                "response":r,
-                                "title":JSON.parse(form).title
+                                "title":response.form_title
                             })
                         }
                     }

@@ -12,7 +12,7 @@
         </div>
         <div id="estimate-container" v-if="estimating != undefined">
             <p class="title">Estimate Task</p>
-            <p>{{estimating.response.description}}</p>
+            <p>{{estimating.description}}</p>
             <p><input type="number" id="estimate-input"></p>
             <button @click="submitEstimate">Submit</button>
         </div>
@@ -34,9 +34,9 @@
                 this.$parent.taskList.push(
                     new InboxItem
                     (
-                        this.estimating.response.description,
+                        this.estimating.description,
                         'Leslie Knope',
-                        new Date(this.estimating.response.due_date),
+                        new Date(this.estimating.form.due_date),
                         document.getElementById("estimate-input").value
                     ),
                 )

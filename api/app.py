@@ -39,7 +39,16 @@ class RetrieveForm(Resource):
 
         return {"data":results}
 
-@api.route('/responses/<form_title>')
+@api.route('/inbox/<user>')
+class Inbox(Resource):
+    def get(self,user):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_workloads
+        cursor = collection.find_one({"user": user})
+        return {"data":json.dumps(cursor["inbox"])}
+
+@api.route('/responses')
 class Responses(Resource):
     def get(self,form_title):
         client = MongoClient(mongo_URL)
@@ -48,14 +57,26 @@ class Responses(Resource):
         cursor = collection.find_one({"title": form_title})
         return {"data":json.dumps(cursor["responses"])}
         
-    def post(self,form_title):
+    def post(self):
+        form_title  = request.args.get('form_title', None)
+        user  = request.args.get('user', None)
+
         client = MongoClient(mongo_URL)
         db=client.project_management
-        collection = db.ann_perkins_forms
         req_data = json.loads(request.data.decode("utf-8"))
+
+        collection = db.ann_perkins_forms
         cursor = collection.find_one({"title": form_title})
         doc_id = cursor["_id"]
-        collection.update({"_id":doc_id},{'$push': {'responses': req_data}})
+        collection.update_one({"_id":doc_id},{'$push': {'responses': req_data}})
+        
+        db=client.users
+        collection = db.user_workloads
+        cursor = collection.find_one({"user": user})
+        doc_id = cursor["_id"]
+        req_data["form_title"] = form_title
+        collection.update_one({"_id":doc_id},{'$push': {'inbox': req_data}})
+
         return {"message":"success"}
 
 @api.route('/login')

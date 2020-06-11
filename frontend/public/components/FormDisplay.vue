@@ -51,7 +51,7 @@
                 let response = {};
                 let formComplete = true;
                 for (let i of fields) {
-                    parentField = this.$parent.fields.filter(field => field.label == i.dataset.label)[0];
+                    parentField = this.$parent.fields.filter(field => this.toLabel(field.label) == i.dataset.label)[0];
                     if (parentField.mandatory == true && !i.value) {
                         formComplete = false;
                         i.classList.add("incomplete-field");
