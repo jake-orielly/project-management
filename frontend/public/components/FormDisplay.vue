@@ -50,6 +50,7 @@
                 let parentField;
                 let response = {};
                 let formComplete = true;
+                response.fields = {}
                 for (let i of fields) {
                     parentField = this.$parent.fields.filter(field => this.toLabel(field.label) == i.dataset.label)[0];
                     if (parentField.mandatory == true && !i.value) {
@@ -57,7 +58,10 @@
                         i.classList.add("incomplete-field");
                         alert("Some mandatory fields incomplete")
                     }
-                    response[i.dataset.label] = i.value;
+                    if (["description","due_date"].indexOf(i.dataset.label) != -1)
+                        response[i.dataset.label] = i.value;
+                    else
+                        response.fields[i.dataset.label] = i.value;
                 }
                 response.hash = Math.random().toString(36).substring(2, 15);
                 if (formComplete) {
