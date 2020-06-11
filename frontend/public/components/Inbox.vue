@@ -22,6 +22,8 @@
 </template>
 
 <script>
+    import requests from '../services/requests.js';
+
     export default {
         data() {
             return {
@@ -38,13 +40,17 @@
                     (
                         this.estimating.description,
                         'Leslie Knope',
-                        new Date(this.estimating.form.due_date),
+                        new Date(this.estimating.fields.due_date),
                         document.getElementById("estimate-input").value
                     ),
                 )
                 this.$parent.inbox.splice(this.$parent.inbox.indexOf(this.estimating),1);
-                this.estimating = undefined;
                 this.$parent.updateWorkload();
+                requests.submitEstimate("ann.perkins",this.estimating.fields.hash).then(
+                    response => {
+                        this.estimating = undefined;
+                        console.log(response)
+                })
             },
             fromLabel(s) {
                 s = s.replace(/_/g,' ')

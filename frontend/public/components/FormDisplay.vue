@@ -59,6 +59,7 @@
                     }
                     response[i.dataset.label] = i.value;
                 }
+                response.hash = Math.random().toString(36).substring(2, 15);
                 if (formComplete) {
                     response["time"] = String(new Date());
                     requests.submitResponse(this.$parent.currForm,response);

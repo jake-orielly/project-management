@@ -15,7 +15,7 @@ api = Api(app)
 mongo_URL = "mongodb:27017"
 
 @api.route('/is-alive')
-class isAlive(Resource):
+class IsAlive(Resource):
     def get(self):
         return {'message': 'API is alive'}
 
@@ -47,6 +47,39 @@ class Inbox(Resource):
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
         return {"data":json.dumps(cursor["inbox"])}
+
+    def patch(self,user):
+        obj_hash  = request.args.get('hash', None)
+
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_workloads
+        cursor = collection.find_one({"user": user})
+        doc_id = cursor["_id"]
+
+
+        for index, item in enumerate(cursor["inbox"]):
+            if item["hash"] == obj_hash:
+                break
+        else:
+            return {"message":"Error: could not find item in task list"}
+
+        task = cursor["inbox"][index]
+        collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
+
+        new_inbox = cursor["inbox"]
+        new_inbox.pop(index)
+        collection.update_one({"_id":doc_id},{"$set": { "inbox": new_inbox}})
+        return {"message":"success"}
+
+@api.route('/tasks/<user>')
+class Tasks(Resource):
+    def get(self,user):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_workloads
+        cursor = collection.find_one({"user": user})
+        return {"data":json.dumps(cursor["tasks"])}
 
 @api.route('/responses')
 class Responses(Resource):

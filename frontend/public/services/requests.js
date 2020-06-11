@@ -18,9 +18,15 @@ export default {
     getInbox(user) {
         return this.genericRequest("/inbox/" + user, "GET")
     },
+    getTasks(user) {
+        return this.genericRequest("/tasks/" + user, "GET")
+    },
     submitResponse(form,response) {
         let data = JSON.stringify(response);
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + "ann.perkins", "POST",data)
+    },
+    submitEstimate(user,hash) {
+        return this.genericRequest("/inbox/" + user + "?hash=" + hash, "PATCH")
     },
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});

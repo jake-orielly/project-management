@@ -59,6 +59,7 @@
         mounted() {
             this.updateWorkload();
             this.updateInbox();
+            this.updateTaskList();
         },
         methods: {
             updateWorkload() {
