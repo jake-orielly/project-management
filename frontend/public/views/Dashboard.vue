@@ -150,7 +150,8 @@
                                 "estimate":response.estimate,
                                 "due_date":response.due_date,
                                 "hash":response.hash,
-                                "status":response.status
+                                "status":response.status,
+                                "history":response.history
                             })
                         }
                     }

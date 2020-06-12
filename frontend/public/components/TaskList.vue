@@ -2,7 +2,7 @@
     <div id="taskList">
         <p class="title">My Tasks</p>
         <ul>
-            <li v-for="task in $parent.taskList" v-bind:key="task.name">
+            <li v-for="task in $parent.taskList.filter(task => task.status == 'In Progress')" v-bind:key="task.name">
                 <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
                     <div class="task-name">
                         <span class="clickable" @click="taskClick(task)">
@@ -38,6 +38,13 @@
             },
             setStatus(task,status) {
                 task.status = status;
+                task.history.push(
+                    {
+                        event:"Status set to " + status,
+                        user:"ann.perkins",
+                        time:String(new Date())
+                    }
+                );
                 requests.updateTask("ann.perkins",task);
             }
         }

@@ -30,7 +30,12 @@ export default {
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + "ann.perkins", "POST",data)
     },
     submitEstimate(user,hash,estimate) {
-        return this.genericRequest("/inbox/" + user + "?hash=" + hash + "&estimate=" + estimate, "PATCH")
+        let data = JSON.stringify({
+            hash:hash,
+            estimate:estimate,
+            time:String(new Date())
+        });
+        return this.genericRequest("/inbox/" + user, "PATCH",data)
     },
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});

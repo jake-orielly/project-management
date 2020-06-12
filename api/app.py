@@ -5,6 +5,7 @@ from flask_restplus import Resource, Api
 import json
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from datetime import date
 
 import config
 
@@ -49,8 +50,10 @@ class Inbox(Resource):
         return {"data":json.dumps(cursor["inbox"])}
 
     def patch(self,user):
-        obj_hash  = request.args.get('hash', None)
-        estimate  = request.args.get('estimate', None)
+        req_data = json.loads(request.data.decode("utf-8"))
+        obj_hash  = req_data["hash"]
+        estimate  = req_data["estimate"]
+        time = req_data["time"]
 
         client = MongoClient(mongo_URL)
         db=client.users
@@ -68,6 +71,13 @@ class Inbox(Resource):
         task = cursor["inbox"][index]
         task["estimate"] = estimate
         task["status"] = "In Progress"
+        task["history"].append(
+            {
+                "event":"Estimate submitted",
+                "user":user,
+                "time":time
+            }
+        )
         collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
 
         new_inbox = cursor["inbox"]

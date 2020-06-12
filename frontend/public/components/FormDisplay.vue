@@ -64,6 +64,13 @@
                         response.fields[i.dataset.label] = i.value;
                 }
                 response.hash = Math.random().toString(36).substring(2, 15);
+                response.history =[
+                    {
+                        event:"Request Submitted",
+                        user:"leslie.knope",
+                        time:String(new Date())
+                    }
+                ];
                 if (formComplete) {
                     response["time"] = String(new Date());
                     requests.submitResponse(this.$parent.currForm,response);
