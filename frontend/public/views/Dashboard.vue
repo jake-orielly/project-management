@@ -1,10 +1,12 @@
 <template>
     <div>
+        <div v-if="modalTint" id="modal-tint"></div>
         <Banner v-bind:user="'Ann Perkins'"></Banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
             <Calendar ref="calendar"></Calendar>
             <TaskList ref="taskList"></TaskList>
+            <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
             <FormList v-bind:targetUser="'ann_perkins'" ref="FormList"></FormList>
@@ -26,6 +28,7 @@
     import FormCreation from '../components/FormCreation.vue';
     import FormDisplay from '../components/FormDisplay.vue';
     import FormList from '../components/FormList.vue';
+    import TaskStatusModal from '../components/TaskStatusModal.vue';
 
     export default {
         components: {
@@ -36,7 +39,8 @@
             FieldAdd,
             FormCreation,
             FormDisplay,
-            FormList
+            FormList,
+            TaskStatusModal
         },
         data () {
             return {
@@ -54,6 +58,7 @@
                 dayHighlightedClass: 'cell-highlighted',
                 draggingPos: undefined,
                 draggingField: undefined,
+                modalTint: false
             }
         },
         mounted() {
@@ -188,5 +193,15 @@
         & div {
             margin-top: 1rem;
         }
+    }
+
+    #modal-tint {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #00000066;
+        z-index: 1;
     }
 </style>

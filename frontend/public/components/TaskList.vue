@@ -22,8 +22,6 @@
 </template>
 
 <script>
-    import requests from '../services/requests.js';
-
     export default {
         data() {
             return {
@@ -37,15 +35,7 @@
                         this.$parent.dayHighlighted[i] = true;
             },
             setStatus(task,status) {
-                task.status = status;
-                task.history.push(
-                    {
-                        event:"Status set to " + status,
-                        user:"ann.perkins",
-                        time:String(new Date())
-                    }
-                );
-                requests.updateTask("ann.perkins",task);
+                this.$parent.$refs.taskStatusModal.show(task,status);
             }
         }
     }
