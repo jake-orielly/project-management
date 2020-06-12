@@ -67,6 +67,7 @@ class Inbox(Resource):
 
         task = cursor["inbox"][index]
         task["estimate"] = estimate
+        task["status"] = "In Progress"
         collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
 
         new_inbox = cursor["inbox"]
@@ -82,6 +83,27 @@ class Tasks(Resource):
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
         return {"data":json.dumps(cursor["tasks"])}
+
+    def patch(self,user):
+        req_data = json.loads(request.data.decode("utf-8"))
+
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_workloads
+        cursor = collection.find_one({"user": user})
+        doc_id = cursor["_id"]
+
+        for index, item in enumerate(cursor["tasks"]):
+            if item["hash"] == req_data["hash"]:
+                break
+        else:
+            return {"message":"Error: could not find item in task list"}
+
+        new_tasks = cursor["tasks"]
+        new_tasks[index] = req_data
+
+        collection.update_one({"_id":doc_id},{"$set": { "tasks": new_tasks}})
+        return {"message":"success"}
 
 @api.route('/responses')
 class Responses(Resource):

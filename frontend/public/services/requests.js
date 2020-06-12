@@ -19,7 +19,11 @@ export default {
         return this.genericRequest("/inbox/" + user, "GET")
     },
     getTasks(user) {
-        return this.genericRequest("/tasks/" + user, "GET")
+        return this.genericRequest("/tasks/" + user, "GET");
+    },
+    updateTask(user,task){
+        let data = JSON.stringify(task);
+        return this.genericRequest("/tasks/" + user, "PATCH",data);
     },
     submitResponse(form,response) {
         let data = JSON.stringify(response);

@@ -143,10 +143,14 @@
                         let responseData = JSON.parse(JSON.parse(response.responseText).data);
                         for (let response of responseData) {
                             this.taskList.push({
-                                "description": "Give Estimate",
-                                "from": "Leslie Knope",
+                                "description": response.description,
+                                "from": response.assigner,
                                 "title":response.form_title,
-                                "fields":response
+                                "fields":response.fields,
+                                "estimate":response.estimate,
+                                "due_date":response.due_date,
+                                "hash":response.hash,
+                                "status":response.status
                             })
                         }
                     }
@@ -170,6 +174,7 @@
             this.assigner = "TODO: assigner";
             this.due = new Date(item.due_date);
             this.estimate = item.estimate;
+            this.status = item.status;
             this.danger = false;
         }
     }
