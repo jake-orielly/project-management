@@ -2,7 +2,7 @@
     <div id="history-container">
         <p class="title">History</p>
         <div v-if="!task">
-            <div class="task-item" v-for="task in $parent.taskList" v-bind:key="task.hash">
+            <div class="task-item" v-for="task in $store.state.taskList" v-bind:key="task.hash">
                 <p>
                     {{task.description}}
                 </p>

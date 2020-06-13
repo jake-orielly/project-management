@@ -2,7 +2,7 @@
     <div id="taskList">
         <p class="title">My Tasks</p>
         <ul>
-            <li v-for="task in $parent.taskList.filter(task => task.status == 'In Progress')" v-bind:key="task.name">
+            <li v-for="task in $store.state.taskList.filter(task => task.status == 'In Progress')" v-bind:key="task.name">
                 <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
                     <div class="task-name">
                         <span class="clickable" @click="taskClick(task)">

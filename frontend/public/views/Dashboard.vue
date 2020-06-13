@@ -4,7 +4,7 @@
         <Banner v-bind:user="'Ann Perkins'"></Banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
-            <Calendar ref="calendar" v-bind:taskList="taskList"></Calendar>
+            <Calendar ref="calendar"></Calendar>
             <TaskList ref="taskList"></TaskList>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             <History></History>
@@ -51,7 +51,6 @@
                 fields: [
                     ],
                 inbox: [],
-                taskList: [],
                 formTitle: "",
                 formPreview: false,
                 formSaved: true,
@@ -83,12 +82,12 @@
                 )
             },
             updateTaskList() {
-                this.taskList = [];
+                let taskList = [];
                 requests.getTasks("ann.perkins").then(
                     response => {
                         let responseData = JSON.parse(JSON.parse(response.responseText).data);
                         for (let response of responseData) {
-                            this.taskList.push({
+                            taskList.push({
                                 "description": response.description,
                                 "from": response.assigner,
                                 "title":response.form_title,
@@ -100,30 +99,16 @@
                                 "history":response.history
                             })
                         }
+                        this.$store.commit("setTaskList", taskList);
                         this.$refs.calendar.updateWorkload();
                     }
                 )
-            },
-            newTask(item) {
-                this.taskList.push(new TaskListItem(item))
             },
             caps: function(text) {
                 if (!text)
                     return text;
                 return text[0].toUpperCase() + text.substr(1);
             }
-        }
-    }
-
-    class TaskListItem {
-        constructor(item) {
-            this.description = item.description;
-            this.fields = item.fields;
-            this.assigner = "TODO: assigner";
-            this.due = new Date(item.due_date);
-            this.estimate = item.estimate;
-            this.status = item.status;
-            this.danger = false;
         }
     }
 </script>

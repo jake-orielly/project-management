@@ -41,12 +41,6 @@
 
 <script>
     export default {
-        props: {
-            taskList: {
-                type: Array,
-                required: true
-            },
-        },
         data() {
             return {
                 daysOfWeek: ["Su","Mo","Tu","We","Th","Fr","Sa"],
@@ -95,7 +89,7 @@
             },
             updateWorkload() {
                 let workload = [];
-                let taskList = this.taskList.slice().filter(task => task.status == "In Progress");
+                let taskList = this.$store.state.taskList.slice().filter(task => task.status == "In Progress");
                 let currTask;
                 let currDay = this.today.getDate();
                 let availibleHours;
