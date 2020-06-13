@@ -8,10 +8,10 @@
                         <span class="clickable" @click="taskClick(task)">
                             {{task.description}}
                         </span>
-                        <div class="task-icon" @click="setStatus(task,'Blocked')">
+                        <div v-if="mine" class="task-icon" @click="setStatus(task,'Blocked')">
                             <i class="fa fa-ban clickable"></i>
                         </div>
-                        <div class="task-icon" @click="setStatus(task,'Completed')">
+                        <div v-if="mine" class="task-icon" @click="setStatus(task,'Completed')">
                             <i class="fa fa-check clickable"></i>
                         </div>
                     </div>
@@ -30,6 +30,13 @@
                 type: String,
                 required: true
             },
+            mine: {
+                type: Boolean,
+                required: true
+            }
+        },
+        mounted() {
+            this.updateTaskList();
         },
         data() {
             return {

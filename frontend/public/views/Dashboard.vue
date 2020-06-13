@@ -5,7 +5,7 @@
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
             <Calendar ref="calendar"></Calendar>
-            <TaskList ref="taskList" v-bind:user="'ann.perkins'"></TaskList>
+            <TaskList ref="taskList" v-bind:user="'ann.perkins'" v-bind:mine="true"></TaskList>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             <History></History>
         </div>
@@ -60,9 +60,7 @@
             }
         },
         mounted() {
-            this.$refs.calendar.updateWorkload();
             this.updateInbox();
-            this.$refs.taskList.updateTaskList();
         },
         methods: {
             updateInbox() {

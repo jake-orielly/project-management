@@ -3,23 +3,27 @@
     <div>
         <Banner v-bind:user="'Leslie Knope'"></Banner>
         <div id="team-container" v-if="!formPreview">
-        <div class="clickable" @click="toggleForms('ann_perkins')">
+        <div class="clickable">
             <div class="user-forms-container">
                 <p>
                     Ann Perkins
                 </p>
                 <div v-if="!formsOpen">
-                    <span>
+                    <span @click="toggleForms('ann_perkins')">
                         <i class="fa fa-plus"></i>
                     </span>
                 </div>
                 <div v-if="formsOpen">
-                    <span>
+                    <span @click="toggleForms('ann_perkins')">
                         <i class="fa fa-minus"></i>
                     </span>
                 </div>
             </div>
-            <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
+            <div v-if="formsOpen">
+                <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
+                <TaskList ref="taskList" v-bind:user="'ann.perkins'" v-bind:mine="false"></TaskList>
+                <Calendar ref="calendar"></Calendar>
+            </div>
         </div>
         </div>
         <FormDisplay v-bind:preview="false"></FormDisplay>
@@ -35,11 +39,15 @@
     import requests from '../services/requests.js';
     import Banner from '../components/Banner.vue';
     import FormDisplay from '../components/FormDisplay.vue';
+    import Calendar from '../components/Calendar.vue';
+    import TaskList from '../components/TaskList.vue';
 
     export default {
         components: {
             Banner,
             FormDisplay,
+            Calendar,
+            TaskList
         },
         data () {
             return {

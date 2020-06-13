@@ -57,6 +57,9 @@
                 dayHighlightedClass: 'cell-highlighted',
             }
         },
+        mounted() {
+            this.updateWorkload();
+        },
         methods: {
             showDay(row,col) {
                 this.dayShowing = this.calendarToDate(row,col);
