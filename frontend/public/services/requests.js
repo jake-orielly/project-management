@@ -14,9 +14,9 @@ export default {
     getUserTeam(user) {
         return this.genericRequest("/team/" + user, "GET")
     },
-    postForm(form) {
+    postForm(form,user) {
         let data = JSON.stringify(form);
-        return this.genericRequest("/forms", "POST",data)
+        return this.genericRequest("/forms/" + user, "POST",data)
     },
     getInbox(user) {
         return this.genericRequest("/inbox/" + user, "GET")

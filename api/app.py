@@ -24,8 +24,8 @@ class IsAlive(Resource):
 class RetrieveForm(Resource):
     def post(self):
         client = MongoClient(mongo_URL)
-        db=client.project_management
-        collection = db.ann_perkins_forms
+        db=client.forms
+        collection = db["ann.perkins" + "_forms"]
         req_data = json.loads(request.data.decode("utf-8"))
 
         results = []
@@ -128,8 +128,8 @@ class Tasks(Resource):
 class Responses(Resource):
     def get(self,form_title):
         client = MongoClient(mongo_URL)
-        db=client.project_management
-        collection = db.ann_perkins_forms
+        db=client.forms
+        collection = db["ann.perkins" + "_forms"]
         cursor = collection.find_one({"title": form_title})
         return {"data":json.dumps(cursor["responses"])}
         
@@ -138,10 +138,10 @@ class Responses(Resource):
         user  = request.args.get('user', None)
 
         client = MongoClient(mongo_URL)
-        db=client.project_management
+        db=client.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
-        collection = db.ann_perkins_forms
+        collection = db["ann.perkins" + "_forms"]
         cursor = collection.find_one({"title": form_title})
         doc_id = cursor["_id"]
         collection.update_one({"_id":doc_id},{'$push': {'responses': req_data}})
@@ -173,7 +173,7 @@ class Login(Resource):
 class Forms(Resource):
     def get(self, user):
         client = MongoClient(mongo_URL)
-        db=client.project_management
+        db=client.forms
         collection = db[user + "_forms"]
         cursor = collection.find({})
         results = []
@@ -183,8 +183,8 @@ class Forms(Resource):
         return {"data":results}
     def post(self, user):
         client = MongoClient(mongo_URL)
-        db=client.project_management
-        collection = db.ann_perkins_forms
+        db=client.forms
+        collection = db[user + "_forms"]
         req_data = json.loads(request.data.decode("utf-8"))
         collection.insert_one(req_data)
         return {"message":"success"}

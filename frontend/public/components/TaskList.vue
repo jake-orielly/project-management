@@ -6,7 +6,7 @@
                 <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
                     <div class="task-name">
                         <span class="clickable" @click="taskClick(task)">
-                            {{task.description}}
+                            {{task.description + ': ' + formatDate(task.due_date)}}
                         </span>
                         <div v-if="mine" class="task-icon" @click="setStatus(task,'Blocked')">
                             <i class="fa fa-ban clickable"></i>
@@ -80,6 +80,10 @@
             },
             setStatus(task,status) {
                 this.$parent.$refs.taskStatusModal.show(task,status);
+            },
+            formatDate(date) {
+                let dateSplit = date.split('-');
+                return dateSplit[1] + "/" + dateSplit[2] + "/" + dateSplit[0];
             }
         }
     }
