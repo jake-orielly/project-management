@@ -40,7 +40,7 @@
                     () => {
                         this.estimating = undefined;
                         this.$parent.updateInbox();
-                        this.$parent.updateTaskList();
+                        this.$parent.$refs.taskList.updateTaskList();
                 })
             },
             fromLabel(s) {

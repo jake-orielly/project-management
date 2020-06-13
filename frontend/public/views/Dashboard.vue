@@ -5,7 +5,7 @@
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
             <Calendar ref="calendar"></Calendar>
-            <TaskList ref="taskList"></TaskList>
+            <TaskList ref="taskList" v-bind:user="'ann.perkins'"></TaskList>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             <History></History>
         </div>
@@ -62,7 +62,7 @@
         mounted() {
             this.$refs.calendar.updateWorkload();
             this.updateInbox();
-            this.updateTaskList();
+            this.$refs.taskList.updateTaskList();
         },
         methods: {
             updateInbox() {
@@ -78,29 +78,6 @@
                                 "fields":response
                             })
                         }
-                    }
-                )
-            },
-            updateTaskList() {
-                let taskList = [];
-                requests.getTasks("ann.perkins").then(
-                    response => {
-                        let responseData = JSON.parse(JSON.parse(response.responseText).data);
-                        for (let response of responseData) {
-                            taskList.push({
-                                "description": response.description,
-                                "from": response.assigner,
-                                "title":response.form_title,
-                                "fields":response.fields,
-                                "estimate":response.estimate,
-                                "due_date":response.due_date,
-                                "hash":response.hash,
-                                "status":response.status,
-                                "history":response.history
-                            })
-                        }
-                        this.$store.commit("setTaskList", taskList);
-                        this.$refs.calendar.updateWorkload();
                     }
                 )
             },

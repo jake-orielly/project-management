@@ -22,12 +22,43 @@
 </template>
 
 <script>
+    import requests from '../services/requests.js';
+
     export default {
+        props: {
+            user: {
+                type: String,
+                required: true
+            },
+        },
         data() {
             return {
             }
         },
         methods: {
+            updateTaskList() {
+                let taskList = [];
+                requests.getTasks(this.user).then(
+                    response => {
+                        let responseData = JSON.parse(JSON.parse(response.responseText).data);
+                        for (let response of responseData) {
+                            taskList.push({
+                                "description": response.description,
+                                "from": response.assigner,
+                                "title":response.form_title,
+                                "fields":response.fields,
+                                "estimate":response.estimate,
+                                "due_date":response.due_date,
+                                "hash":response.hash,
+                                "status":response.status,
+                                "history":response.history
+                            })
+                        }
+                        this.$store.commit("setTaskList", taskList);
+                        this.$parent.$refs.calendar.updateWorkload();
+                    }
+                )
+            },
             taskClick(task) {
                 this.$parent.$refs.calendar.dayHighlighted = {};
                 for (let i = 0; i < this.$parent.$refs.calendar.workload.length; i++)
