@@ -41,6 +41,12 @@
 
 <script>
     export default {
+        props: {
+            user: {
+                type: String,
+                required: true
+            },
+        },
         data() {
             return {
                 daysOfWeek: ["Su","Mo","Tu","We","Th","Fr","Sa"],

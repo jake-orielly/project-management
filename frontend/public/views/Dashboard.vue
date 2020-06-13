@@ -4,7 +4,7 @@
         <Banner></Banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
-            <Calendar ref="calendar"></Calendar>
+            <Calendar ref="calendar" v-bind:user="$store.state.user"></Calendar>
             <TaskList ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             <History></History>

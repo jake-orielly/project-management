@@ -1,4 +1,3 @@
 {
-  "baseUrl": "http://frontend:8080",
-  "video": true
+  "baseUrl": "http://frontend:8080"
 }

@@ -2,28 +2,28 @@
 <template>
     <div>
         <div id="team-container" v-if="!formPreview">
-        <div class="clickable">
-            <div class="user-forms-container">
-                <p>
-                    Ann Perkins
-                </p>
-                <div v-if="!formsOpen">
-                    <span @click="toggleForms('ann_perkins')">
-                        <i class="fa fa-plus"></i>
-                    </span>
-                </div>
-                <div v-if="formsOpen">
-                    <span @click="toggleForms('ann_perkins')">
-                        <i class="fa fa-minus"></i>
-                    </span>
+            <div class="clickable">
+                <div class="user-forms-container" v-for="user in myTeam" v-bind:key="user.name">
+                    <p>
+                        {{user.name}}
+                    </p>
+                    <div v-if="!user.open">
+                        <span @click="toggleForms(user)">
+                            <i class="fa fa-plus"></i>
+                        </span>
+                    </div>
+                    <div v-if="user.open">
+                        <span @click="toggleForms(user)">
+                            <i class="fa fa-minus"></i>
+                        </span>
+                    </div>
+                    <div v-if="user.open">
+                        <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
+                        <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false"></TaskList>
+                        <Calendar ref="calendar" v-bind:user="user.name"></Calendar>
+                    </div>
                 </div>
             </div>
-            <div v-if="formsOpen">
-                <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
-                <TaskList ref="taskList" v-bind:user="'ann.perkins'" v-bind:mine="false"></TaskList>
-                <Calendar ref="calendar"></Calendar>
-            </div>
-        </div>
         </div>
         <FormDisplay v-bind:preview="false"></FormDisplay>
     </div>
@@ -49,22 +49,32 @@
         data () {
             return {
                 forms: [],
-                formsOpen: false,
                 formPreview: false,
                 currForm: "",
+                myTeam: [],
             }
         },
-        computed: {
+        mounted () {
+            requests.getUserTeam(this.$store.state.user).then(
+                response => {
+                    let responseData = JSON.parse(response.responseText).data;
+                    for (let i of JSON.parse(responseData))
+                        this.myTeam.push({
+                            name:i,
+                            open:false
+                        });
+                }
+            )
         },
         methods: {
             toggleForms(user) {
-                if (!this.formsOpen) {
+                if (!user.open) {
                     this.getForms(user)
-                    this.formsOpen = true;
+                    user.open = true;
                 }
                 else {
                     this.forms = [];
-                    this.formsOpen = false;
+                    user.open = false;
                 }
             },
             getForms(user) {

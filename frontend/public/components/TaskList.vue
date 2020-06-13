@@ -36,10 +36,16 @@
             }
         },
         mounted() {
+            this.calendar = (
+                    this.$parent.$refs.calendar.length ?
+                    this.$parent.$refs.calendar.filter(item => item.user == this.user)[0] :
+                    this.$parent.$refs.calendar
+                )
             this.updateTaskList();
         },
         data() {
             return {
+                calendar: undefined
             }
         },
         methods: {
@@ -62,15 +68,15 @@
                             })
                         }
                         this.$store.commit("setTaskList", taskList);
-                        this.$parent.$refs.calendar.updateWorkload();
+                        this.calendar.updateWorkload();
                     }
                 )
             },
             taskClick(task) {
-                this.$parent.$refs.calendar.dayHighlighted = {};
-                for (let i = 0; i < this.$parent.$refs.calendar.workload.length; i++)
-                    if (this.$parent.$refs.calendar.workload[i].tasks.filter(item => item.name == task.description).length)
-                        this.$parent.$refs.calendar.dayHighlighted[i] = true;
+                this.calendar.dayHighlighted = {};
+                for (let i = 0; i < this.calendar.workload.length; i++)
+                    if (this.calendar.workload[i].tasks.filter(item => item.name == task.description).length)
+                        this.calendar.dayHighlighted[i] = true;
             },
             setStatus(task,status) {
                 this.$parent.$refs.taskStatusModal.show(task,status);

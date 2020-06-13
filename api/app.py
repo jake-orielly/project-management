@@ -40,6 +40,15 @@ class RetrieveForm(Resource):
 
         return {"data":results}
 
+@api.route('/team/<user>')
+class Inbox(Resource):
+    def get(self,user):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_credentials
+        cursor = collection.find_one({"user": user})
+        return {"data":json.dumps(cursor["team"])}
+
 @api.route('/inbox/<user>')
 class Inbox(Resource):
     def get(self,user):
