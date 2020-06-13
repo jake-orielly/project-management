@@ -36,7 +36,7 @@
             },
             submitEstimate() {
                 let estimateVal = document.getElementById("estimate-input").value;
-                requests.submitEstimate("ann.perkins",this.estimating.fields.hash,estimateVal).then(
+                requests.submitEstimate(this.$store.state.user,this.estimating.fields.hash,estimateVal).then(
                     () => {
                         this.estimating = undefined;
                         this.$parent.updateInbox();

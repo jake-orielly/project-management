@@ -1,7 +1,6 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <Banner v-bind:user="'Leslie Knope'"></Banner>
         <div id="team-container" v-if="!formPreview">
         <div class="clickable">
             <div class="user-forms-container">
@@ -37,14 +36,12 @@
     import '@fortawesome/fontawesome-free/js/all.js'
 
     import requests from '../services/requests.js';
-    import Banner from '../components/Banner.vue';
     import FormDisplay from '../components/FormDisplay.vue';
     import Calendar from '../components/Calendar.vue';
     import TaskList from '../components/TaskList.vue';
 
     export default {
         components: {
-            Banner,
             FormDisplay,
             Calendar,
             TaskList

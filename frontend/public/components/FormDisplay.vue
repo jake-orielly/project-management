@@ -67,7 +67,7 @@
                 response.history =[
                     {
                         event:"Request Submitted",
-                        user:"leslie.knope",
+                        user:this.$store.state.user,
                         time:String(new Date())
                     }
                 ];

@@ -10,7 +10,6 @@
     import './css/style.css'
     import Login from './views/Login.vue';
     import Dashboard from './views/Dashboard.vue';
-    import MyTeam from './views/MyTeam.vue';
     import Forms from './views/Forms.vue';
 
     import Vue from 'vue'
@@ -23,7 +22,6 @@
     const routes = [
         { path: '/', component: Login },
         { path: '/dashboard', component: Dashboard },
-        { path: '/my-team', component: MyTeam },
         { path: '/forms/:formId', component: Forms}
     ];
 
@@ -32,7 +30,7 @@
         name: 'app',
         store: store,
         router,
-        components: {Login,Dashboard,MyTeam,Forms},
+        components: {Login,Dashboard,Forms},
     };
 </script>
 

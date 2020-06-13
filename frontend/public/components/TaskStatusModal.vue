@@ -34,7 +34,7 @@
                 let comment = document.getElementById("comment-content").value;
                 let event = {
                     event:"Status set to " + this.status,
-                    user:"ann.perkins",
+                    user:this.$store.state.user,
                     time:String(new Date())
                 }
 
@@ -43,7 +43,7 @@
 
                 this.task.status = status;
                 this.task.history.push(event);
-                requests.updateTask("ann.perkins",this.task);
+                requests.updateTask(this.$store.state.user,this.task);
                 this.closeModal();
            },
            show(task,status) {

@@ -5,14 +5,17 @@
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
             <Calendar ref="calendar"></Calendar>
-            <TaskList ref="taskList" v-bind:user="'ann.perkins'" v-bind:mine="true"></TaskList>
+            <TaskList ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             <History></History>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
-            <FormList v-bind:targetUser="'ann_perkins'" ref="FormList"></FormList>
+            <FormList v-bind:targetUser="$store.state.user" ref="FormList"></FormList>
             <FieldAdd></FieldAdd>
             <FormCreation></FormCreation>
+        </div>
+        <div v-if="currTab == 'myTeam' && !formPreview" id="myTeam">
+            <MyTeam></MyTeam>
         </div>
         <FormDisplay v-bind:preview="true"></FormDisplay>
     </div>
@@ -31,7 +34,8 @@
     import FormList from '../components/FormList.vue';
     import TaskStatusModal from '../components/TaskStatusModal.vue';
     import History from '../components/History.vue';
-    
+    import MyTeam from '../components/MyTeam.vue';
+
     export default {
         components: {
             Banner,
@@ -43,7 +47,8 @@
             FormDisplay,
             FormList,
             TaskStatusModal,
-            History
+            History,
+            MyTeam
         },
         data () {
             return {
@@ -65,7 +70,7 @@
         methods: {
             updateInbox() {
                 this.inbox = [];
-                requests.getInbox("ann.perkins").then(
+                requests.getInbox(this.$store.state.user).then(
                     response => {
                         let responseData = JSON.parse(JSON.parse(response.responseText).data);
                         for (let response of responseData) {
