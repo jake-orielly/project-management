@@ -7,6 +7,7 @@
             <Calendar ref="calendar"></Calendar>
             <TaskList ref="taskList"></TaskList>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
+            <History></History>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
             <FormList v-bind:targetUser="'ann_perkins'" ref="FormList"></FormList>
@@ -29,6 +30,7 @@
     import FormDisplay from '../components/FormDisplay.vue';
     import FormList from '../components/FormList.vue';
     import TaskStatusModal from '../components/TaskStatusModal.vue';
+    import History from '../components/History.vue';
 
     export default {
         components: {
@@ -40,7 +42,8 @@
             FormCreation,
             FormDisplay,
             FormList,
-            TaskStatusModal
+            TaskStatusModal,
+            History
         },
         data () {
             return {
