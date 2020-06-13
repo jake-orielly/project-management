@@ -4,7 +4,7 @@
         <Banner v-bind:user="'Ann Perkins'"></Banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
-            <Calendar ref="calendar"></Calendar>
+            <Calendar ref="calendar" v-bind:taskList="taskList"></Calendar>
             <TaskList ref="taskList"></TaskList>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             <History></History>
@@ -52,83 +52,20 @@
                     ],
                 inbox: [],
                 taskList: [],
-                today: new Date(),
-                workload: [],
                 formTitle: "",
                 formPreview: false,
                 formSaved: true,
-                dayHighlighted: {},
-                dayHighlightedClass: 'cell-highlighted',
                 draggingPos: undefined,
                 draggingField: undefined,
                 modalTint: false
             }
         },
         mounted() {
-            this.updateWorkload();
+            this.$refs.calendar.updateWorkload();
             this.updateInbox();
             this.updateTaskList();
         },
         methods: {
-            updateWorkload() {
-                let workload = [];
-                let taskList = this.taskList.slice().filter(task => task.status == "In Progress");
-                let currTask;
-                let currDay = this.today.getDate();
-                console.log(currDay)
-                let availibleHours;
-                taskList = taskList.sort(
-                    (a,b) => new Date(a.due_date) < new Date(b.due_date) ? -1 : 1
-                )
-                for (let i = 0; i < this.$refs.calendar.monthLength; i++)  
-                    workload.push({remaining:8,tasks:[]});
-                for (let i of taskList) {
-                    currTask = Object.assign({}, i);
-                    i.danger = false;
-                    while (currTask.estimate > 0) {
-                        if (this.$refs.calendar.isWeekend(currDay)) {
-                            currDay++;
-                        }
-                        else if (workload[currDay].remaining > currTask.estimate) {
-                            workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
-                            workload[currDay].remaining -= currTask.estimate;
-                            currTask.estimate = 0;
-                        }
-                        else if (new Date(currTask.due_date).getDate() + 1 > currDay) {
-                            if (workload[currDay].remaining) {
-                                workload[currDay].tasks.push({name:currTask.description, time:parseInt(workload[currDay].remaining - 1)});
-                                currTask.estimate -= (workload[currDay].remaining - 1);
-                                workload[currDay].remaining = 1;
-                            }
-                            currDay++;
-                        }
-                        else {
-                            for (let j = currDay; j >= this.today.getDate(); j--) {
-                                if (this.$refs.calendar.isWeekend(j)) {
-                                    j--;
-                                }
-                                else if (new Date(currTask.due_date).getDate() + 1 == currDay) {
-                                    workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
-                                    workload[j].remaining -= currTask.estimate;
-                                    i.danger = true;
-                                    currTask.estimate = 0;
-                                    break;
-                                }
-                                else if (workload[j].remaining > 0) {
-                                    availibleHours = workload[j].remaining;
-                                    workload[currDay].tasks.push({name:currTask.description, time:availibleHours});
-                                    workload[j].remaining = Math.max(0, workload[j].remaining - currTask.estimate);
-                                    currTask.estimate -= availibleHours;
-                                    if (currTask.estimate <= 0)
-                                        break;
-                                }
-                            }
-                            currDay++;
-                        }
-                    }
-                }
-                this.workload = workload;
-            },
             updateInbox() {
                 this.inbox = [];
                 requests.getInbox("ann.perkins").then(
@@ -163,7 +100,7 @@
                                 "history":response.history
                             })
                         }
-                        this.updateWorkload();
+                        this.$refs.calendar.updateWorkload();
                     }
                 )
             },

@@ -29,10 +29,10 @@
         },
         methods: {
             taskClick(task) {
-                this.$parent.dayHighlighted = {};
-                for (let i = 0; i < this.$parent.workload.length; i++)
-                    if (this.$parent.workload[i].tasks.filter(item => item.name == task.description).length)
-                        this.$parent.dayHighlighted[i] = true;
+                this.$parent.$refs.calendar.dayHighlighted = {};
+                for (let i = 0; i < this.$parent.$refs.calendar.workload.length; i++)
+                    if (this.$parent.$refs.calendar.workload[i].tasks.filter(item => item.name == task.description).length)
+                        this.$parent.$refs.calendar.dayHighlighted[i] = true;
             },
             setStatus(task,status) {
                 this.$parent.$refs.taskStatusModal.show(task,status);
