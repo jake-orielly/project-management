@@ -30,7 +30,7 @@
         },
         methods: {
             copyUrl(form) {
-                let url = "http://vps:8081/#/forms/" + form.id;
+                let url = "http://23.254.164.217:8081/#/forms/" + form.id;
                 const el = document.createElement('textarea');
                 el.value = url;
                 document.body.appendChild(el);
