@@ -36,10 +36,8 @@
                     response => {
                         let result = JSON.parse(response.responseText).message;
                         if (result == "success") {
-                            if (this.username == "ann.perkins")
-                                this.$router.push('/dashboard')
-                            else if (this.username == "leslie.knope")
-                                this.$router.push('/my-team')
+                            this.$store.commit("setUser",this.username)
+                            this.$router.push('/dashboard')
                         }
                         else
                             this.loginStatus = "failed";

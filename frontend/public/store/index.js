@@ -5,13 +5,17 @@ Vue.use(Vuex);
  
 export default new Vuex.Store({
  state: {
-    taskList:[]
+    taskList:[],
+    user:"",
  },
  getters: {},
  mutations: {
-    setTaskList (state, list) {
+    setTaskList(state, list) {
         state.taskList = list
-    }
+    },
+    setUser(state, user) {
+      state.user = user
+  }
  },
  actions: {}
 });

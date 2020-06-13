@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="modalTint" id="modal-tint"></div>
-        <Banner v-bind:user="'Ann Perkins'"></Banner>
+        <Banner></Banner>
         <div v-if="currTab == 'dashboard'" id="dashboard">
             <Inbox></Inbox>
             <Calendar ref="calendar"></Calendar>
@@ -31,7 +31,7 @@
     import FormList from '../components/FormList.vue';
     import TaskStatusModal from '../components/TaskStatusModal.vue';
     import History from '../components/History.vue';
-
+    
     export default {
         components: {
             Banner,

@@ -4,18 +4,12 @@
         <p class="clickable" @click="setTab('dashboard')">Dashboard</p>
         <p class="clickable" @click="setTab('myForms')">My Forms</p>
         <img src="../images/avatar.png" id="avatar-img">
-        <p id="user-name">{{user}}</p>
+        <p id="user-name">{{$store.state.user}}</p>
     </div>
 </template>
 
 <script>
     export default {
-        props: {
-            user: {
-                type: String,
-                required: true
-            },
-        },
         methods: {
             setTab: function(newTab) {
                 this.$parent.currTab = newTab;
