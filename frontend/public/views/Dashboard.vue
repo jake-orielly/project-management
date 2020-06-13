@@ -72,12 +72,13 @@
         methods: {
             updateWorkload() {
                 let workload = [];
-                let taskList = this.taskList.slice();
+                let taskList = this.taskList.slice().filter(task => task.status == "In Progress");
                 let currTask;
                 let currDay = this.today.getDate();
+                console.log(currDay)
                 let availibleHours;
                 taskList = taskList.sort(
-                    (a,b) => a.due < b.due ? -1 : 1
+                    (a,b) => new Date(a.due_date) < new Date(b.due_date) ? -1 : 1
                 )
                 for (let i = 0; i < this.$refs.calendar.monthLength; i++)  
                     workload.push({remaining:8,tasks:[]});
@@ -93,7 +94,7 @@
                             workload[currDay].remaining -= currTask.estimate;
                             currTask.estimate = 0;
                         }
-                        else if (currTask.due.getDate() + 1 > currDay) {
+                        else if (new Date(currTask.due_date).getDate() + 1 > currDay) {
                             if (workload[currDay].remaining) {
                                 workload[currDay].tasks.push({name:currTask.description, time:parseInt(workload[currDay].remaining - 1)});
                                 currTask.estimate -= (workload[currDay].remaining - 1);
@@ -106,7 +107,7 @@
                                 if (this.$refs.calendar.isWeekend(j)) {
                                     j--;
                                 }
-                                else if (currTask.due.getDate() + 1 == currDay) {
+                                else if (new Date(currTask.due_date).getDate() + 1 == currDay) {
                                     workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
                                     workload[j].remaining -= currTask.estimate;
                                     i.danger = true;
@@ -162,6 +163,7 @@
                                 "history":response.history
                             })
                         }
+                        this.updateWorkload();
                     }
                 )
             },

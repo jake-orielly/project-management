@@ -39,7 +39,6 @@
                 requests.submitEstimate("ann.perkins",this.estimating.fields.hash,estimateVal).then(
                     () => {
                         this.estimating = undefined;
-                        this.$parent.updateWorkload();
                         this.$parent.updateInbox();
                         this.$parent.updateTaskList();
                 })
