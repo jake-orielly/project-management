@@ -88,7 +88,8 @@
             requestForm(formName) {
                 this.currForm = formName;
                 requests.retrieveForm(
-                    {"title":formName}
+                    {"title":formName},
+                    this.$store.state.user
                 ).then(
                     response => {
                         let responseText = JSON.parse(response.responseText);

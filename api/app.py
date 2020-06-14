@@ -23,9 +23,11 @@ class IsAlive(Resource):
 @api.route('/retrieve-form')
 class RetrieveForm(Resource):
     def post(self):
+        user  = request.args.get('user', None)
+
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db["ann.perkins" + "_forms"]
+        collection = db[user + "_forms"]
         req_data = json.loads(request.data.decode("utf-8"))
 
         results = []
@@ -161,9 +163,11 @@ class Tasks(Resource):
 @api.route('/responses')
 class Responses(Resource):
     def get(self,form_title):
+        user  = request.args.get('user', None)
+
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db["ann.perkins" + "_forms"]
+        collection = db[user + "_forms"]
         cursor = collection.find_one({"title": form_title})
         return {"data":json.dumps(cursor["responses"])}
         
@@ -175,7 +179,7 @@ class Responses(Resource):
         db=client.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
-        collection = db["ann.perkins" + "_forms"]
+        collection = db[user + "_forms"]
         cursor = collection.find_one({"title": form_title})
         doc_id = cursor["_id"]
         collection.update_one({"_id":doc_id},{'$push': {'responses': req_data}})

@@ -22,7 +22,7 @@
     const routes = [
         { path: '/', component: Login },
         { path: '/dashboard', component: Dashboard },
-        { path: '/forms/:formId', component: Forms}
+        { path: '/forms/:user/:formId', component: Forms}
     ];
 
     const router = new VueRouter({routes});

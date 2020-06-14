@@ -73,7 +73,7 @@
                 ];
                 if (formComplete) {
                     response["time"] = String(new Date());
-                    requests.submitResponse(this.$parent.currForm,response);
+                    requests.submitResponse(this.$parent.currForm,response,this.$store.state.user);
                     this.$parent.formPreview = false;
                     this.$parent.currForm = "";
                 }

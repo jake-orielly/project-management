@@ -4,9 +4,9 @@ export default {
     components: {
         'config': config
     },
-    retrieveForm(inputData) {
+    retrieveForm(inputData,user) {
         let bodyData = JSON.stringify(inputData);
-        return this.genericRequest("/retrieve-form", "POST", bodyData)
+        return this.genericRequest("/retrieve-form" + "?user=" + user, "POST", bodyData)
     },
     getUserForms(user) {
         return this.genericRequest("/forms/" + user, "GET")
@@ -37,9 +37,9 @@ export default {
         });
         return this.genericRequest("/inbox", "PUT",data);
     },
-    submitResponse(form,response) {
+    submitResponse(form,response,user) {
         let data = JSON.stringify(response);
-        return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + "ann.perkins", "POST",data)
+        return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + user, "POST",data)
     },
     submitEstimate(user,hash,estimate) {
         let data = JSON.stringify({
@@ -53,8 +53,8 @@ export default {
         let data = JSON.stringify({"user":username,"password":password});
         return this.genericRequest("/login", "POST",data)
     },
-    getResponses(form){
-        return this.genericRequest("/responses/" + form, "GET")
+    getResponses(form,user){
+        return this.genericRequest("/responses/" + form + "?user=" + user, "GET")
     },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();

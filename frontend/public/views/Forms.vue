@@ -16,6 +16,7 @@
         data () {
             return {
                 formPreview: false,
+                user: this.$route.params.user,
                 currForm: this.$route.params.formId,
                 formTitle: "",
                 fields: []
@@ -23,7 +24,8 @@
         },
         mounted() {
             requests.retrieveForm(
-                {"id":this.currForm}
+                {"id":this.currForm},
+                this.user
             ).then(
                 response => {
                     let responseText = JSON.parse(response.responseText);
