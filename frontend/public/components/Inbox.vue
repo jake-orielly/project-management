@@ -14,7 +14,7 @@
             </ul>
         </div>
         <div id="estimate-container" v-if="viewing != undefined">
-            <p>{{viewing.description}}</p>
+            <p>{{viewing.fields.description}}</p>
             <p v-for="field in Object.keys(viewing.fields.fields)" v-bind:key="field">
                 {{fromLabel(field) + ': ' + viewing.fields.fields[field]}}
             </p>
@@ -80,6 +80,7 @@
         methods: {
             openInboxItem(item) {
                 this.viewing = item;
+                console.log(this.viewing)
             },
             setMode(mode) {
                 this.mode = mode;
