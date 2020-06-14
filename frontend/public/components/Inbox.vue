@@ -1,6 +1,6 @@
 <template>
     <div id="inbox" :class="{'focused':viewing}">
-        <div v-if="viewing" class="close-icon-container" @click="closeInbox">
+        <div v-if="viewing" class="close-icon-container" @click="closeView">
             <i class="fa fa-times clickable"></i>
         </div>
         <div v-if="viewing == undefined">
@@ -80,14 +80,12 @@
         methods: {
             openInboxItem(item) {
                 this.viewing = item;
-                console.log(this.viewing)
             },
             setMode(mode) {
                 this.mode = mode;
             },
             toggleExpand(user) {
                 user.expanded = !user.expanded;
-                console.log(user.expanded)
             },
             confirm() {
                 if (this.mode == 'estimate') {
@@ -107,11 +105,13 @@
             },
             closeView() {
                 this.viewing = undefined;
+                this.mode = undefined;
                 this.$parent.updateInbox();
                 this.$parent.$refs.taskList.updateTaskList();
-            },
-            closeInbox() {
-                this.viewing = undefined;
+                for (let user of this.myTeam) {
+                    user.expanded = false;
+                    user.selected = false;
+                }
             },
             toggleSelect(givenUser) {
                 for (let user of this.myTeam)
