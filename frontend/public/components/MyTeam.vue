@@ -4,19 +4,17 @@
         <div id="team-container" v-if="!formPreview">
             <div class="clickable">
                 <div class="user-forms-container" v-for="user in myTeam" v-bind:key="user.name">
-                    <p>
+                    <p class="user-name">
                         {{user.name}}
                     </p>
-                    <div v-if="!user.open">
+                    <div v-if="!user.open" class="open-icon">
                         <span @click="toggleForms(user)">
                             <i class="fa fa-plus"></i>
                         </span>
                     </div>
-                    <div v-if="user.open">
-                        <span @click="toggleForms(user)">
-                            <i class="fa fa-minus"></i>
-                        </span>
-                    </div>
+                    <span v-if="user.open" @click="toggleForms(user)">
+                        <i class="fa fa-minus"></i>
+                    </span>
                     <div v-if="user.open">
                         <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
                         <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false"></TaskList>
@@ -117,13 +115,12 @@
         font-size: 1.5rem;
     }
 
-    .user-forms-container {
+    .user-name {
         display: inline-block;
+        margin-right: 1rem;
+    }
 
-        * {
-            display: inline-block;
-            margin-left: 0.5rem;
-        }
-        
+    .open-icon {
+        display: inline-block;
     }
 </style>

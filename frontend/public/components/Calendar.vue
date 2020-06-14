@@ -63,9 +63,9 @@
                 dayHighlightedClass: 'cell-highlighted',
             }
         },
-        mounted() {
+/*        mounted() {
             this.updateWorkload();
-        },
+        },*/
         methods: {
             showDay(row,col) {
                 this.dayShowing = this.calendarToDate(row,col);
@@ -96,9 +96,9 @@
                 else if (hours < 8)
                     return "green-day";
             },
-            updateWorkload() {
+            updateWorkload(givenTaskList) {
                 let workload = [];
-                let taskList = this.$store.state.taskList.slice().filter(task => task.status == "In Progress");
+                let taskList = givenTaskList.slice().filter(task => task.status == "In Progress");
                 let currTask;
                 let currDay = this.today.getDate();
                 let availibleHours;

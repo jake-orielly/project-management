@@ -75,16 +75,17 @@
                         if (this.mine)
                             this.$store.commit("setTaskList", this.taskList);
                         if (this.calendar)
-                            this.calendar.updateWorkload();
+                            this.calendar.updateWorkload(this.taskList);
                     }
                 )
             },
             taskClick(task) {
                 if (this.calendar) {
                     this.calendar.dayHighlighted = {};
-                    for (let i = 0; i < this.calendar.workload.length; i++)
+                    for (let i = 0; i < this.calendar.workload.length; i++) {
                         if (this.calendar.workload[i].tasks.filter(item => item.name == task.description).length)
                             this.calendar.dayHighlighted[i] = true;
+                    }
                 }
             },
             setStatus(task,status) {
