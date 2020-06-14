@@ -66,13 +66,18 @@
         },
         mounted() {
             this.updateInbox();
+            let app = this;
+            setInterval(
+                () => {app.updateInbox()},
+                10000
+            )
         },
         methods: {
             updateInbox() {
-                this.inbox = [];
                 requests.getInbox(this.$store.state.user).then(
                     response => {
                         let responseData = JSON.parse(JSON.parse(response.responseText).data);
+                        this.inbox = [];
                         for (let response of responseData) {
                             this.inbox.push({
                                 "description": "Give Estimate",
