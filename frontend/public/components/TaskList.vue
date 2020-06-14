@@ -1,12 +1,12 @@
 <template>
-    <div id="taskList">
-        <p class="title">My Tasks</p>
+    <div id="taskList" :class="{'no-border' : !mine}">
+        <p class="title" v-if="mine">My Tasks</p>
         <ul>
-            <li v-for="task in $store.state.taskList.filter(task => task.status == 'In Progress')" v-bind:key="task.name">
+            <li v-for="task in this.taskList.filter(task => task.status == 'In Progress')" v-bind:key="task.name">
                 <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
                     <div class="task-name">
                         <span class="clickable" @click="taskClick(task)">
-                            {{task.description + ': ' + formatDate(task.due_date)}}
+                            {{task.description + ': ' + task.estimate + ' hours, due: ' + formatDate(task.due_date)}}
                         </span>
                         <div v-if="mine" class="task-icon" @click="setStatus(task,'Blocked')">
                             <i class="fa fa-ban clickable"></i>
@@ -18,6 +18,7 @@
                 </div>
             </li>
         </ul>
+        <p v-if="!this.taskList.length">No tasks</p>
     </div>
 </template>
 
@@ -36,26 +37,30 @@
             }
         },
         mounted() {
-            this.calendar = (
+            if (!this.$parent.$refs.calendar)
+                this.calendar = undefined;
+            else
+                this.calendar = (
                     this.$parent.$refs.calendar.length ?
                     this.$parent.$refs.calendar.filter(item => item.user == this.user)[0] :
                     this.$parent.$refs.calendar
                 )
             this.updateTaskList();
         },
-        data() {
+        data: () => {
             return {
-                calendar: undefined
+                calendar: undefined,
+                taskList: []
             }
         },
         methods: {
             updateTaskList() {
-                let taskList = [];
+                this.taskList = [];
                 requests.getTasks(this.user).then(
                     response => {
                         let responseData = JSON.parse(JSON.parse(response.responseText).data);
                         for (let response of responseData) {
-                            taskList.push({
+                            this.taskList.push({
                                 "description": response.description,
                                 "from": response.assigner,
                                 "title":response.form_title,
@@ -67,16 +72,20 @@
                                 "history":response.history
                             })
                         }
-                        this.$store.commit("setTaskList", taskList);
-                        this.calendar.updateWorkload();
+                        if (this.mine)
+                            this.$store.commit("setTaskList", this.taskList);
+                        if (this.calendar)
+                            this.calendar.updateWorkload();
                     }
                 )
             },
             taskClick(task) {
-                this.calendar.dayHighlighted = {};
-                for (let i = 0; i < this.calendar.workload.length; i++)
-                    if (this.calendar.workload[i].tasks.filter(item => item.name == task.description).length)
-                        this.calendar.dayHighlighted[i] = true;
+                if (this.calendar) {
+                    this.calendar.dayHighlighted = {};
+                    for (let i = 0; i < this.calendar.workload.length; i++)
+                        if (this.calendar.workload[i].tasks.filter(item => item.name == task.description).length)
+                            this.calendar.dayHighlighted[i] = true;
+                }
             },
             setStatus(task,status) {
                 this.$parent.$refs.taskStatusModal.show(task,status);
@@ -97,5 +106,16 @@
     .task-icon {
         float: right;
         margin-left: 0.25rem;
+    }
+
+    #taskList.no-border {
+        border: none;
+        width: 50%;
+    }
+
+    li {
+        & .dashboard-card {
+            width: auto;
+        }
     }
 </style>

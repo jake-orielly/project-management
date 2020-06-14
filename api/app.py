@@ -41,7 +41,7 @@ class RetrieveForm(Resource):
         return {"data":results}
 
 @api.route('/team/<user>')
-class Inbox(Resource):
+class Team(Resource):
     def get(self,user):
         client = MongoClient(mongo_URL)
         db=client.users
@@ -49,6 +49,7 @@ class Inbox(Resource):
         cursor = collection.find_one({"user": user})
         return {"data":json.dumps(cursor["team"])}
 
+@api.route('/inbox')
 @api.route('/inbox/<user>')
 class Inbox(Resource):
     def get(self,user):
@@ -57,6 +58,39 @@ class Inbox(Resource):
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
         return {"data":json.dumps(cursor["inbox"])}
+
+    def put(self):
+        req_data = json.loads(request.data.decode("utf-8"))
+        
+        userFrom = req_data["userFrom"]
+        userTo = req_data["userTo"]
+        task_hash = req_data["task"]
+        time = req_data["time"]
+        
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_workloads
+
+        cursor = collection.find_one({"user": userFrom})
+        doc_id = cursor["_id"]
+
+        task = list(filter(lambda item: item["hash"] == task_hash, cursor["inbox"]))[0]
+
+        collection.update_one({"_id":doc_id},{"$set": { "inbox": 
+            list(filter(lambda item: item["hash"] != task_hash, cursor["inbox"]))
+        }})
+
+        task["history"].append(
+            {
+                "event":"Request Assigned to " + userTo,
+                "user":userFrom,
+                "time":time
+            }
+        )
+
+        cursor = collection.find_one({"user": userTo})
+        doc_id = cursor["_id"]
+        collection.update_one({"_id":doc_id},{'$push': {'inbox': task}})
 
     def patch(self,user):
         req_data = json.loads(request.data.decode("utf-8"))

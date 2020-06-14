@@ -28,6 +28,15 @@ export default {
         let data = JSON.stringify(task);
         return this.genericRequest("/tasks/" + user, "PATCH",data);
     },
+    assignTask(userFrom,userTo,task,time){
+        let data = JSON.stringify({
+            userFrom:userFrom,
+            userTo:userTo,
+            task:task,
+            time:time
+        });
+        return this.genericRequest("/inbox", "PUT",data);
+    },
     submitResponse(form,response) {
         let data = JSON.stringify(response);
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + "ann.perkins", "POST",data)
