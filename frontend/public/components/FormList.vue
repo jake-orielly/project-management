@@ -64,6 +64,7 @@
         padding: 1rem;
         border: 3px solid #2C666E;
         border-radius: 1rem;
+        font-size: 1.15rem;
     }
 
     .title {

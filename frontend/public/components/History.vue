@@ -96,6 +96,7 @@
     #history-container {
         display: inline-block;
         margin-left: 2em;
+        padding: 1rem;
         border: 3px solid #2C666E;
         border-radius: 1em;
         width: 50%;

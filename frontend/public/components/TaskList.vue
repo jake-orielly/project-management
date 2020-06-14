@@ -102,11 +102,15 @@
 <style lang="scss" scoped>
     .task-name {
         padding: 0.75rem 1rem;
+
+        span {
+            margin-right: 1rem;
+        }
     }
 
     .task-icon {
         float: right;
-        margin-left: 0.25rem;
+        margin-left: 0.5rem;
     }
 
     #taskList.no-border {

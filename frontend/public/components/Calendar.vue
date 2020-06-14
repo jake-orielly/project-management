@@ -121,8 +121,8 @@
                         }
                         else if (new Date(currTask.due_date).getDate() + 1 > currDay) {
                             if (workload[currDay].remaining) {
-                                workload[currDay].tasks.push({name:currTask.description, time:parseInt(workload[currDay].remaining - 1)});
-                                currTask.estimate -= (workload[currDay].remaining - 1);
+                                workload[currDay].tasks.push({name:currTask.description, time:parseInt(workload[currDay].remaining)});
+                                currTask.estimate -= (workload[currDay].remaining);
                                 workload[currDay].remaining = 1;
                             }
                             currDay++;
