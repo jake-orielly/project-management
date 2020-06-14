@@ -39,6 +39,7 @@
         },
         data() {
             return {
+                creator: undefined
             }
         },
         methods: {
@@ -73,7 +74,7 @@
                 ];
                 if (formComplete) {
                     response["time"] = String(new Date());
-                    requests.submitResponse(this.$parent.currForm,response,this.$store.state.user);
+                    requests.submitResponse(this.$parent.currForm,this.$parent.user,response);
                     this.$parent.formPreview = false;
                     this.$parent.currForm = "";
                 }

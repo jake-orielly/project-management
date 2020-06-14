@@ -15,7 +15,9 @@ export default {
         return this.genericRequest("/team/" + user, "GET")
     },
     postForm(form,user) {
-        let data = JSON.stringify(form);
+        let data;
+        form.creator = user;
+        data = JSON.stringify(form);
         return this.genericRequest("/forms/" + user, "POST",data)
     },
     getInbox(user) {
@@ -37,7 +39,7 @@ export default {
         });
         return this.genericRequest("/inbox", "PUT",data);
     },
-    submitResponse(form,response,user) {
+    submitResponse(form,user,response) {
         let data = JSON.stringify(response);
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + user, "POST",data)
     },
