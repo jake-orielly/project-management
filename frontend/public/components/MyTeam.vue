@@ -15,7 +15,7 @@
                     <span v-if="user.open" @click="toggleForms(user)">
                         <i class="fa fa-minus"></i>
                     </span>
-                    <div v-if="user.open">
+                    <div v-if="user.open" id="user-container">
                         <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
                         <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false"></TaskList>
                         <Calendar ref="calendar" v-bind:user="user.name"></Calendar>
