@@ -1,1 +1,7 @@
+.env
+*.css
+*.pyc
 mongodb-storage/
+node_modules/
+cypress_volume/videos/
+cypress/

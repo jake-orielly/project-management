@@ -26,14 +26,7 @@ textarea {
 
 .field-card, .dashboard-card{
     display: table;
-    box-shadow: 1px 1px 3px 0px #0005;
 }
-
-.field-card li {
-    list-style-type: disc;
-    text-align: left;
-}
-
 #field-input-container {
     display: inline-block;
     margin-left: 2em;
@@ -41,15 +34,33 @@ textarea {
     padding: 1rem;
     border: 3px solid #2C666E;
     border-radius: 1rem;
-}
 
-#field-input-container p {
-    margin: 0.25rem;
+    p {
+        margin: 0.25rem;
+    }
 }
 
 .field-card {
+    width: 100%;
     margin: 1rem;
-    padding: 1rem 2em;
+    text-align: left;
+
+    .field-card-inner {
+        display: inline-block;
+        margin: 0;
+        padding: 1rem 2em;
+        box-shadow: 1px 1px 3px 0px #0005;
+    }
+
+    li {
+        list-style-type: disc;
+        text-align: left;
+    }
+
+    input {
+        border:none;
+        font-size: 1.2rem;
+    }
 }
 
 .field-type {
@@ -155,7 +166,6 @@ textarea {
     border-radius: 1em;
     width: 35%;
     height: 35%;
-    overflow-y: auto;
 }
 
 #inbox .title, #taskList .title, #calendar .title {
@@ -175,6 +185,7 @@ textarea {
     padding: 0;
     border: 2px solid #2C666E;
     border-radius: 0.5em;
+    box-shadow: 1px 1px 3px 0px #0005;
 }
 
 .card-danger {
@@ -264,4 +275,8 @@ textarea {
 
 #submission-response-text {
     margin: 2em;
+}
+
+.move-bars {
+    margin-left: 0.5em;
 }
