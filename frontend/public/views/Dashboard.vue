@@ -101,6 +101,9 @@
 <style lang="scss" scoped>
     #dashboard {
         height: 90vh;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        margin-right: 2rem;
     
         & div {
             margin-top: 1rem;
