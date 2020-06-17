@@ -15,6 +15,7 @@
         </div>
         <div id="estimate-container" v-if="viewing != undefined">
             <p>{{viewing.fields.description}}</p>
+            <p>{{'Due: ' + viewing.fields.due_date}}</p>
             <p v-for="field in Object.keys(viewing.fields.fields)" v-bind:key="field">
                 {{fromLabel(field) + ': ' + viewing.fields.fields[field]}}
             </p>
