@@ -89,7 +89,7 @@
             },
             confirm() {
                 if (this.mode == 'estimate') {
-                    let estimateVal = document.getElementById("estimate-input").value;
+                    let estimateVal = parseFloat(document.getElementById("estimate-input").value);
                     requests.submitEstimate(this.$store.state.user,this.viewing.fields.hash,estimateVal).then(
                         () => {
                             this.closeView();
