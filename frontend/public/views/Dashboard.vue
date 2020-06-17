@@ -69,7 +69,7 @@
             let app = this;
             setInterval(
                 () => {app.updateInbox()},
-                10000
+                2500
             )
         },
         methods: {
