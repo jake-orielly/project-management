@@ -66,7 +66,7 @@
 
                 formatted += (dateObj.getMonth() + 1) + "/";
                 formatted += dateObj.getDate() + "/";
-                formatted += dateObj.getYear() + " ";
+                formatted += dateObj.getFullYear() + " ";
 
                 let hour = dateObj.getHours();
                 if (hour > 12) {
