@@ -1,10 +1,18 @@
 <template>
     <div id="history-container">
-        <p class="title">History</p>
+        <p class="title">
+            History
+            <span class="clickable" @click="expandHistory()">
+                <i class="fa fa-plus"></i>
+            </span>
+        </p>
         <div v-if="!task">
-            <div class="task-item" v-for="task in $store.state.taskList" v-bind:key="task.hash">
+            <div class="task-item" v-for="task in $store.state.taskList.reverse()" v-bind:key="task.hash">
                 <p>
                     {{task.description}}
+                </p>
+                <p>
+                    {{formatDate(task.history[task.history.length - 1].time)}}
                 </p>
                 <div class="clickable icon" @click="selectTask(task)">
                     <i class="fa fa-history" aria-hidden="true"></i>
@@ -12,8 +20,8 @@
             </div>
         </div>
         <div v-if="task">
-            <div class="close-icon-container" @click="deselectTask()">
-                <i class="fa fa-times clickable"></i>
+            <div class="close-icon-container clickable" @click="deselectTask()">
+                <i class="fa fa-times"></i>
             </div>
             <table>
                 <tr v-for="event in task.history" v-bind:key="event.time">
@@ -42,6 +50,9 @@
             }
         },
         methods: {
+            expandHistory() {
+                console.log(this.$store.state.taskList)
+            },
             selectTask(task) {
                 this.task = task;
             },
@@ -70,6 +81,10 @@
                 
 
                 return formatted;
+            },
+            formatDate(date) {
+                let currDate = new Date(date);
+                return currDate.getMonth() + 1 + "/" + currDate.getDate() + "/" + currDate.getFullYear()
             }
         }
     }
@@ -78,6 +93,10 @@
 <style lang="scss" scoped>
     .title {
         text-decoration: underline;
+    }
+
+    p {
+        margin-right: 0.5rem;
     }
 
     .task-item *{
@@ -104,5 +123,9 @@
 
     td {
         padding-left: 1.5rem;
+    }
+
+    .fa-plus {
+        float: right;
     }
 </style>
