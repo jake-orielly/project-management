@@ -20,6 +20,12 @@ export default {
         data = JSON.stringify(form);
         return this.genericRequest("/forms/" + user, "POST",data)
     },
+    patchForm(form,user) {
+        let data;
+        form.creator = user;
+        data = JSON.stringify(form);
+        return this.genericRequest("/forms/" + user, "PATCH",data)
+    },
     getInbox(user) {
         return this.genericRequest("/inbox/" + user, "GET")
     },

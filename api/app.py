@@ -227,5 +227,13 @@ class Forms(Resource):
         collection.insert_one(req_data)
         return {"message":"success"}
 
+    def patch(self, user):
+        client = MongoClient(mongo_URL)
+        db=client.forms
+        collection = db[user + "_forms"]
+        req_data = json.loads(request.data.decode("utf-8"))
+        collection.replace_one({"title": req_data["title"]}, req_data)
+        return {"message":"success"}
+
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',port=config.port,debug=True)
