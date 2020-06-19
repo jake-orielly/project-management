@@ -83,5 +83,8 @@ export default {
             request.open(type, baseUrl + url, true);
             request.send(body);
         });
+    },
+    returnTask(user,hash,comment) {
+        console.log(user,hash,comment)
     }
 }

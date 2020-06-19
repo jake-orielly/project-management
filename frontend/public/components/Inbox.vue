@@ -21,6 +21,7 @@
             </p>
             <button @click="setMode('assign')">Re-Assign</button>
             <button @click="setMode('estimate')">Estimate</button>
+            <button @click="setMode('pushBack')">Push Back</button>
             <div v-if="mode == 'estimate'">
                 <p><input type="number" id="estimate-input"></p>
             </div>
@@ -41,6 +42,10 @@
                         <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false" :key="user.name + '-task-list'"></TaskList>
                     </div>
                 </div>
+            </div>
+            <div v-if="mode == 'pushBack'">
+                <p>Reason for pushback:</p>
+                <textarea id="pushback-comment"></textarea>
             </div>
             <p v-if="mode">
                 <button @click="confirm">Confirm</button>
@@ -99,6 +104,13 @@
                 else if (this.mode == 'assign') {
                     let user = this.myTeam.filter(user => user.selected)[0];
                     requests.assignTask(this.$store.state.user,user.name,this.viewing.fields.hash, new Date()).then(
+                        () => {
+                            this.closeView();
+                    })
+                }
+                else if (this.mode == 'pushBack') {
+                    let comment = document.getElementById("pushback-comment").value;
+                    requests.returnTask(this.$store.state.user,this.viewing.fields.hash,comment).then(
                         () => {
                             this.closeView();
                     })
@@ -165,5 +177,12 @@
         & .user-info {
             display: block;
         }
+    }
+
+    #pushback-comment {
+        font-size: 1.5rem;
+        font-family: 'Montserrat', sans-serif;
+        width: 30rem;
+        height: 10rem;
     }
 </style>
