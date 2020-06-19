@@ -7,6 +7,7 @@
         <div v-for="field in $parent.fields" class="form-field" v-bind:key="$parent.fields.indexOf(field)">
             <p> 
                 {{field.label}}
+                <br>
                 <span v-if="field.mandatory">*</span>
                 <input v-if="field.type == 'text'" :data-label="toLabel(field.label)" type="text">
                 <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
