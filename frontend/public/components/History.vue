@@ -1,10 +1,7 @@
 <template>
     <div id="history-container">
         <p class="title">
-            History
-            <span class="clickable" @click="expandHistory()">
-                <i class="fa fa-plus"></i>
-            </span>
+            Recent Responses
         </p>
         <div v-if="!task">
             <div class="task-item" v-for="task in $store.state.taskList.reverse()" v-bind:key="task.hash">
@@ -50,9 +47,6 @@
             }
         },
         methods: {
-            expandHistory() {
-                console.log(this.$store.state.taskList)
-            },
             selectTask(task) {
                 this.task = task;
             },
