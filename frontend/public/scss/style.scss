@@ -164,8 +164,6 @@ textarea {
     margin-left: 2em;
     border: 3px solid #2C666E;
     border-radius: 1em;
-    width: 35%;
-    height: 35%;
 }
 
 #inbox .title, #taskList .title, #calendar .title {
@@ -179,10 +177,9 @@ textarea {
 
 .dashboard-card {
     display: inline-block;
-    width: 80%;
     margin-left: 10%;
     margin-bottom: 1em;
-    padding: 0;
+    padding: 0 2em;
     border: 2px solid #2C666E;
     border-radius: 0.5em;
     box-shadow: 1px 1px 3px 0px #0005;
@@ -192,9 +189,6 @@ textarea {
     border: 2px solid red;
 }
 
-.dashboard-card p {
-    padding-left: 1em;
-}
 
 #calendar-table-container {
     display: flex;
