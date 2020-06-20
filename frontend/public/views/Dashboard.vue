@@ -11,6 +11,7 @@
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
             <FormList v-bind:targetUser="$store.state.user" ref="FormList"></FormList>
+            <FormResponses></FormResponses>
             <FieldAdd></FieldAdd>
             <FormCreation></FormCreation>
         </div>
@@ -35,6 +36,7 @@
     import TaskStatusModal from '../components/TaskStatusModal.vue';
     import History from '../components/History.vue';
     import MyTeam from '../components/MyTeam.vue';
+    import FormResponses from '../components/FormResponses.vue';
 
     export default {
         components: {
@@ -48,7 +50,8 @@
             FormList,
             TaskStatusModal,
             History,
-            MyTeam
+            MyTeam,
+            FormResponses
         },
         data () {
             return {

@@ -86,6 +86,7 @@
         methods: {
             openInboxItem(item) {
                 this.viewing = item;
+                console.log(item)
             },
             setMode(mode) {
                 this.mode = mode;

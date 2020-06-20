@@ -17,6 +17,7 @@ export default {
     postForm(form,user) {
         let data;
         form.creator = user;
+        form.responses = [];
         data = JSON.stringify(form);
         return this.genericRequest("/forms/" + user, "POST",data)
     },
@@ -45,6 +46,9 @@ export default {
         });
         return this.genericRequest("/inbox", "PUT",data);
     },
+    getResponses(form,user){
+        return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + user, "GET")
+    },
     submitResponse(form,user,response) {
         let data = JSON.stringify(response);
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + user, "POST",data)
@@ -60,9 +64,6 @@ export default {
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});
         return this.genericRequest("/login", "POST",data)
-    },
-    getResponses(form,user){
-        return this.genericRequest("/responses/" + form + "?user=" + user, "GET")
     },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();

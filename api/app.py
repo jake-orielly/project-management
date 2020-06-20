@@ -162,9 +162,10 @@ class Tasks(Resource):
 
 @api.route('/responses')
 class Responses(Resource):
-    def get(self,form_title):
+    def get(self):
+        form_title  = request.args.get('form_title', None)
         user  = request.args.get('user', None)
-
+        
         client = MongoClient(mongo_URL)
         db=client.forms
         collection = db[user + "_forms"]

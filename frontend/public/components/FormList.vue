@@ -6,6 +6,9 @@
             <span class="clickable" @click="edit(form)">
                 <i class="fa fa-pencil-alt"></i>
             </span>
+            <span class="clickable" @click="showResponses(form)">
+                <i class="fa fa-reply"></i>
+            </span>
             <span class="clickable" @click="copyUrl(form)">
                 <i class="fa fa-paperclip"></i>
             </span>
@@ -89,5 +92,9 @@
     .title {
         text-decoration: underline;
         font-weight: bold;
+    }
+
+    span {
+        margin-left: 0.25rem;
     }
 </style>
