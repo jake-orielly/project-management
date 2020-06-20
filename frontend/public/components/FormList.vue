@@ -73,6 +73,9 @@
                         }
                     }
                 )
+            },
+            showResponses(form) {
+                this.$parent.showForm(form.name);
             }
         }
     }

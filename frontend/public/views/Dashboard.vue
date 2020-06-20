@@ -10,8 +10,8 @@
             <History></History>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
-            <FormList v-bind:targetUser="$store.state.user" ref="FormList"></FormList>
-            <FormResponses></FormResponses>
+            <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
+            <FormResponses ref="formResponses"></FormResponses>
             <FieldAdd></FieldAdd>
             <FormCreation></FormCreation>
         </div>
@@ -64,7 +64,7 @@
                 formSaved: true,
                 draggingPos: undefined,
                 draggingField: undefined,
-                modalTint: false
+                modalTint: false,
             }
         },
         mounted() {
@@ -91,6 +91,9 @@
                         }
                     }
                 )
+            },
+            showForm(formName) {
+                this.$refs.formResponses.loadForm(formName);
             },
             caps: function(text) {
                 if (!text)

@@ -1,6 +1,12 @@
 <template>
-    <div id="response-list">
-        <table>
+    <div id="response-list" v-if="showingResponse">
+        <div class="close-responses clickable" @click="closeResponses">
+            <i class="fa fa-times"></i>
+        </div>
+        <div v-if="!responses.length" class="no-responses">
+            This form has no responses yet.
+        </div>
+        <table v-if="responses.length">
             <thead>
                 <tr>
                     <th v-for="field in fields" v-bind:key="field" class="clickable" @click="setSort(field)">
@@ -30,21 +36,25 @@
                 responses: [],
                 fields: [],
                 sort: undefined,
-                sortOrder: undefined
+                sortOrder: undefined,
+                showingResponse: false,
             }
         },
-        mounted() {
-            requests.getResponses("Brand Request",this.$store.state.user).then(
-                response => {
-                    let responseText = JSON.parse(response.responseText);
-                    let responseData = JSON.parse(responseText.data)
-                    this.responses = responseData;
-                    this.fields = ["description","due_date"].concat(Object.keys(responseData[0].fields));
-                    this.setSort("due_date")
-                }
-            )
-        },
         methods: {
+            loadForm(formName) {
+                requests.getResponses(formName,this.$store.state.user).then(
+                    response => {
+                        let responseText = JSON.parse(response.responseText);
+                        let responseData = JSON.parse(responseText.data);
+                        this.responses = responseData;
+                        if (this.responses.length) {
+                            this.fields = ["description","due_date"].concat(Object.keys(responseData[0].fields));
+                            this.setSort("due_date");
+                        }
+                        this.showingResponse = true;
+                    }
+                )
+            },
             getData(response,field) {
                 if (field == "due_date" || field == "description")
                     return response[field]
@@ -81,6 +91,11 @@
                     
                     return result;
                 });
+            },
+            closeResponses() {
+                this.showingResponse = false;
+                this.responses = undefined;
+                this.field = undefined;
             }
         }
     }
@@ -109,5 +124,14 @@
     .sort-img {
         height: 0.5em;
         margin: 0.15em;
+    }
+
+    .no-responses {
+        text-align: center;
+    }
+
+    .close-responses {
+        text-align: right;
+        font-size: 1.25rem;
     }
 </style>
