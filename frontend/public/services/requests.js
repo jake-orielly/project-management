@@ -27,6 +27,10 @@ export default {
         data = JSON.stringify(form);
         return this.genericRequest("/forms/" + user, "PATCH",data)
     },
+    deleteForm(formID,user) {
+        let data = JSON.stringify({ id:formID });
+        return this.genericRequest("/forms/" + user, "DELETE",data)
+    },
     getInbox(user) {
         return this.genericRequest("/inbox/" + user, "GET")
     },

@@ -51,6 +51,8 @@
                             this.fields = ["description","due_date"].concat(Object.keys(responseData[0].fields));
                             this.setSort("due_date");
                         }
+                        for (let response of this.responses)
+                            console.log(response,response.history)
                         this.showingResponse = true;
                     }
                 )

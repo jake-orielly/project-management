@@ -12,6 +12,9 @@
             <span class="clickable" @click="copyUrl(form)">
                 <i class="fa fa-paperclip"></i>
             </span>
+             <span class="clickable" @click="deleteForm(form)">
+                <i class="fa fa-times"></i>
+            </span>
         </p>
     </div>
 </template>
@@ -76,6 +79,16 @@
             },
             showResponses(form) {
                 this.$parent.showForm(form.name);
+            },
+            deleteForm(form) {
+                let confirmation = confirm("Are you sure you want to delete your form: " + form.name + "?");
+                if (confirmation) {
+                    requests.deleteForm(form.id,this.$store.state.user).then(
+                        () => {
+                            this.updateFormList();
+                        }
+                    );
+                }
             }
         }
     }

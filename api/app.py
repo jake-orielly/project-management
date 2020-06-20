@@ -236,5 +236,14 @@ class Forms(Resource):
         collection.replace_one({"title": req_data["title"]}, req_data)
         return {"message":"success"}
 
+    def delete(self, user):
+        client = MongoClient(mongo_URL)
+        db=client.forms
+        collection = db[user + "_forms"]
+        req_data = json.loads(request.data.decode("utf-8"))
+        print(req_data["id"])
+        collection.delete_one({'_id':ObjectId(req_data["id"])})
+        return {"message":"success"}
+
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',port=config.port,debug=True)
