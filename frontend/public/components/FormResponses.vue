@@ -41,6 +41,9 @@
                 </tr>
             </tbody>
         </table>
+        <button class="clickable" @click="exportToCSV">
+            Export to CSV
+        </button>
     </div>
 </template>
 
@@ -173,6 +176,27 @@
             formatDate(date) {
                 let dateSplit = date.split('-');
                 return dateSplit[1] + "-" + dateSplit[2] + "-" + dateSplit[0];
+            },
+            exportToCSV() {
+                let csvString = "";
+                csvString += this.fields.join(',') + "\n";
+                for (let response of this.filteredResponses) {
+                    csvString += response.description + ",";
+                    csvString += response.due_date + ",";
+                    csvString += Object.values(response.fields).join(",");
+                    csvString += "\n";
+                }
+
+                let element = document.createElement('a');
+                element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvString));
+                element.setAttribute('download', 'data.txt');
+
+                element.style.display = 'none';
+                document.body.appendChild(element);
+
+                element.click();
+
+                document.body.removeChild(element);
             }
         }
     }
