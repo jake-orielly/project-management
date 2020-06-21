@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="response in responses" v-bind:key="response.hash">
+                <tr v-for="response in filteredResponses" v-bind:key="response.hash">
                     <td v-for="field in fields" v-bind:key="response.hash + '-' + field">
                         {{getData(response,field)}}
                     </td>
@@ -58,7 +58,51 @@
                 filters: [],
             }
         },
+        computed: {
+            filteredResponses: function () {
+                let filteredResponses = this.responses;
+
+                for (let f of this.filters)
+                    filteredResponses = this.evalFilter(filteredResponses,f);
+
+                return filteredResponses;
+            }
+        },
         methods: {
+            evalFilter(responses,filterText) {
+                filterText = filterText.toLowerCase();
+                let filterSplit = filterText.split(" ");
+
+                let columnInd = 0;
+                let column = filterSplit[0];
+
+                while (this.fields.indexOf(column) == -1) {
+                    if (columnInd + 2 == filterSplit.length)
+                        return responses;
+                    columnInd++;
+                    column += "_" + filterSplit[columnInd];
+                }
+                
+                let operator = filterSplit[columnInd + 1];
+                let argument = filterSplit[columnInd + 2];
+                console.log(column,operator,argument)
+                let containsOperators = ["contains"];
+                let equalsOperators = ["is"];
+
+                if (containsOperators.indexOf(operator) != -1)
+                    return responses.filter(r => this.getData(r,column).toLowerCase().indexOf(argument) != -1);
+                else if (equalsOperators.indexOf(operator) != -1) {
+                    return responses.filter(r => this.getData(r,column).toLowerCase() == argument);
+                }
+                else if (operator == ">")
+                    return responses.filter(r => this.getData(r,column).toLowerCase() > argument);
+                else if (operator == ">=")
+                    return responses.filter(r => this.getData(r,column).toLowerCase() >= argument);
+                else if (operator == "<")
+                    return responses.filter(r => this.getData(r,column).toLowerCase() < argument);
+                else if (operator == "<=")
+                    return responses.filter(r => this.getData(r,column).toLowerCase() <= argument);
+            },
             loadForm(formName) {
                 requests.getResponses(formName,this.$store.state.user).then(
                     response => {
@@ -69,13 +113,12 @@
                             this.fields = ["description","due_date"].concat(Object.keys(responseData[0].fields));
                             this.setSort("due_date");
                         }
-                        for (let response of this.responses)
-                            console.log(response,response.history)
                         this.showingResponse = true;
                     }
                 )
             },
             getData(response,field) {
+                field = field.replace(/ /g,'_');
                 if (field == "due_date" || field == "description")
                     return response[field]
                 else
