@@ -27,13 +27,13 @@ class RetrieveForm(Resource):
 
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
+        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
         results = []
 
         if "title" in req_data:
-            cursor = collection.find({"title": req_data["title"]}, {'_id': False})
+            cursor = collection.find({"title": req_data["title"],"creator":user}, {'_id': False})
             for i in cursor:
                 results.append(json.dumps(i))
         elif "id" in req_data:
@@ -168,8 +168,8 @@ class Responses(Resource):
         
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
-        cursor = collection.find_one({"title": form_title})
+        collection = db.forms
+        cursor = collection.find_one({"title": form_title,"creator":user})
         return {"data":json.dumps(cursor["responses"])}
         
     def post(self):
@@ -180,14 +180,14 @@ class Responses(Resource):
         db=client.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
-        collection = db[user + "_forms"]
-        cursor = collection.find_one({"title": form_title})
+        collection = db.forms
+        cursor = collection.find_one({"title": form_title,"creator":user})
         doc_id = cursor["_id"]
         collection.update_one({"_id":doc_id},{'$push': {'responses': req_data}})
         
         db=client.users
         collection = db.user_workloads
-        cursor = collection.find_one({"user": user})
+        cursor = collection.find_one({"creator": user})
         doc_id = cursor["_id"]
         req_data["form_title"] = form_title
         collection.update_one({"_id":doc_id},{'$push': {'inbox': req_data}})
@@ -213,8 +213,8 @@ class Forms(Resource):
     def get(self, user):
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
-        cursor = collection.find({})
+        collection = db.forms
+        cursor = collection.find({"creator": user})
         results = []
         for i in cursor:
             i["_id"] = str(i["_id"])
@@ -223,7 +223,7 @@ class Forms(Resource):
     def post(self, user):
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
+        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
         collection.insert_one(req_data)
         return {"message":"success"}
@@ -231,15 +231,15 @@ class Forms(Resource):
     def patch(self, user):
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
+        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
-        collection.replace_one({"title": req_data["title"]}, req_data)
+        collection.replace_one({"title": req_data["title"],"creator": user}, req_data)
         return {"message":"success"}
 
     def delete(self, user):
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
+        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
         print(req_data["id"])
         collection.delete_one({'_id':ObjectId(req_data["id"])})
