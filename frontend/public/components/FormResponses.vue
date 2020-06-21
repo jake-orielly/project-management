@@ -41,6 +41,9 @@
                 </tr>
             </tbody>
         </table>
+        <div id="response-count-container">
+            {{'Showing ' + filteredResponses.length + ' of ' + responses.length + ' responses'}}
+        </div>
         <button class="clickable" @click="exportToCSV">
             Export to CSV
         </button>
@@ -259,5 +262,9 @@
         border: 2px solid #2C666E;
         box-shadow: 1px 1px 6px 0px #0006;
         border-radius: 0.5rem;
+    }
+
+    #response-count-container {
+        margin-top: 2rem;
     }
 </style>
