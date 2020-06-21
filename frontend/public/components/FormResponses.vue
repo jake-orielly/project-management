@@ -85,15 +85,14 @@
                 
                 let operator = filterSplit[columnInd + 1];
                 let argument = filterSplit[columnInd + 2];
-                console.log(column,operator,argument)
+
                 let containsOperators = ["contains"];
                 let equalsOperators = ["is"];
 
                 if (containsOperators.indexOf(operator) != -1)
                     return responses.filter(r => this.getData(r,column).toLowerCase().indexOf(argument) != -1);
-                else if (equalsOperators.indexOf(operator) != -1) {
+                else if (equalsOperators.indexOf(operator) != -1)
                     return responses.filter(r => this.getData(r,column).toLowerCase() == argument);
-                }
                 else if (operator == ">")
                     return responses.filter(r => this.getData(r,column).toLowerCase() > argument);
                 else if (operator == ">=")
@@ -113,6 +112,8 @@
                             this.fields = ["description","due_date"].concat(Object.keys(responseData[0].fields));
                             this.setSort("due_date");
                         }
+                        for (let i of this.responses)
+                            i.due_date = this.formatDate(i.due_date);
                         this.showingResponse = true;
                     }
                 )
@@ -168,6 +169,10 @@
             removeFilter(filter) {
                 let filterIndex = this.filters.indexOf(filter);
                 this.filters.splice(filterIndex,1);
+            },
+            formatDate(date) {
+                let dateSplit = date.split('-');
+                return dateSplit[1] + "-" + dateSplit[2] + "-" + dateSplit[0];
             }
         }
     }
