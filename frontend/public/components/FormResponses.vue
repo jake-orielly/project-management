@@ -3,6 +3,23 @@
         <div class="close-responses clickable" @click="closeResponses">
             <i class="fa fa-times"></i>
         </div>
+        <p class="title" id="component-title">
+            Form Responses
+        </p>
+        <i class="fa fa-filter clickable"></i>
+        <div id="filter-input-container">
+            <input type="text" id="filter-input">
+            <button @click="applyFilter">Apply</button>
+        </div>
+        <br>
+        <div id="filter-tags-container"> 
+            <div v-for="filter in filters" v-bind:key="filter" class="filter-tag">
+                {{filter}}
+                <span class="clickable" @click="removeFilter(filter)">
+                    <i class="fa fa-times"></i>
+                </span>
+            </div>
+        </div>
         <div v-if="!responses.length" class="no-responses">
             This form has no responses yet.
         </div>
@@ -38,6 +55,7 @@
                 sort: undefined,
                 sortOrder: undefined,
                 showingResponse: false,
+                filters: [],
             }
         },
         methods: {
@@ -98,6 +116,15 @@
                 this.showingResponse = false;
                 this.responses = undefined;
                 this.field = undefined;
+            },
+            applyFilter() {
+                let filterText = document.getElementById("filter-input").value;
+                this.filters.push(filterText);
+                document.getElementById("filter-input").value = "";
+            },
+            removeFilter(filter) {
+                let filterIndex = this.filters.indexOf(filter);
+                this.filters.splice(filterIndex,1);
             }
         }
     }
@@ -135,5 +162,28 @@
     .close-responses {
         text-align: right;
         font-size: 1.25rem;
+    }
+
+    #component-title, .fa-filter, #filter-input-container, #filter-tags-container {
+        display: inline-block;
+    }
+
+    .fa-filter, #filter-input-container {
+        margin-left: 1rem;
+    }
+
+    #filter-input-container {
+        input {
+            width: 20rem;
+        }
+    }
+
+    .filter-tag {
+        display: inline-block;
+        margin: 0.75rem;
+        padding: 0.5rem;
+        border: 2px solid #2C666E;
+        box-shadow: 1px 1px 6px 0px #0006;
+        border-radius: 0.5rem;
     }
 </style>
