@@ -24,7 +24,9 @@
                     class="slider" id="myRange">
             </p>
         </div>
-        <button v-if="!preview" @click="submitForm">Submit</button>
+        <div id="submit-container">
+            <button v-if="!preview" @click="submitForm">Submit</button>
+        </div>
     </div>
 </template>
 
@@ -98,5 +100,9 @@
     .incomplete-field {
         border: 1px solid black;
         box-shadow: 2px 2px 8px 0px red;
+    }
+
+    #submit-container {
+        text-align: center;
     }
 </style>

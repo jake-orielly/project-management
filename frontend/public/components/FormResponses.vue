@@ -130,8 +130,12 @@
                 field = field.replace(/ /g,'_');
                 if (field == "due_date" || field == "description")
                     return response[field]
-                else
-                    return response.fields[field]
+                else {
+                    if (isNaN(parseInt(response.fields[field])))
+                        return response.fields[field]
+                    else
+                        return parseInt(response.fields[field])
+                }
             },
             prettify(text) {
                 let splitText = text.split('_');
