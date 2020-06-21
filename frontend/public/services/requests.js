@@ -8,11 +8,11 @@ export default {
         let bodyData = JSON.stringify(inputData);
         return this.genericRequest("/retrieve-form" + "?user=" + user, "POST", bodyData)
     },
-    getUserForms(user) {
-        return this.genericRequest("/forms/" + user, "GET")
-    },
     getUserTeam(user) {
         return this.genericRequest("/team/" + user, "GET")
+    },
+    getUserForms(user,scope) {
+        return this.genericRequest("/forms/" + user + "?scope=" + scope, "GET")
     },
     postForm(form,user) {
         let data;

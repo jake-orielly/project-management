@@ -211,10 +211,21 @@ class Login(Resource):
 @api.route('/forms/<user>')
 class Forms(Resource):
     def get(self, user):
+        scope  = request.args.get('scope', None)
+
         client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
-        cursor = collection.find({"creator": user})
+
+        if scope == "mine":
+            cursor = collection.find({"creator": user})
+
+        else:
+            team_collection = client.users.user_credentials
+            team_cursor = team_collection.find_one({"user": user})
+            team = [user] + team_cursor["team"]
+            cursor = collection.find({"creator":{"$in":team}})
+
         results = []
         for i in cursor:
             i["_id"] = str(i["_id"])

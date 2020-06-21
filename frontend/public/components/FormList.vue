@@ -1,6 +1,11 @@
 <template>
     <div id="form-list">
         <p class="title">My Forms</p>
+        <select id="form-list-scope" @change="scopeChange">
+            <option value="mine">Mine</option>
+            <option value="team">Team</option>
+            <option value="orginization">Orginization</option>n>
+        </select>
         <p v-for="form in forms" v-bind:key="form.name">
             {{form.name}}
             <span class="clickable" @click="edit(form)">
@@ -35,7 +40,7 @@
             }
         },
         mounted() {
-            this.updateFormList();
+            this.updateFormList("mine");
         },
         methods: {
             copyUrl(form) {
@@ -64,10 +69,10 @@
                     }
                 )
             },
-            updateFormList() {
+            updateFormList(scope) {
                 let parsedForm;
                 this.forms = [];
-                requests.getUserForms(this.targetUser).then(
+                requests.getUserForms(this.targetUser,scope).then(
                     response => {
                         let responseData = JSON.parse(response.responseText).data;
                         for (let form of responseData) {
@@ -76,6 +81,11 @@
                         }
                     }
                 )
+            },
+            scopeChange() {
+                console.log(1)
+                let scope = document.getElementById("form-list-scope").value;
+                this.updateFormList(scope);
             },
             showResponses(form) {
                 this.$parent.showForm(form.name);
