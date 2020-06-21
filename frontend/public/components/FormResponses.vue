@@ -96,6 +96,8 @@
                     return responses.filter(r => this.getData(r,column).toLowerCase().indexOf(argument) != -1);
                 else if (equalsOperators.indexOf(operator) != -1)
                     return responses.filter(r => this.getData(r,column).toLowerCase() == argument);
+                else if (operator == "not")
+                    return responses.filter(r => this.getData(r,column).toLowerCase() != argument);
                 else if (operator == ">")
                     return responses.filter(r => this.getData(r,column).toLowerCase() > argument);
                 else if (operator == ">=")
