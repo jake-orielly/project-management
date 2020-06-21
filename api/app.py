@@ -169,7 +169,10 @@ class Responses(Resource):
         client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
-        cursor = collection.find_one({"title": form_title,"creator":user})
+
+        # TODO check against user as well for imported forms
+        cursor = collection.find_one({"title": form_title})
+
         return {"data":json.dumps(cursor["responses"])}
         
     def post(self):
