@@ -82,8 +82,10 @@
                 let columnInd = 0;
                 let column = filterSplit[0];
 
-                for (let i = 0; i < filterSplit.length; i++) {
-                    if (columnInd + 2 == filterSplit.length)
+                for (let i = 1; i < filterSplit.length; i++) {
+                    if (this.fields.indexOf(column) != -1)
+                        break
+                    if (columnInd + 2 > filterSplit.length)
                         return responses;
                     columnInd = i;
                     column += "_" + filterSplit[columnInd];
@@ -91,7 +93,7 @@
                 
                 let operator = filterSplit[columnInd + 1];
                 let argument = filterSplit[columnInd + 2];
-
+                
                 let containsOperators = ["contains"];
                 let equalsOperators = ["is"];
 
@@ -120,15 +122,15 @@
                             this.fields = ["description","due_date"].concat(Object.keys(responseData[0].fields));
                             this.setSort("due_date");
                         }
-                        for (let i of this.responses)
-                            i.due_date = this.formatDate(i.due_date);
                         this.showingResponse = true;
                     }
                 )
             },
             getData(response,field) {
                 field = field.replace(/ /g,'_');
-                if (field == "due_date" || field == "description")
+                if (field == "due_date")
+                    return this.formatDate(response[field])
+                else if (field == "description")
                     return response[field]
                 else {
                     if (isNaN(parseInt(response.fields[field])))
