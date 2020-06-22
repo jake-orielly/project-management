@@ -23,7 +23,7 @@
             <button @click="setMode('estimate')">Estimate</button>
             <button @click="setMode('pushBack')">Push Back</button>
             <div v-if="mode == 'estimate'">
-                <p><input type="number" id="estimate-input"></p>
+                <p><input type="number" id="estimate-input"> Hours</p>
             </div>
             <div class="team-container" v-if="mode == 'assign'">
                 <div v-for="user in myTeam" v-bind:key="user.name" class="user-container">

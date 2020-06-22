@@ -28,8 +28,8 @@
                 <tr>
                     <th v-for="field in fields" v-bind:key="field" class="clickable" @click="setSort(field)">
                         {{prettify(field)}}
-                        <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../images/sort-up.png">
-                        <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../images/sort-down.png">       
+                        <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../images/sort-down.png">
+                        <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../images/sort-up.png">       
                     </th>
                 </tr>
             </thead>
@@ -82,10 +82,10 @@
                 let columnInd = 0;
                 let column = filterSplit[0];
 
-                while (this.fields.indexOf(column) == -1) {
+                for (let i = 0; i < filterSplit.length; i++) {
                     if (columnInd + 2 == filterSplit.length)
                         return responses;
-                    columnInd++;
+                    columnInd = i;
                     column += "_" + filterSplit[columnInd];
                 }
                 
@@ -102,13 +102,13 @@
                 else if (operator == "not")
                     return responses.filter(r => this.getData(r,column).toLowerCase() != argument);
                 else if (operator == ">")
-                    return responses.filter(r => this.getData(r,column).toLowerCase() > argument);
+                    return responses.filter(r => this.getData(r,column) > argument);
                 else if (operator == ">=")
-                    return responses.filter(r => this.getData(r,column).toLowerCase() >= argument);
+                    return responses.filter(r => this.getData(r,column) >= argument);
                 else if (operator == "<")
-                    return responses.filter(r => this.getData(r,column).toLowerCase() < argument);
+                    return responses.filter(r => this.getData(r,column) < argument);
                 else if (operator == "<=")
-                    return responses.filter(r => this.getData(r,column).toLowerCase() <= argument);
+                    return responses.filter(r => this.getData(r,column) <= argument);
             },
             loadForm(formName) {
                 requests.getResponses(formName,this.$store.state.user).then(
@@ -198,7 +198,7 @@
 
                 let element = document.createElement('a');
                 element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvString));
-                element.setAttribute('download', 'data.txt');
+                element.setAttribute('download', 'data.csv');
 
                 element.style.display = 'none';
                 document.body.appendChild(element);
