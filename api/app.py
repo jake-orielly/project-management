@@ -7,13 +7,13 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import date
 
+from mongo_url import mongo_URL
+
 import config
 
 app = Flask(__name__) 
 CORS(app)
 api = Api(app)
-
-mongo_URL = "mongodb:27017"
 
 @api.route('/is-alive')
 class IsAlive(Resource):
@@ -27,13 +27,13 @@ class RetrieveForm(Resource):
 
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
+        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
         results = []
 
         if "title" in req_data:
-            cursor = collection.find({"title": req_data["title"]}, {'_id': False})
+            cursor = collection.find({"title": req_data["title"],"creator":user}, {'_id': False})
             for i in cursor:
                 results.append(json.dumps(i))
         elif "id" in req_data:
@@ -59,7 +59,7 @@ class Inbox(Resource):
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
-        return {"data":json.dumps(cursor["inbox"])}
+        return cursor["inbox"]
 
     def put(self):
         req_data = json.loads(request.data.decode("utf-8"))
@@ -162,13 +162,17 @@ class Tasks(Resource):
 
 @api.route('/responses')
 class Responses(Resource):
-    def get(self,form_title):
+    def get(self):
+        form_title  = request.args.get('form_title', None)
         user  = request.args.get('user', None)
-
+        
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
+        collection = db.forms
+
+        # TODO check against user as well for imported forms
         cursor = collection.find_one({"title": form_title})
+
         return {"data":json.dumps(cursor["responses"])}
         
     def post(self):
@@ -179,14 +183,14 @@ class Responses(Resource):
         db=client.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
-        collection = db[user + "_forms"]
+        collection = db.forms
         cursor = collection.find_one({"title": form_title})
         doc_id = cursor["_id"]
         collection.update_one({"_id":doc_id},{'$push': {'responses': req_data}})
         
         db=client.users
         collection = db.user_workloads
-        cursor = collection.find_one({"user": user})
+        cursor = collection.find_one({"creator": user})
         doc_id = cursor["_id"]
         req_data["form_title"] = form_title
         collection.update_one({"_id":doc_id},{'$push': {'inbox': req_data}})
@@ -210,10 +214,20 @@ class Login(Resource):
 @api.route('/forms/<user>')
 class Forms(Resource):
     def get(self, user):
+        scope  = request.args.get('scope', None)
+
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
-        cursor = collection.find({})
+        collection = db.forms
+
+        if scope == "team" or scope == "orginization":
+            team_collection = client.users.user_credentials
+            team_cursor = team_collection.find_one({"user": user})
+            team = [user] + team_cursor["team"]
+            cursor = collection.find({"creator":{"$in":team}})
+        else:
+            cursor = collection.find({"creator": user})
+
         results = []
         for i in cursor:
             i["_id"] = str(i["_id"])
@@ -222,9 +236,26 @@ class Forms(Resource):
     def post(self, user):
         client = MongoClient(mongo_URL)
         db=client.forms
-        collection = db[user + "_forms"]
+        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
         collection.insert_one(req_data)
+        return {"message":"success"}
+
+    def patch(self, user):
+        client = MongoClient(mongo_URL)
+        db=client.forms
+        collection = db.forms
+        req_data = json.loads(request.data.decode("utf-8"))
+        collection.replace_one({"title": req_data["title"],"creator": user}, req_data)
+        return {"message":"success"}
+
+    def delete(self, user):
+        client = MongoClient(mongo_URL)
+        db=client.forms
+        collection = db.forms
+        req_data = json.loads(request.data.decode("utf-8"))
+        print(req_data["id"])
+        collection.delete_one({'_id':ObjectId(req_data["id"])})
         return {"message":"success"}
 
 if __name__ == '__main__':

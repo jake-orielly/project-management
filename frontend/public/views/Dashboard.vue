@@ -10,7 +10,8 @@
             <History></History>
         </div>
         <div v-if="currTab == 'myForms' && !formPreview" id="form-creation">
-            <FormList v-bind:targetUser="$store.state.user" ref="FormList"></FormList>
+            <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
+            <FormResponses ref="formResponses"></FormResponses>
             <FieldAdd></FieldAdd>
             <FormCreation></FormCreation>
         </div>
@@ -35,6 +36,7 @@
     import TaskStatusModal from '../components/TaskStatusModal.vue';
     import History from '../components/History.vue';
     import MyTeam from '../components/MyTeam.vue';
+    import FormResponses from '../components/FormResponses.vue';
 
     export default {
         components: {
@@ -48,7 +50,8 @@
             FormList,
             TaskStatusModal,
             History,
-            MyTeam
+            MyTeam,
+            FormResponses
         },
         data () {
             return {
@@ -61,7 +64,7 @@
                 formSaved: true,
                 draggingPos: undefined,
                 draggingField: undefined,
-                modalTint: false
+                modalTint: false,
             }
         },
         mounted() {
@@ -69,14 +72,14 @@
             let app = this;
             setInterval(
                 () => {app.updateInbox()},
-                10000
+                2500
             )
         },
         methods: {
             updateInbox() {
                 requests.getInbox(this.$store.state.user).then(
                     response => {
-                        let responseData = JSON.parse(JSON.parse(response.responseText).data);
+                        let responseData = JSON.parse(response.responseText);
                         this.inbox = [];
                         for (let response of responseData) {
                             this.inbox.push({
@@ -88,6 +91,9 @@
                         }
                     }
                 )
+            },
+            showForm(formName) {
+                this.$refs.formResponses.loadForm(formName);
             },
             caps: function(text) {
                 if (!text)
@@ -101,6 +107,9 @@
 <style lang="scss" scoped>
     #dashboard {
         height: 90vh;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        margin-right: 2rem;
     
         & div {
             margin-top: 1rem;

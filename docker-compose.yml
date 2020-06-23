@@ -15,12 +15,14 @@ services:
       - "${FLASK_PORT}"
     volumes:
       - ./api/app.py:/app/app.py
+      - ./api/mongo_url.py:/app/mongo_url.py
   mongodb:
     image: mongo
     ports:
       - "${MONGODB_PORT}:27017"
     volumes:
       - ./mongodb-storage:/data/db
+    command: [--auth]
   cypress:
     image: cypress/included:3.2.0
     volumes: 

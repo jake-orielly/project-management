@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
  state: {
     taskList:[],
-    user:"ann.perkins",
+    user:"jake",
  },
  getters: {},
  mutations: {

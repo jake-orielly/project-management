@@ -1,10 +1,15 @@
 <template>
     <div id="history-container">
-        <p class="title">History</p>
+        <p class="title">
+            Recent Responses
+        </p>
         <div v-if="!task">
-            <div class="task-item" v-for="task in $store.state.taskList" v-bind:key="task.hash">
+            <div class="task-item" v-for="task in $store.state.taskList.reverse()" v-bind:key="task.hash">
                 <p>
                     {{task.description}}
+                </p>
+                <p>
+                    {{formatDate(task.history[task.history.length - 1].time)}}
                 </p>
                 <div class="clickable icon" @click="selectTask(task)">
                     <i class="fa fa-history" aria-hidden="true"></i>
@@ -12,8 +17,8 @@
             </div>
         </div>
         <div v-if="task">
-            <div class="close-icon-container" @click="deselectTask()">
-                <i class="fa fa-times clickable"></i>
+            <div class="close-icon-container clickable" @click="deselectTask()">
+                <i class="fa fa-times"></i>
             </div>
             <table>
                 <tr v-for="event in task.history" v-bind:key="event.time">
@@ -55,7 +60,7 @@
 
                 formatted += (dateObj.getMonth() + 1) + "/";
                 formatted += dateObj.getDate() + "/";
-                formatted += dateObj.getYear() + " ";
+                formatted += dateObj.getFullYear() + " ";
 
                 let hour = dateObj.getHours();
                 if (hour > 12) {
@@ -70,6 +75,10 @@
                 
 
                 return formatted;
+            },
+            formatDate(date) {
+                let currDate = new Date(date);
+                return currDate.getMonth() + 1 + "/" + currDate.getDate() + "/" + currDate.getFullYear()
             }
         }
     }
@@ -78,6 +87,10 @@
 <style lang="scss" scoped>
     .title {
         text-decoration: underline;
+    }
+
+    p {
+        margin-right: 0.5rem;
     }
 
     .task-item *{
@@ -99,12 +112,14 @@
         padding: 1rem;
         border: 3px solid #2C666E;
         border-radius: 1em;
-        width: 50%;
-        height: 35%;
         overflow-y: auto;
     }
 
     td {
         padding-left: 1.5rem;
+    }
+
+    .fa-plus {
+        float: right;
     }
 </style>

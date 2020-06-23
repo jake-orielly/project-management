@@ -8,17 +8,28 @@ export default {
         let bodyData = JSON.stringify(inputData);
         return this.genericRequest("/retrieve-form" + "?user=" + user, "POST", bodyData)
     },
-    getUserForms(user) {
-        return this.genericRequest("/forms/" + user, "GET")
-    },
     getUserTeam(user) {
         return this.genericRequest("/team/" + user, "GET")
+    },
+    getUserForms(user,scope) {
+        return this.genericRequest("/forms/" + user + "?scope=" + scope, "GET")
     },
     postForm(form,user) {
         let data;
         form.creator = user;
+        form.responses = [];
         data = JSON.stringify(form);
         return this.genericRequest("/forms/" + user, "POST",data)
+    },
+    patchForm(form,user) {
+        let data;
+        form.creator = user;
+        data = JSON.stringify(form);
+        return this.genericRequest("/forms/" + user, "PATCH",data)
+    },
+    deleteForm(formID,user) {
+        let data = JSON.stringify({ id:formID });
+        return this.genericRequest("/forms/" + user, "DELETE",data)
     },
     getInbox(user) {
         return this.genericRequest("/inbox/" + user, "GET")
@@ -39,6 +50,9 @@ export default {
         });
         return this.genericRequest("/inbox", "PUT",data);
     },
+    getResponses(form,user){
+        return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + user, "GET")
+    },
     submitResponse(form,user,response) {
         let data = JSON.stringify(response);
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + user, "POST",data)
@@ -54,9 +68,6 @@ export default {
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});
         return this.genericRequest("/login", "POST",data)
-    },
-    getResponses(form,user){
-        return this.genericRequest("/responses/" + form + "?user=" + user, "GET")
     },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();
@@ -77,5 +88,8 @@ export default {
             request.open(type, baseUrl + url, true);
             request.send(body);
         });
+    },
+    returnTask(user,hash,comment) {
+        console.log(user,hash,comment)
     }
 }

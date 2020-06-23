@@ -52,12 +52,28 @@
                 let form = {};
                 form.title = this.$parent.formTitle;
                 form.fields = this.$parent.fields.slice();
-                requests.postForm(form,this.$store.state.user).then(
-                    () => {
-                        this.$parent.formSaved = true;
-                        this.$parent.$refs.FormList.updateFormList(); 
+                requests.retrieveForm(
+                    {"title":this.$parent.formTitle},
+                    this.$store.state.user
+                ).then(
+                    response => {
+                        if (JSON.parse(response.responseText).data.length == 0) {
+                            requests.postForm(form,this.$store.state.user).then(
+                                () => {
+                                    this.$parent.formSaved = true;
+                                    this.$parent.$refs.FormList.updateFormList("mine"); 
+                                }
+                            );
+                        }
+                        else {
+                            requests.patchForm(form,this.$store.state.user).then(
+                                () => {
+                                    this.$parent.formSaved = true;
+                                }
+                            );
+                        }
                     }
-                );
+                )
             },
             onDrag(item) {
                 for (let i = 0; i < this.$parent.fields.length; i++)

@@ -1,10 +1,24 @@
 <template>
     <div id="form-list">
         <p class="title">My Forms</p>
+        <select id="form-list-scope" @change="scopeChange">
+            <option value="mine">Mine</option>
+            <option value="team">Team</option>
+            <option value="orginization">Orginization</option>n>
+        </select>
         <p v-for="form in forms" v-bind:key="form.name">
             {{form.name}}
+            <span class="clickable" @click="edit(form)">
+                <i class="fa fa-pencil-alt"></i>
+            </span>
+            <span class="clickable" @click="showResponses(form)">
+                <i class="fa fa-reply"></i>
+            </span>
             <span class="clickable" @click="copyUrl(form)">
                 <i class="fa fa-paperclip"></i>
+            </span>
+             <span class="clickable" @click="deleteForm(form)">
+                <i class="fa fa-times"></i>
             </span>
         </p>
     </div>
@@ -26,7 +40,7 @@
             }
         },
         mounted() {
-            this.updateFormList();
+            this.updateFormList("mine");
         },
         methods: {
             copyUrl(form) {
@@ -39,10 +53,26 @@
                 document.body.removeChild(el);
                 alert("Url copied to clipboard")
             },
-            updateFormList() {
+            edit(form) {
+                this.$parent.formSaved = false;
+                requests.retrieveForm(
+                    {"title":form.name},
+                    this.$store.state.user
+                ).then(
+                    response => {
+                        let responseText = JSON.parse(response.responseText);
+                        let form = JSON.parse(responseText.data[0]);
+                        this.$parent.formTitle = form.title;
+                        for (let i of form.fields) {
+                            this.$parent.fields.push(i)
+                        }
+                    }
+                )
+            },
+            updateFormList(scope) {
                 let parsedForm;
                 this.forms = [];
-                requests.getUserForms(this.targetUser).then(
+                requests.getUserForms(this.targetUser,scope).then(
                     response => {
                         let responseData = JSON.parse(response.responseText).data;
                         for (let form of responseData) {
@@ -51,6 +81,24 @@
                         }
                     }
                 )
+            },
+            scopeChange() {
+                console.log(1)
+                let scope = document.getElementById("form-list-scope").value;
+                this.updateFormList(scope);
+            },
+            showResponses(form) {
+                this.$parent.showForm(form.name);
+            },
+            deleteForm(form) {
+                let confirmation = confirm("Are you sure you want to delete your form: " + form.name + "?");
+                if (confirmation) {
+                    requests.deleteForm(form.id,this.$store.state.user).then(
+                        () => {
+                            this.updateFormList();
+                        }
+                    );
+                }
             }
         }
     }
@@ -70,5 +118,9 @@
     .title {
         text-decoration: underline;
         font-weight: bold;
+    }
+
+    span {
+        margin-left: 0.25rem;
     }
 </style>

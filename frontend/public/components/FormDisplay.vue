@@ -7,6 +7,7 @@
         <div v-for="field in $parent.fields" class="form-field" v-bind:key="$parent.fields.indexOf(field)">
             <p> 
                 {{field.label}}
+                <br>
                 <span v-if="field.mandatory">*</span>
                 <input v-if="field.type == 'text'" :data-label="toLabel(field.label)" type="text">
                 <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
@@ -23,7 +24,9 @@
                     class="slider" id="myRange">
             </p>
         </div>
-        <button v-if="!preview" @click="submitForm">Submit</button>
+        <div id="submit-container">
+            <button v-if="!preview" @click="submitForm">Submit</button>
+        </div>
     </div>
 </template>
 
@@ -97,5 +100,9 @@
     .incomplete-field {
         border: 1px solid black;
         box-shadow: 2px 2px 8px 0px red;
+    }
+
+    #submit-container {
+        text-align: center;
     }
 </style>
