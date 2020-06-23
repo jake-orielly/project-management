@@ -7,13 +7,13 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import date
 
+from mongo_url import mongo_URL
+
 import config
 
 app = Flask(__name__) 
 CORS(app)
 api = Api(app)
-
-mongo_URL = "mongodb:27017"
 
 @api.route('/is-alive')
 class IsAlive(Resource):
