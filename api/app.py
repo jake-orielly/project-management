@@ -184,7 +184,7 @@ class Responses(Resource):
         req_data = json.loads(request.data.decode("utf-8"))
 
         collection = db.forms
-        cursor = collection.find_one({"title": form_title,"creator":user})
+        cursor = collection.find_one({"title": form_title})
         doc_id = cursor["_id"]
         collection.update_one({"_id":doc_id},{'$push': {'responses': req_data}})
         
@@ -220,14 +220,13 @@ class Forms(Resource):
         db=client.forms
         collection = db.forms
 
-        if scope == "mine":
-            cursor = collection.find({"creator": user})
-
-        else:
+        if scope == "team" or scope == "orginization":
             team_collection = client.users.user_credentials
             team_cursor = team_collection.find_one({"user": user})
             team = [user] + team_cursor["team"]
             cursor = collection.find({"creator":{"$in":team}})
+        else:
+            cursor = collection.find({"creator": user})
 
         results = []
         for i in cursor:

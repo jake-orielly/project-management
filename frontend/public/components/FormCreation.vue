@@ -61,7 +61,7 @@
                             requests.postForm(form,this.$store.state.user).then(
                                 () => {
                                     this.$parent.formSaved = true;
-                                    this.$parent.$refs.FormList.updateFormList(); 
+                                    this.$parent.$refs.FormList.updateFormList("mine"); 
                                 }
                             );
                         }
