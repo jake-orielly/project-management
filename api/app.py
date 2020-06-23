@@ -59,7 +59,7 @@ class Inbox(Resource):
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
-        return {"data":json.dumps(cursor["inbox"])}
+        return cursor["inbox"]
 
     def put(self):
         req_data = json.loads(request.data.decode("utf-8"))

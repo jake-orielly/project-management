@@ -79,7 +79,7 @@
             updateInbox() {
                 requests.getInbox(this.$store.state.user).then(
                     response => {
-                        let responseData = JSON.parse(JSON.parse(response.responseText).data);
+                        let responseData = JSON.parse(response.responseText);
                         this.inbox = [];
                         for (let response of responseData) {
                             this.inbox.push({
