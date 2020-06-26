@@ -74,16 +74,14 @@
                 this.forms = [];
                 requests.getUserForms(this.targetUser,scope).then(
                     response => {
-                        let responseData = JSON.parse(response.responseText).data;
+                        let responseData = JSON.parse(response.responseText);
                         for (let form of responseData) {
-                            parsedForm = JSON.parse(form);
-                            this.forms.push({name:parsedForm.title,id:parsedForm._id});
+                            this.forms.push({name:form.title,id:form._id});
                         }
                     }
                 )
             },
             scopeChange() {
-                console.log(1)
                 let scope = document.getElementById("form-list-scope").value;
                 this.updateFormList(scope);
             },

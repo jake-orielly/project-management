@@ -72,8 +72,7 @@
         mounted() {
             requests.getUserTeam(this.$store.state.user).then(
                 response => {
-                    let responseData = JSON.parse(response.responseText).data;
-                    for (let i of JSON.parse(responseData))
+                    for (let i of JSON.parse(response.responseText))
                         this.myTeam.push({
                             name:i,
                             open:false,

@@ -49,7 +49,7 @@ class Team(Resource):
         db=client.users
         collection = db.user_credentials
         cursor = collection.find_one({"user": user})
-        return {"data":json.dumps(cursor["team"])}
+        return cursor["team"]
 
 @api.route('/inbox')
 @api.route('/inbox/<user>')
@@ -186,11 +186,12 @@ class Responses(Resource):
         collection = db.forms
         cursor = collection.find_one({"title": form_title})
         doc_id = cursor["_id"]
+        form_owner = cursor["creator"]
         collection.update_one({"_id":doc_id},{'$push': {'responses': req_data}})
         
         db=client.users
         collection = db.user_workloads
-        cursor = collection.find_one({"creator": user})
+        cursor = collection.find_one({"user": form_owner})
         doc_id = cursor["_id"]
         req_data["form_title"] = form_title
         collection.update_one({"_id":doc_id},{'$push': {'inbox': req_data}})
@@ -231,8 +232,9 @@ class Forms(Resource):
         results = []
         for i in cursor:
             i["_id"] = str(i["_id"])
-            results.append(json.dumps(i))
-        return {"data":results}
+            results.append(i)
+        return results
+
     def post(self, user):
         client = MongoClient(mongo_URL)
         db=client.forms

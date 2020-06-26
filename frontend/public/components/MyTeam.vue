@@ -16,7 +16,7 @@
                         <i class="fa fa-minus"></i>
                     </span>
                     <div v-if="user.open" id="user-container">
-                        <p class="clickable" v-for="form in forms" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
+                        <p class="clickable" v-for="form in forms.filter(form => form.creator == user.name)" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
                         <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false"></TaskList>
                         <Calendar ref="calendar" v-bind:user="user.name"></Calendar>
                     </div>
@@ -55,8 +55,7 @@
         mounted () {
             requests.getUserTeam(this.$store.state.user).then(
                 response => {
-                    let responseData = JSON.parse(response.responseText).data;
-                    for (let i of JSON.parse(responseData))
+                    for (let i of JSON.parse(response.responseText))
                         this.myTeam.push({
                             name:i,
                             open:false
@@ -67,7 +66,7 @@
         methods: {
             toggleForms(user) {
                 if (!user.open) {
-                    this.getForms(user)
+                    this.getForms(user.name)
                     user.open = true;
                 }
                 else {
@@ -76,12 +75,10 @@
                 }
             },
             getForms(user) {
-                requests.getUserForms(user).then(
+                requests.getUserForms(user,"mine").then(
                     response => {
-                        let responseData = JSON.parse(response.responseText).data;
-                        for (let form of responseData) {
-                            this.forms.push({name:JSON.parse(form).title});
-                        }
+                        for (let form of JSON.parse(response.responseText))
+                            this.forms.push({name:form.title,creator:user});
                     }
                 )
             },
