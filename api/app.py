@@ -31,8 +31,7 @@ class RetrieveForm(Resource):
         req_data = json.loads(request.data.decode("utf-8"))
 
         if "title" in req_data:
-            cursor = collection.find({"title": req_data["title"],"creator":user}, {'_id': False})
-            return cursor[0]
+            return list(collection.find({"title": req_data["title"],"creator":user}, {'_id': False}))
         elif "id" in req_data:
             found = [i for i in collection.find({"_id": ObjectId(req_data["id"])}, {'_id': False})]
             return found
