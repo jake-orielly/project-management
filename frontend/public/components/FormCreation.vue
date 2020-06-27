@@ -57,7 +57,7 @@
                     this.$store.state.user
                 ).then(
                     response => {
-                        if (JSON.parse(response.responseText)) {
+                        if (JSON.parse(response.responseText).length) {
                             requests.postForm(form,this.$store.state.user).then(
                                 () => {
                                     this.$parent.formSaved = true;

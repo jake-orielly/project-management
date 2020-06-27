@@ -28,7 +28,7 @@
                 this.user
             ).then(
                 response => {
-                    let form = JSON.parse(response.responseText);
+                    let form = JSON.parse(response.responseText)[0];
                     this.formTitle = form.title;
                     this.currForm = this.formTitle;
                     this.fields = form.fields;
