@@ -60,8 +60,7 @@
                     this.$store.state.user
                 ).then(
                     response => {
-                        let responseText = JSON.parse(response.responseText);
-                        let form = JSON.parse(responseText.data[0]);
+                        let form = JSON.parse(response.responseText);
                         this.$parent.formTitle = form.title;
                         for (let i of form.fields) {
                             this.$parent.fields.push(i)

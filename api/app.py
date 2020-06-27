@@ -30,17 +30,12 @@ class RetrieveForm(Resource):
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
-        results = []
-
         if "title" in req_data:
             cursor = collection.find({"title": req_data["title"],"creator":user}, {'_id': False})
-            for i in cursor:
-                results.append(json.dumps(i))
+            return cursor[0]
         elif "id" in req_data:
             found = [i for i in collection.find({"_id": ObjectId(req_data["id"])}, {'_id': False})]
-            results.append(json.dumps(found))
-
-        return {"data":results}
+            return found
 
 @api.route('/team/<user>')
 class Team(Resource):
@@ -137,7 +132,7 @@ class Tasks(Resource):
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
-        return {"data":json.dumps(cursor["tasks"])}
+        return cursor["tasks"]
 
     def patch(self,user):
         req_data = json.loads(request.data.decode("utf-8"))
@@ -173,7 +168,7 @@ class Responses(Resource):
         # TODO check against user as well for imported forms
         cursor = collection.find_one({"title": form_title})
 
-        return {"data":json.dumps(cursor["responses"])}
+        return cursor["responses"]
         
     def post(self):
         form_title  = request.args.get('form_title', None)

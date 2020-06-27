@@ -89,8 +89,7 @@
                     this.$store.state.user
                 ).then(
                     response => {
-                        let responseText = JSON.parse(response.responseText);
-                        let form = JSON.parse(responseText.data);
+                        let form = JSON.parse(response.responseText);
                         this.formTitle = form.title;
                         this.fields = form.fields;
                         this.openFormPreview()

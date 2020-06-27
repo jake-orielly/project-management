@@ -116,10 +116,9 @@
                 requests.getResponses(formName,this.$store.state.user).then(
                     response => {
                         let responseText = JSON.parse(response.responseText);
-                        let responseData = JSON.parse(responseText.data);
-                        this.responses = responseData;
+                        this.responses = responseText;
                         if (this.responses.length) {
-                            this.fields = ["description","due_date"].concat(Object.keys(responseData[0].fields));
+                            this.fields = ["description","due_date"].concat(Object.keys(responseText[0].fields));
                             this.setSort("due_date");
                         }
                         this.showingResponse = true;
