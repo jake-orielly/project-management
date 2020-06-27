@@ -58,7 +58,7 @@
                 this.taskList = [];
                 requests.getTasks(this.user).then(
                     response => {
-                        let responseData = JSON.parse(JSON.parse(response.responseText).data);
+                        let responseData = JSON.parse(response.responseText);
                         for (let response of responseData) {
                             this.taskList.push({
                                 "description": response.description,

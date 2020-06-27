@@ -113,6 +113,7 @@
                     while (currTask.estimate > 0) {
                         if (this.isWeekend(currDay)) {
                             currDay++;
+
                         }
                         else if (workload[currDay].remaining > currTask.estimate) {
                             workload[currDay].tasks.push({name:currTask.description, time:parseInt(currTask.estimate)});
@@ -126,6 +127,7 @@
                                 workload[currDay].remaining = 1;
                             }
                             currDay++;
+
                         }
                         else {
                             for (let j = currDay; j >= this.today.getDate(); j--) {
@@ -149,6 +151,7 @@
                                 }
                             }
                             currDay++;
+                            console.log(currDay)
                         }
                     }
                 }

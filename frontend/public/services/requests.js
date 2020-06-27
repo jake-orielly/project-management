@@ -12,6 +12,7 @@ export default {
         return this.genericRequest("/team/" + user, "GET")
     },
     getUserForms(user,scope) {
+        console.log(user,scope)
         return this.genericRequest("/forms/" + user + "?scope=" + scope, "GET")
     },
     postForm(form,user) {

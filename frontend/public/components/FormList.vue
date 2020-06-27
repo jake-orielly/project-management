@@ -60,8 +60,7 @@
                     this.$store.state.user
                 ).then(
                     response => {
-                        let responseText = JSON.parse(response.responseText);
-                        let form = JSON.parse(responseText.data[0]);
+                        let form = JSON.parse(response.responseText);
                         this.$parent.formTitle = form.title;
                         for (let i of form.fields) {
                             this.$parent.fields.push(i)
@@ -74,16 +73,14 @@
                 this.forms = [];
                 requests.getUserForms(this.targetUser,scope).then(
                     response => {
-                        let responseData = JSON.parse(response.responseText).data;
+                        let responseData = JSON.parse(response.responseText);
                         for (let form of responseData) {
-                            parsedForm = JSON.parse(form);
-                            this.forms.push({name:parsedForm.title,id:parsedForm._id});
+                            this.forms.push({name:form.title,id:form._id});
                         }
                     }
                 )
             },
             scopeChange() {
-                console.log(1)
                 let scope = document.getElementById("form-list-scope").value;
                 this.updateFormList(scope);
             },
