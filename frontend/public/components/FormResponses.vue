@@ -42,7 +42,7 @@
             </tbody>
         </table>
         <div id="chart-container">
-            <Chart></Chart>
+            <Chart v-bind:filteredResponses="filteredResponses"></Chart>
         </div>
         <div id="response-count-container">
             {{'Showing ' + filteredResponses.length + ' of ' + responses.length + ' responses'}}

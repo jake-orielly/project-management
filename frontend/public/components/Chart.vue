@@ -8,7 +8,15 @@
     import Chart from 'chart.js';
 
     export default {
+        props: {
+            filteredResponses: {
+                type: Array,
+                required: true
+            },
+        },
         mounted() {
+            console.log(this.filteredResponses)
+            console.log(this.filteredResponses.map(response => response.fields.cool_factor))
             new Chart(document.getElementById('my-chart'), {
                 type: 'line',
                 data: {
