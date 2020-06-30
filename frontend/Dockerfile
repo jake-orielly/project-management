@@ -10,6 +10,7 @@ RUN npm install vue-router
 RUN npm install sass-loader
 RUN npm install @fortawesome/fontawesome-free
 RUN npm install vuex
+RUN npm install chart.js
 
 COPY . .
 

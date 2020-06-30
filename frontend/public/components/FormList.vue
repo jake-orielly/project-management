@@ -69,7 +69,6 @@
                 )
             },
             updateFormList(scope) {
-                let parsedForm;
                 this.forms = [];
                 requests.getUserForms(this.targetUser,scope).then(
                     response => {

@@ -41,6 +41,9 @@
                 </tr>
             </tbody>
         </table>
+        <div id="chart-container">
+            <Chart></Chart>
+        </div>
         <div id="response-count-container">
             {{'Showing ' + filteredResponses.length + ' of ' + responses.length + ' responses'}}
         </div>
@@ -52,8 +55,12 @@
 
 <script>
     import requests from '../services/requests.js';
+    import Chart from '../components/Chart.vue';
     
     export default {
+        components: {
+            Chart
+        },
         data() {
             return {
                 responses: [],
@@ -271,5 +278,14 @@
 
     #response-count-container {
         margin-top: 2rem;
+    }
+
+    table {
+        display: inline-block;
+    }
+
+    #chart-container {
+        display: inline-block;
+        width: 30%;
     }
 </style>
