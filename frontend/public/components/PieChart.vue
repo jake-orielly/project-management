@@ -16,12 +16,18 @@
         },
         mounted() {
             new Chart(document.getElementById('my-chart'), {
-                type: 'line',
+                type: 'pie',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    labels: ["Green", "Blue", "Gray", "Purple", "Yellow"],
                     datasets: [
                     {
-                        label: '2018 Sales',
+                        backgroundColor: [
+                            "#0ecc71",
+                            "#3498db",
+                            "#95a5a6",
+                            "#9b59b6",
+                            "#f1c40f"
+                        ],
                         data: [300, 700, 450, 750, 450]
                     }
                     ]
