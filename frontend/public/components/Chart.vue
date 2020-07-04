@@ -1,6 +1,6 @@
 <template>
     <div>
-        <canvas id="my-chart" width="100" height="100"></canvas>
+        <canvas id="my-chart" width="100" height="100" @click="ping"></canvas>
     </div>
 </template>
 
@@ -14,15 +14,33 @@
                 required: true
             },
         },
+        data() {
+            return {
+                dates: undefined
+            }
+        },
         mounted() {
+            let responseDates = this.filteredResponses.sort().map(response => {
+                return response.due_date
+            })
+
+            this.dates = {}
+
+            for (let i of responseDates)
+                if (this.dates[i] != undefined)
+                    this.dates[i]++;
+                else
+                    this.dates[i] = 1
+
+            console.log(Object.values(this.dates))
             new Chart(document.getElementById('my-chart'), {
-                type: 'line',
+                type: 'bar',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    labels: Object.keys(this.dates),
                     datasets: [
                     {
                         label: '2018 Sales',
-                        data: [300, 700, 450, 750, 450]
+                        data: Object.values(this.dates)
                     }
                     ]
                 },
@@ -31,5 +49,10 @@
                 }
             });
         },
+        methods: {
+            ping() {
+                console.log(this.filteredResponses)
+            }
+        }
     }
 </script>
