@@ -42,7 +42,7 @@
             </tbody>
         </table>
         <div id="chart-container">
-            <PieChart v-bind:filteredResponses="filteredResponses"></PieChart>
+            <BarChart v-bind:filteredResponses="filteredResponses"></BarChart>
         </div>
         <div id="response-count-container">
             {{'Showing ' + filteredResponses.length + ' of ' + responses.length + ' responses'}}
@@ -55,12 +55,12 @@
 
 <script>
     import requests from '../services/requests.js';
-    import Chart from '../components/Chart.vue';
+    import BarChart from '../components/BarChart.vue';
     import PieChart from '../components/PieChart.vue';
     
     export default {
         components: {
-            Chart,
+            BarChart,
             PieChart
         },
         data() {
