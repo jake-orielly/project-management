@@ -23,6 +23,8 @@
         data() {
             return {
                 dates: {},
+                startDate: undefined,
+                endDate: undefined
             }
         },
         computed: {
@@ -40,8 +42,8 @@
                     {
                         label: 'Responses',
                         data: Object.values(this.dates),
-                        backgroundColor: ["rgba(220,0,0,0.5)", "rgba(0,220,0,0.5)", "rgba(0,0,220,0.5)", "rgba(220,220,0,0.5)", "rgba(220,0,220,0.5)", "rgba(0,220,220,0.5)"], 
-                        hoverBackgroundColor: ["rgba(220,0,0,0.8)", "rgba(0,220,0,0.8)", "rgba(0,0,220,0.8)", "rgba(220,220,0,0.8)", "rgba(220,0,220,0.8)", "rgba(0,220,220,0.8)"], 
+                        backgroundColor: this.getColors(Object.values(this.dates),0.5), 
+                        hoverBackgroundColor: this.getColors(Object.values(this.dates),0.8), 
                     }
                     ]
                 },
@@ -73,12 +75,51 @@
                 let responseDates = this.filteredResponses.slice(0).sort().reverse().map(response => {
                     return response.due_date
                 })
+
+                if (!this.startDate) {
+                    this.startDate = responseDates[0];
+                    this.endDate = responseDates[responseDates.length - 1]
+                }
+
                 this.dates = {}
-                for (let i of responseDates)
+                let lastDate = undefined;
+                for (let i of responseDates) {
                     if (this.dates[i] != undefined)
                         this.dates[i]++;
                     else
                         this.dates[i] = 1
+                    let count = 0;
+                    while (!(new Date(i).getDate() - new Date(lastDate).getDate() <= 1) && lastDate != undefined) {
+                        lastDate = this.incrementDate(lastDate);
+                        this.dates[lastDate] = 0;
+                    }
+                    lastDate = i;
+                }
+            },
+            incrementDate(date) {
+                let newDate = date.slice(0,date.length-2) + (parseInt(date.slice(date.length-2)) + 1);
+                return newDate;
+            },
+            getColors(dates,opacity) {
+                let colors = [
+                 "rgba(220,0,0," + opacity + ")",
+                 "rgba(0,220,0," + opacity + ")",
+                 "rgba(0,0,220," + opacity + ")",
+                 "rgba(220,220,0," + opacity + ")",
+                 "rgba(220,0,220," + opacity + ")",
+                 "rgba(0,220,220," + opacity + ")"
+                ];
+                let colorPos = 0;
+                let colorArr = [];
+ 
+                for (let i of dates)
+                    if (i == 0)
+                        colorArr.push([""])
+                    else {
+                        colorArr.push(colors[colorPos])
+                        colorPos++;
+                    }
+                return colorArr;
             }
         }
     }

@@ -55,7 +55,7 @@
         },
         data () {
             return {
-                currTab: "dashboard",
+                currTab: "myForms",
                 fields: [
                     ],
                 inbox: [],
