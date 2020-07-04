@@ -42,7 +42,22 @@
             </tbody>
         </table>
         <div id="chart-container">
-            <BarChart v-bind:filteredResponses="filteredResponses"></BarChart>
+            <BarChart v-if="chartType == 'bar'" v-bind:filteredResponses="filteredResponses"></BarChart>
+            <PieChart v-if="chartType == 'pie'" v-bind:filteredResponses="filteredResponses"></PieChart>
+        </div>
+        <div id="chart-controls">
+            <p class="title">
+                Chart Controls
+            </p>
+            <div class="clickable" @click="setChart('bar')">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="close-icon-container" @click="setChart('pie')">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <div class="close-icon-container" @click="setChart('none')">
+                <i class="fas fa-times"></i>
+            </div>
         </div>
         <div id="response-count-container">
             {{'Showing ' + filteredResponses.length + ' of ' + responses.length + ' responses'}}
@@ -71,6 +86,7 @@
                 sortOrder: undefined,
                 showingResponse: false,
                 filters: [],
+                chartType: "none"
             }
         },
         computed: {
@@ -216,6 +232,9 @@
                 element.click();
 
                 document.body.removeChild(element);
+            },
+            setChart(type) {
+                this.chartType = type;
             }
         }
     }
@@ -289,5 +308,16 @@
     #chart-container {
         display: inline-block;
         width: 30%;
+    }
+
+    #chart-controls {
+        position: absolute;
+        display: inline-block;
+
+        div {
+            display: inline-block;
+            font-size: 1.5rem;
+            margin: 0.25rem;
+        }
     }
 </style>
