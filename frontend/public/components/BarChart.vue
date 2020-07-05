@@ -113,8 +113,9 @@
             datesToHistogram(responseDates) {
                 let lastDate = this.startDate;
                 let dates = {};
-
-                while (lastDate != this.endDate) {
+                let emergencyCutoff = 0
+                while (lastDate != this.endDate && emergencyCutoff < 15) {
+                    emergencyCutoff++;
                     dates[lastDate] = 0
                     lastDate = this.incrementDate(lastDate);
                 }
