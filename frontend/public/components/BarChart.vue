@@ -34,7 +34,9 @@
                     "0,0,220",
                     "220,220,0",
                     "220,0,220",
-                    "0,220,220"
+                    "0,220,220",
+                    "110,110,0",
+                    "0,110,110"
                 ]
             }
         },
@@ -64,7 +66,7 @@
                             data: Object.values(this.dates),
                             backgroundColor: this.getColor(0,0.5), 
                             hoverBackgroundColor: this.getColor(0,0.8), 
-                        }]
+                        }],
                     },
                     options: {
                         responsive: true,
@@ -99,25 +101,17 @@
             datesToHistogram(responseDates) {
                 let startDate = this.filteredResponses[this.filteredResponses.length - 1].due_date;
                 let endDate = this.filteredResponses[0].due_date;
-                let dates = {}
                 let lastDate = startDate;
+                let dates = {};
 
-                for (let i of responseDates) {
-                    if (dates[i] != undefined)
-                        dates[i]++;
-                    else
-                        dates[i] = 1
-                    while (!(new Date(lastDate).getDate() - new Date(i).getDate() < 0)) {
-                        lastDate = this.incrementDate(lastDate);
-                        dates[lastDate] = 0;
-                    }
-                    lastDate = i;
-                }
-
-                while (!(new Date(endDate).getDate() - new Date(lastDate).getDate() <= 0)) {
+                while (lastDate != endDate) {
+                    dates[lastDate] = 0
                     lastDate = this.incrementDate(lastDate);
-                    dates[lastDate] = 0;
                 }
+                dates[lastDate] = 0
+
+                for (let i of responseDates)
+                        dates[i]++;
                 
                 return dates;
             },
@@ -133,9 +127,7 @@
                 let splitData = {};
                 let currSplit, dataset;
 
-                this.chart.data.datasets.forEach((dataset) => {
-                    dataset.data.pop();
-                });
+                this.chart.data.datasets = [];
 
                 if (split == "not split") {
                     this.updateDates();
@@ -155,8 +147,8 @@
 
                     }
                     
+                    
                     let colorCount = 0;
-                    this.chart.data.datasets = []
                     for (let split in splitData) {
                         dataset = {
                             label: splitData[split].label,
@@ -165,11 +157,13 @@
                             hoverBackgroundColor: this.getColor(colorCount,0.8), 
                         }
                         colorCount++;
-                        console.log(this.datesToHistogram(splitData[split].dates.sort()))
-                        dataset.data = Object.values(this.datesToHistogram(splitData[split].dates.sort())).reverse()
+                        dataset.data = Object.values(this.datesToHistogram(splitData[split].dates.sort()))
                         this.chart.data.datasets.push(dataset);
-                        this.chart.update();
                     }
+                    console.log(
+                        this.chart.data.datasets
+                    )
+                    this.chart.update();
                 }
             }
         }
