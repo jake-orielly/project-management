@@ -165,9 +165,6 @@
                         dataset.data = Object.values(this.datesToHistogram(splitData[split].dates.sort()))
                         this.chart.data.datasets.push(dataset);
                     }
-                    console.log(
-                        this.chart.data.datasets
-                    )
                     this.chart.update();
                 }
             }

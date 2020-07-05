@@ -20,10 +20,18 @@
                 required: true
             },
         },
+        watch: { 
+            filteredResponses: function() {
+                this.refreshChart();
+            }
+        },
         mounted() {
             this.createChart()
         },
         methods: {
+            refreshChart() {
+                this.split();
+            },
             createChart() {
                 if (this.chart)
                     this.chart.destroy()
