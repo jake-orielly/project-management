@@ -1,6 +1,12 @@
 <template>
     <div>
         <canvas id="my-chart" width="100" height="100" @click="refreshChart"></canvas>
+        <select v-on:change="split" id="split-select">
+            <option value="not split">Not Split</option>
+            <option v-bind:value="field" v-for="field in Object.keys(this.filteredResponses[0].fields)" v-bind:key="field">
+                {{field}}
+            </option>
+        </select>
     </div>
 </template>
 
@@ -16,15 +22,20 @@
         },
         watch: { 
             filteredResponses: function() {
-                console.log(1)
                 this.refreshChart();
             }
         },
         data() {
             return {
                 dates: {},
-                startDate: undefined,
-                endDate: undefined
+                colors:[
+                    "220,0,0",
+                    "0,220,0",
+                    "0,0,220",
+                    "220,220,0",
+                    "220,0,220",
+                    "0,220,220"
+                ]
             }
         },
         computed: {
@@ -33,93 +44,133 @@
             }
         },
         mounted() {
-            this.updateDates();  
-            this.chart = new Chart(this.chartEl, {
-                type: 'bar',
-                data: {
-                    labels: Object.keys(this.dates),
-                    datasets: [
-                    {
-                        label: 'Responses',
-                        data: Object.values(this.dates),
-                        backgroundColor: this.getColors(Object.values(this.dates),0.5), 
-                        hoverBackgroundColor: this.getColors(Object.values(this.dates),0.8), 
-                    }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    legend: {
-                        labels: {
-                            boxWidth: 0
-                        }
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }]
-                    }
-                }
-            });
+            this.updateDates();
+            this.createChart();
         },
         methods: {
             refreshChart() {
-                this.updateDates(); 
+                this.updateDates();
                 this.chart.data.labels = Object.keys(this.dates)
-                this.chart.data.datasets[0].data = Object.values(this.dates)
+                this.chart.data.datasets[0].data = Object.values(this.dates);
                 this.chart.update();
             },
+            createChart() {
+                this.chart = new Chart(this.chartEl, {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(this.dates),
+                        datasets: [{
+                            label: 'Responses',
+                            data: Object.values(this.dates),
+                            backgroundColor: this.getColor(0,0.5), 
+                            hoverBackgroundColor: this.getColor(0,0.8), 
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            labels: {
+                                boxWidth: 0
+                            }
+                        },
+                        scales: {
+                            xAxes: [{
+                                stacked: true
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            },
             updateDates() {
-                let responseDates = this.filteredResponses.slice(0).sort().reverse().map(response => {
-                    return response.due_date
-                })
+                this.dates = this.datesToHistogram(
+                    this.filteredResponses.slice(0).sort().reverse().map(
+                        response => {
+                            return response.due_date
+                        }
+                    )
+                );  
+            },
+            datesToHistogram(responseDates) {
+                let startDate = this.filteredResponses[this.filteredResponses.length - 1].due_date;
+                let endDate = this.filteredResponses[0].due_date;
+                let dates = {}
+                let lastDate = startDate;
 
-                if (!this.startDate) {
-                    this.startDate = responseDates[0];
-                    this.endDate = responseDates[responseDates.length - 1]
-                }
-
-                this.dates = {}
-                let lastDate = undefined;
                 for (let i of responseDates) {
-                    if (this.dates[i] != undefined)
-                        this.dates[i]++;
+                    if (dates[i] != undefined)
+                        dates[i]++;
                     else
-                        this.dates[i] = 1
-                    let count = 0;
-                    while (!(new Date(i).getDate() - new Date(lastDate).getDate() <= 1) && lastDate != undefined) {
+                        dates[i] = 1
+                    while (!(new Date(lastDate).getDate() - new Date(i).getDate() < 0)) {
                         lastDate = this.incrementDate(lastDate);
-                        this.dates[lastDate] = 0;
+                        dates[lastDate] = 0;
                     }
                     lastDate = i;
                 }
+
+                while (!(new Date(endDate).getDate() - new Date(lastDate).getDate() <= 0)) {
+                    lastDate = this.incrementDate(lastDate);
+                    dates[lastDate] = 0;
+                }
+                
+                return dates;
             },
             incrementDate(date) {
                 let newDate = date.slice(0,date.length-2) + (parseInt(date.slice(date.length-2)) + 1);
                 return newDate;
             },
-            getColors(dates,opacity) {
-                let colors = [
-                 "rgba(220,0,0," + opacity + ")",
-                 "rgba(0,220,0," + opacity + ")",
-                 "rgba(0,0,220," + opacity + ")",
-                 "rgba(220,220,0," + opacity + ")",
-                 "rgba(220,0,220," + opacity + ")",
-                 "rgba(0,220,220," + opacity + ")"
-                ];
-                let colorPos = 0;
-                let colorArr = [];
- 
-                for (let i of dates)
-                    if (i == 0)
-                        colorArr.push([""])
-                    else {
-                        colorArr.push(colors[colorPos])
-                        colorPos++;
+            getColor(num,opacity) {
+                return "rgba(" + this.colors[num] + "," + opacity + ")"
+            },
+            split() {
+                let split = document.getElementById("split-select").value;
+                let splitData = {};
+                let currSplit, dataset;
+
+                this.chart.data.datasets.forEach((dataset) => {
+                    dataset.data.pop();
+                });
+
+                if (split == "not split") {
+                    this.updateDates();
+                    this.createChart();
+                }
+                else {
+                    for (let response of this.filteredResponses) {
+                        currSplit =  response.fields[split];
+
+                        if (!splitData[currSplit]) 
+                            splitData[currSplit] = {
+                                label:currSplit,
+                                dates:[response.due_date]
+                            }
+                        else 
+                            splitData[currSplit].dates.push(response.due_date)
+
                     }
-                return colorArr;
+                    
+                    let colorCount = 0;
+                    this.chart.data.datasets = []
+                    for (let split in splitData) {
+                        dataset = {
+                            label: splitData[split].label,
+                            data:[],
+                            backgroundColor: this.getColor(colorCount,0.5), 
+                            hoverBackgroundColor: this.getColor(colorCount,0.8), 
+                        }
+                        colorCount++;
+                        console.log(this.datesToHistogram(splitData[split].dates.sort()))
+                        dataset.data = Object.values(this.datesToHistogram(splitData[split].dates.sort())).reverse()
+                        this.chart.data.datasets.push(dataset);
+                        this.chart.update();
+                    }
+                }
             }
         }
     }
