@@ -12,38 +12,42 @@
             <button @click="applyFilter">Apply</button>
         </div>
         <br>
-        <div id="filter-tags-container"> 
-            <div v-for="filter in filters" v-bind:key="filter" class="filter-tag">
-                {{filter}}
-                <span class="clickable" @click="removeFilter(filter)">
-                    <i class="fa fa-times"></i>
-                </span>
+        <div id="grid-container">
+            <div id="table-container">
+                <div id="filter-tags-container"> 
+                    <div v-for="filter in filters" v-bind:key="filter" class="filter-tag">
+                        {{filter}}
+                        <span class="clickable" @click="removeFilter(filter)">
+                            <i class="fa fa-times"></i>
+                        </span>
+                    </div>
+                </div>
+                <div v-if="!responses.length" class="no-responses">
+                    This form has no responses yet.
+                </div>
+                <table v-if="responses.length">
+                    <thead>
+                        <tr>
+                            <th v-for="field in fields" v-bind:key="field" class="clickable" @click="setSort(field)">
+                                {{prettify(field)}}
+                                <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../images/sort-down.png">
+                                <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../images/sort-up.png">       
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="response in filteredResponses" v-bind:key="response.hash">
+                            <td v-for="field in fields" v-bind:key="response.hash + '-' + field">
+                                {{getData(response,field)}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </div>
-        <div v-if="!responses.length" class="no-responses">
-            This form has no responses yet.
-        </div>
-        <table v-if="responses.length">
-            <thead>
-                <tr>
-                    <th v-for="field in fields" v-bind:key="field" class="clickable" @click="setSort(field)">
-                        {{prettify(field)}}
-                        <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../images/sort-down.png">
-                        <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../images/sort-up.png">       
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="response in filteredResponses" v-bind:key="response.hash">
-                    <td v-for="field in fields" v-bind:key="response.hash + '-' + field">
-                        {{getData(response,field)}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div id="chart-container">
-            <BarChart v-if="chartType == 'bar'" v-bind:filteredResponses="filteredResponses" v-bind:responses="responses"></BarChart>
-            <PieChart v-if="chartType == 'pie'" v-bind:filteredResponses="filteredResponses"></PieChart>
+            <div id="chart-container">
+                <BarChart v-if="chartType == 'bar'" v-bind:filteredResponses="filteredResponses" v-bind:responses="responses"></BarChart>
+                <PieChart v-if="chartType == 'pie'" v-bind:filteredResponses="filteredResponses"></PieChart>
+            </div>
         </div>
         <div id="chart-controls">
             <p class="title">
@@ -246,6 +250,7 @@
     }
 
     #response-list {
+        position: relative;
         width: 90%;
         margin-left: 2em;
         margin-top: 1em;
@@ -273,8 +278,14 @@
         font-size: 1.25rem;
     }
 
-    #component-title, .fa-filter, #filter-input-container, #filter-tags-container {
+    #component-title, .fa-filter, #filter-input-container, #table-container {
         display: inline-block;
+    }
+
+    #grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
     }
 
     .fa-filter, #filter-input-container {
@@ -300,18 +311,15 @@
         margin-top: 2rem;
     }
 
-    table {
-        display: inline-block;
-    }
-
     #chart-container {
         display: inline-block;
-        width: 30%;
+        width: 45%;
     }
 
     #chart-controls {
         position: absolute;
-        display: inline-block;
+        top: 2rem;
+        right: 8rem;
 
         div {
             display: inline-block;
