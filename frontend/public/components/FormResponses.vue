@@ -42,7 +42,7 @@
             </tbody>
         </table>
         <div id="chart-container">
-            <BarChart v-if="chartType == 'bar'" v-bind:filteredResponses="filteredResponses"></BarChart>
+            <BarChart v-if="chartType == 'bar'" v-bind:filteredResponses="filteredResponses" v-bind:responses="responses"></BarChart>
             <PieChart v-if="chartType == 'pie'" v-bind:filteredResponses="filteredResponses"></PieChart>
         </div>
         <div id="chart-controls">
@@ -95,7 +95,6 @@
 
                 for (let f of this.filters)
                     filteredResponses = this.evalFilter(filteredResponses,f);
-
                 return filteredResponses;
             }
         },

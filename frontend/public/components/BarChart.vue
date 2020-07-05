@@ -19,6 +19,10 @@
                 type: Array,
                 required: true
             },
+            responses: {
+                type: Array,
+                required: true
+            },
         },
         watch: { 
             filteredResponses: function() {
@@ -37,7 +41,9 @@
                     "0,220,220",
                     "110,110,0",
                     "0,110,110"
-                ]
+                ],
+                startDate: this.responses[this.responses.length - 1].due_date,
+                endDate: this.responses[0].due_date
             }
         },
         computed: {
@@ -52,11 +58,12 @@
         methods: {
             refreshChart() {
                 this.updateDates();
-                this.chart.data.labels = Object.keys(this.dates)
-                this.chart.data.datasets[0].data = Object.values(this.dates);
-                this.chart.update();
+                this.createChart();
+                this.split();
             },
             createChart() {
+                if (this.chart)
+                    this.chart.destroy()
                 this.chart = new Chart(this.chartEl, {
                     type: 'bar',
                     data: {
@@ -99,12 +106,10 @@
                 );  
             },
             datesToHistogram(responseDates) {
-                let startDate = this.filteredResponses[this.filteredResponses.length - 1].due_date;
-                let endDate = this.filteredResponses[0].due_date;
-                let lastDate = startDate;
+                let lastDate = this.startDate;
                 let dates = {};
 
-                while (lastDate != endDate) {
+                while (lastDate != this.endDate) {
                     dates[lastDate] = 0
                     lastDate = this.incrementDate(lastDate);
                 }
