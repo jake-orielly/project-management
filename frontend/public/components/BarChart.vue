@@ -77,9 +77,14 @@
                     },
                     options: {
                         responsive: true,
+                        chartArea: {
+                            backgroundColor: 'rgba(255,255,255,1)'
+                        },
                         legend: {
                             labels: {
-                                boxWidth: 0
+                                fontColor: "black",
+                                fontSize: 18,
+                                fontStyle: "bold"
                             }
                         },
                         scales: {
@@ -170,4 +175,19 @@
             }
         }
     }
+
+    Chart.pluginService.register({
+        beforeDraw: function (chart, easing) {
+            if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
+                var helpers = Chart.helpers;
+                var ctx = chart.chart.ctx;
+                var chartArea = chart.chartArea;
+
+                ctx.save();
+                ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
+                ctx.fillRect(0, 0, parseInt(ctx.canvas.style.height), parseInt(ctx.canvas.style.width));
+                ctx.restore();
+            }
+        }
+    });
 </script>

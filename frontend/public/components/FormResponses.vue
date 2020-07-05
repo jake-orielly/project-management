@@ -59,6 +59,9 @@
             <div class="clickable" @click="setChart('pie')">
                 <i class="fas fa-chart-pie"></i>
             </div>
+            <div class="clickable" @click="download">
+                <i class="fas fa-file-download"></i>
+            </div>
             <div class="clickable" @click="setChart('none')">
                 <i class="fas fa-times"></i>
             </div>
@@ -238,8 +241,26 @@
             },
             setChart(type) {
                 this.chartType = type;
+            },
+            download() {
+                var lnk = document.createElement('a'), e;
+
+                lnk.download = "chart.png";
+
+                lnk.href = document.getElementById('my-chart').toDataURL("image/png;base64");
+
+                if (document.createEvent) {
+                    e = document.createEvent("MouseEvents");
+                    e.initMouseEvent("click", true, true, window,
+                                    0, 0, 0, 0, 0, false, false, false,
+                                    false, 0, null);
+
+                    lnk.dispatchEvent(e);
+                } else if (lnk.fireEvent) {
+                    lnk.fireEvent("onclick");
+                }
             }
-        }
+        },
     }
 </script>
 
