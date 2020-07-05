@@ -52,10 +52,10 @@
             <div class="clickable" @click="setChart('bar')">
                 <i class="fas fa-chart-bar"></i>
             </div>
-            <div class="close-icon-container" @click="setChart('pie')">
+            <div class="clickable" @click="setChart('pie')">
                 <i class="fas fa-chart-pie"></i>
             </div>
-            <div class="close-icon-container" @click="setChart('none')">
+            <div class="clickable" @click="setChart('none')">
                 <i class="fas fa-times"></i>
             </div>
         </div>
