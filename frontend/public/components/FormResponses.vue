@@ -12,35 +12,60 @@
             <button @click="applyFilter">Apply</button>
         </div>
         <br>
-        <div id="filter-tags-container"> 
-            <div v-for="filter in filters" v-bind:key="filter" class="filter-tag">
-                {{filter}}
-                <span class="clickable" @click="removeFilter(filter)">
-                    <i class="fa fa-times"></i>
-                </span>
+        <div id="grid-container">
+            <div id="table-container">
+                <div id="filter-tags-container"> 
+                    <div v-for="filter in filters" v-bind:key="filter" class="filter-tag">
+                        {{filter}}
+                        <span class="clickable" @click="removeFilter(filter)">
+                            <i class="fa fa-times"></i>
+                        </span>
+                    </div>
+                </div>
+                <div v-if="!responses.length" class="no-responses">
+                    This form has no responses yet.
+                </div>
+                <table v-if="responses.length">
+                    <thead>
+                        <tr>
+                            <th v-for="field in fields" v-bind:key="field" class="clickable" @click="setSort(field)">
+                                {{prettify(field)}}
+                                <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../images/sort-down.png">
+                                <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../images/sort-up.png">       
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="response in filteredResponses" v-bind:key="response.hash">
+                            <td v-for="field in fields" v-bind:key="response.hash + '-' + field">
+                                {{getData(response,field)}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="chart-container">
+                <BarChart v-if="chartType == 'bar'" v-bind:filteredResponses="filteredResponses" v-bind:responses="responses"></BarChart>
+                <PieChart v-if="chartType == 'pie'" v-bind:filteredResponses="filteredResponses"></PieChart>
             </div>
         </div>
-        <div v-if="!responses.length" class="no-responses">
-            This form has no responses yet.
+        <div id="chart-controls">
+            <p class="title">
+                Chart Controls
+            </p>
+            <div class="clickable" @click="setChart('bar')">
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            <div class="clickable" @click="setChart('pie')">
+                <i class="fas fa-chart-pie"></i>
+            </div>
+            <div class="clickable" @click="download">
+                <i class="fas fa-file-download"></i>
+            </div>
+            <div class="clickable" @click="setChart('none')">
+                <i class="fas fa-times"></i>
+            </div>
         </div>
-        <table v-if="responses.length">
-            <thead>
-                <tr>
-                    <th v-for="field in fields" v-bind:key="field" class="clickable" @click="setSort(field)">
-                        {{prettify(field)}}
-                        <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../images/sort-down.png">
-                        <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../images/sort-up.png">       
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="response in filteredResponses" v-bind:key="response.hash">
-                    <td v-for="field in fields" v-bind:key="response.hash + '-' + field">
-                        {{getData(response,field)}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
         <div id="response-count-container">
             {{'Showing ' + filteredResponses.length + ' of ' + responses.length + ' responses'}}
         </div>
@@ -52,8 +77,14 @@
 
 <script>
     import requests from '../services/requests.js';
+    import BarChart from '../components/BarChart.vue';
+    import PieChart from '../components/PieChart.vue';
     
     export default {
+        components: {
+            BarChart,
+            PieChart
+        },
         data() {
             return {
                 responses: [],
@@ -62,6 +93,7 @@
                 sortOrder: undefined,
                 showingResponse: false,
                 filters: [],
+                chartType: "none"
             }
         },
         computed: {
@@ -70,7 +102,6 @@
 
                 for (let f of this.filters)
                     filteredResponses = this.evalFilter(filteredResponses,f);
-
                 return filteredResponses;
             }
         },
@@ -207,8 +238,29 @@
                 element.click();
 
                 document.body.removeChild(element);
+            },
+            setChart(type) {
+                this.chartType = type;
+            },
+            download() {
+                var lnk = document.createElement('a'), e;
+
+                lnk.download = "chart.png";
+
+                lnk.href = document.getElementById('my-chart').toDataURL("image/png;base64");
+
+                if (document.createEvent) {
+                    e = document.createEvent("MouseEvents");
+                    e.initMouseEvent("click", true, true, window,
+                                    0, 0, 0, 0, 0, false, false, false,
+                                    false, 0, null);
+
+                    lnk.dispatchEvent(e);
+                } else if (lnk.fireEvent) {
+                    lnk.fireEvent("onclick");
+                }
             }
-        }
+        },
     }
 </script>
 
@@ -219,6 +271,7 @@
     }
 
     #response-list {
+        position: relative;
         width: 90%;
         margin-left: 2em;
         margin-top: 1em;
@@ -246,8 +299,14 @@
         font-size: 1.25rem;
     }
 
-    #component-title, .fa-filter, #filter-input-container, #filter-tags-container {
+    #component-title, .fa-filter, #filter-input-container, #table-container {
         display: inline-block;
+    }
+
+    #grid-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
     }
 
     .fa-filter, #filter-input-container {
@@ -271,5 +330,22 @@
 
     #response-count-container {
         margin-top: 2rem;
+    }
+
+    #chart-container {
+        display: inline-block;
+        width: 45%;
+    }
+
+    #chart-controls {
+        position: absolute;
+        top: 2rem;
+        right: 8rem;
+
+        div {
+            display: inline-block;
+            font-size: 1.5rem;
+            margin: 0.25rem;
+        }
     }
 </style>
