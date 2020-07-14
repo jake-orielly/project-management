@@ -2,12 +2,11 @@
     <div>
         <div v-if="modalTint" id="modal-tint"></div>
         <Banner></Banner>
-        <div id="dashboard">
-            <Inbox></Inbox>
-            <Calendar ref="calendar" v-bind:user="$store.state.user"></Calendar>
-            <TaskList ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
-            <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
-            <History></History>
+        <div v-if="!formPreview" id="form-creation">
+            <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
+            <FormResponses ref="formResponses"></FormResponses>
+            <FieldAdd></FieldAdd>
+            <FormCreation></FormCreation>
         </div>
         <FormDisplay v-bind:preview="true"></FormDisplay>
     </div>
@@ -17,22 +16,20 @@
     import '../css/style.css'
     import requests from '../services/requests.js';
     import Banner from '../components/Banner.vue';
-    import Calendar from '../components/Calendar.vue';
-    import Inbox from '../components/Inbox.vue';
+    import FieldAdd from '../components/FieldAdd.vue';
+    import FormCreation from '../components/FormCreation.vue';
     import FormDisplay from '../components/FormDisplay.vue';
-    import TaskList from '../components/TaskList.vue';
-    import TaskStatusModal from '../components/TaskStatusModal.vue';
-    import History from '../components/History.vue';
+    import FormList from '../components/FormList.vue';
+    import FormResponses from '../components/FormResponses.vue';
 
     export default {
         components: {
             Banner,
-            Calendar,
-            Inbox,
+            FieldAdd,
+            FormCreation,
             FormDisplay,
-            TaskList,
-            TaskStatusModal,
-            History
+            FormList,
+            FormResponses
         },
         data () {
             return {
