@@ -49,7 +49,10 @@
                 forms: [],
                 formPreview: false,
                 currForm: "",
-                myTeam: [],
+                myTeam: [{
+                    name:this.$store.state.user,
+                    open:false
+                }],
             }
         },
         mounted () {
