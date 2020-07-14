@@ -9,7 +9,6 @@
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             <History></History>
         </div>
-        <FormDisplay v-bind:preview="true"></FormDisplay>
     </div>
 </template>
 
@@ -19,7 +18,6 @@
     import Banner from '../components/Banner.vue';
     import Calendar from '../components/Calendar.vue';
     import Inbox from '../components/Inbox.vue';
-    import FormDisplay from '../components/FormDisplay.vue';
     import TaskList from '../components/TaskList.vue';
     import TaskStatusModal from '../components/TaskStatusModal.vue';
     import History from '../components/History.vue';
@@ -29,7 +27,6 @@
             Banner,
             Calendar,
             Inbox,
-            FormDisplay,
             TaskList,
             TaskStatusModal,
             History
@@ -37,15 +34,7 @@
         data () {
             return {
                 currTab: "dashboard",
-                fields: [
-                    ],
                 inbox: [],
-                formTitle: "",
-                formPreview: false,
-                formSaved: true,
-                draggingPos: undefined,
-                draggingField: undefined,
-                modalTint: false,
             }
         },
         mounted() {
