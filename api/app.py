@@ -6,10 +6,17 @@ import json
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import date
+import bcrypt
 
 from mongo_url import mongo_URL
 
 import config
+
+def get_hashed_password(plain_text_password):
+    return bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+
+def check_password(plain_text_password, hashed_password):
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 app = Flask(__name__) 
 CORS(app)
@@ -200,7 +207,8 @@ class Login(Resource):
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
         db_user = collection.find_one({"user": req_data["user"]}, {'_id': False})
-        if (db_user != None and db_user["password"] == req_data["password"]):
+        correct_pw = check_password(req_data["password"],db_user["password"])
+        if (db_user != None and correct_pw):
             return {"message":"success"}
         else:
             return {"message":"failure"}

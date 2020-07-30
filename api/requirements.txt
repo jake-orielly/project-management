@@ -1,5 +1,6 @@
 flask
 flask_cors
+bcrypt
 
 # Prevents flask_restplus from installing problematic newer version
 Werkzeug==0.16.0
