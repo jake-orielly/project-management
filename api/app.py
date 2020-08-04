@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_api import status
 from flask_cors import CORS
 from werkzeug.utils import cached_property
 from flask_restplus import Resource, Api
@@ -207,11 +208,15 @@ class Login(Resource):
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
         db_user = collection.find_one({"user": req_data["user"]}, {'_id': False})
+
+        if not db_user:
+            return status.HTTP_401_UNAUTHORIZED
+
         correct_pw = check_password(req_data["password"],db_user["password"])
         if (db_user != None and correct_pw):
             return {"message":"success"}
         else:
-            return {"message":"failure"}
+            return status.HTTP_401_UNAUTHORIZED
 
 @api.route('/forms', defaults={'user': None})
 @api.route('/forms/<user>')

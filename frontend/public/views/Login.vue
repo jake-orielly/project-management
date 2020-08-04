@@ -2,11 +2,11 @@
     <div id="login-container">
         <div id="login-inner">
             <p>Login</p>
-            <input type="text" autocomplete="off" placeholder="Username" v-model="username" id="username">
-            <br>
-            <input type="password" autocomplete="off" placeholder="Password" v-model="password" id="password">
-            <br>
-            <button @click="login">Log In</button>
+            <form v-on:submit="login">    
+                <input type="text" name="email" autocomplete="off" placeholder="Username" v-model="username" id="username"/><br>    
+                <input type="password" name="password" autocomplete="off" placeholder="Password" v-model="password" id="password"/><br>    
+                <input type="submit" value="Login" />    
+            </form>
             <p :class="[(loginStatus == 'failed' ? 'error' : '')]" id="login-status-text">{{loginStatusText}}</p>
         </div>
     </div>
@@ -14,6 +14,7 @@
 
 <script>
     import requests from '../services/requests.js';
+
     export default {
         data () {
             return {
@@ -31,7 +32,8 @@
             }
         },
         methods: {
-            login() {
+            login(e) {
+                e.preventDefault()
                 requests.postLogin(this.username,this.password).then(
                     response => {
                         let result = JSON.parse(response.responseText).message;
@@ -42,7 +44,9 @@
                         else
                             this.loginStatus = "failed";
                     }
-                )
+                ).catch((errors) => {    
+                    this.loginStatus = "failed";
+                }) 
             },
         }
     }
