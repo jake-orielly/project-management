@@ -221,6 +221,27 @@ class Login(Resource):
         else:
             return status.HTTP_401_UNAUTHORIZED
 
+@api.route('/user')
+class User(Resource):
+    def delete(self):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+
+        # check if username exists in db
+        existing_user = collection.find_one({"user": req_data["username"]}, {'_id': False})
+
+        if existing_user is None:
+            return "User not found"
+        
+        else:
+            collection.delete_one({"user": req_data["username"]})
+            workload_collection = db.user_workloads
+            workload_collection.delete_one({"user": req_data["username"]})
+            return "User deleted"
+
+
 @api.route('/register')
 class Register(Resource):
     def post(self):
@@ -250,10 +271,6 @@ class Register(Resource):
         
         else:
             return "That username is taken"
-
-            
-    def get(self):
-        pass
 
 @api.route('/forms', defaults={'user': None})
 @api.route('/forms/<user>')
