@@ -9,6 +9,7 @@
 <script>
     import './css/style.css'
     import Login from './views/Login.vue';
+    import Register from './views/Register.vue';
     import Dashboard from './views/Dashboard.vue';
     import MyForms from './views/MyForms.vue';
     import MyTeam from './views/MyTeam.vue';
@@ -23,6 +24,7 @@
 
     const routes = [
         { path: '/', component: Login },
+        { path: '/register', component: Register },
         { path: '/dashboard', component: Dashboard },
         { path: '/my-forms', component: MyForms },
         { path: '/my-team', component: MyTeam },

@@ -70,6 +70,10 @@ export default {
         let data = JSON.stringify({"user":username,"password":password});
         return this.genericRequest("/login", "POST",data)
     },
+    register(username,password) {
+        let data = JSON.stringify({"username":username,"password":password});
+        return this.genericRequest("/register", "POST",data);
+    },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();
         const baseUrl = "http://23.254.164.217:" + config.flaskPort();

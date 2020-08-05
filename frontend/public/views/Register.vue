@@ -1,14 +1,12 @@
 <template>
     <div id="login-container">
         <div id="login-inner">
-            <p>Login</p>
-            <form v-on:submit="login">    
+            <form v-on:submit="registerUser">    
                 <input type="text" name="email" autocomplete="off" placeholder="Username" v-model="username" id="username"/><br>    
                 <input type="password" name="password" autocomplete="off" placeholder="Password" v-model="password" id="password"/><br>    
-                <input type="submit" value="Login" />    
+                <input type="submit" value="Sign Up" />    
             </form>
-            <router-link to="/register" class="sign-up-link">Sign Up</router-link>
-            <p :class="[(loginStatus == 'failed' ? 'error' : '')]" id="login-status-text">{{loginStatusText}}</p>
+            <p :class="[(registrationStatus == 'failed' ? 'error' : '')]" id="registration-status-text">{{registrationStatusText}}</p>
         </div>
     </div>
 </template>
@@ -19,34 +17,34 @@
     export default {
         data () {
             return {
-                loginStatus: "",
+                registrationStatus: "",
                 username:"",
                 password:""
             }
         },
         computed: {
-            loginStatusText() {
+            registrationStatusText() {
                 let statusMap = {
-                    "failed":"Incorrect login credentials."
+                    "failed":"That username is taken."
                 };
-                return statusMap[this.loginStatus];
+                return statusMap[this.registrationStatus];
             }
         },
         methods: {
-            login(e) {
+            registerUser(e) {
                 e.preventDefault()
-                requests.postLogin(this.username,this.password).then(
+                requests.register(this.username,this.password).then(
                     response => {
-                        let result = JSON.parse(response.responseText).message;
-                        if (result == "success") {
+                        let result = JSON.parse(response.responseText);
+                        if (result == "User created") {
                             this.$store.commit("setUser",this.username)
                             this.$router.push('/dashboard')
                         }
                         else
-                            this.loginStatus = "failed";
+                            this.registrationStatus = "failed";
                     }
                 ).catch(() => {    
-                    this.loginStatus = "failed";
+                    this.registrationStatus = "failed";
                 }) 
             },
         }
@@ -88,7 +86,7 @@
         font-size: 1.5rem;
     }
 
-    #login-status-text {
+    #registration-status-text {
         min-height: 1.5rem;
     }
 
