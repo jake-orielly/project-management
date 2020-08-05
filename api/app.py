@@ -239,6 +239,13 @@ class Register(Resource):
                 "password": hash_pass,
             })
             session["username"] = req_data["username"]
+
+            workload_collection = db.user_workloads
+            workload_collection.insert({
+                "user":req_data["username"],
+                "inbox":[],
+                "tasks":[]
+            })
             return "User created"
         
         else:
