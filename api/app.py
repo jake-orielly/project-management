@@ -1,6 +1,7 @@
-from flask import Flask, request
+from flask import Flask, request, session
 from flask_api import status
 from flask_cors import CORS
+
 from werkzeug.utils import cached_property
 from flask_restplus import Resource, Api
 import json
@@ -14,7 +15,7 @@ from mongo_url import mongo_URL
 import config
 
 def get_hashed_password(plain_text_password):
-    return bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt())
+    return bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt()).decode("utf-8")
 
 def check_password(plain_text_password, hashed_password):
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
@@ -22,6 +23,8 @@ def check_password(plain_text_password, hashed_password):
 app = Flask(__name__) 
 CORS(app)
 api = Api(app)
+
+app.secret_key = 'mysecret'
 
 @api.route('/is-alive')
 class IsAlive(Resource):
@@ -217,6 +220,33 @@ class Login(Resource):
             return {"message":"success"}
         else:
             return status.HTTP_401_UNAUTHORIZED
+
+@api.route('/register')
+class Register(Resource):
+    def post(self):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+
+        # check if username exists in db
+        existing_user = collection.find_one({"user": req_data["username"]}, {'_id': False})
+        
+        if existing_user is None:
+            hash_pass = get_hashed_password(req_data["password"])
+            collection.insert({
+                "user": req_data["username"],
+                "password": hash_pass,
+            })
+            session["username"] = req_data["username"]
+            return "User created"
+        
+        else:
+            return "That username is taken"
+
+            
+    def get(self):
+        pass
 
 @api.route('/forms', defaults={'user': None})
 @api.route('/forms/<user>')
