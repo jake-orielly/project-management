@@ -278,6 +278,50 @@ class User(Resource):
             return "User deleted"
 
 
+@api.route('/orginization')
+class orginization(Resource):
+    def get(self):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.orginizations
+        org_name  = request.args.get('name', None)
+        cursor = collection.find_one({"name": org_name}, {'_id': False})
+
+        return cursor
+
+    def post(self):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.orginizations
+        org_name  = request.args.get('name', None)
+
+        members = []
+
+        if request.data:
+            req_data = json.loads(request.data.decode("utf-8"))
+            if req_data["members"]:
+                members = req_data["members"]
+
+        collection.insert({
+            "name":org_name,
+            "members":members
+        })
+
+        return "Orginization " + org_name + " created."
+
+    def patch(self):
+        pass
+    def delete(self):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.orginizations
+        org_name  = request.args.get('name', None)
+        if collection.find_one({"name": org_name}, {'_id': False}):
+            collection.delete_one({"name": org_name})
+            return "Orginization " + org_name + " deleted."
+        else:
+            return "Orginization " + org_name + " not found."
+
 @api.route('/register')
 class Register(Resource):
     def post(self):
