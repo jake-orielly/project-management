@@ -223,6 +223,42 @@ class Login(Resource):
 
 @api.route('/user')
 class User(Resource):
+    def patch(self):
+        client = MongoClient(mongo_URL)
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+        acceptable = ["user","password"]
+        prop = req_data["property"]
+
+        if prop in acceptable:
+            if prop == "user":
+                existing_user = collection.find_one({"user": req_data["value"]}, {'_id': False})
+
+                if existing_user is not None:
+                    return "That username is taken"
+
+
+            if prop == "user":
+                db.user_workloads.update_one({"user": req_data["username"]},{"$set": { 
+                    "user": req_data["value"]
+                }})
+
+            if prop == "password":
+                collection.update_one({"user": req_data["username"]},{"$set": { 
+                    prop: get_hashed_password(req_data["value"])
+                }})
+
+            else:
+                collection.update_one({"user": req_data["username"]},{"$set": { 
+                    prop: req_data["value"]
+                }})
+
+            return "User " + req_data["username"] + " " + prop + " changed to " + req_data["value"]
+                
+        else:
+            return "Property: " + prop + " is not eligible to be changed with this request type."
+
     def delete(self):
         client = MongoClient(mongo_URL)
         db=client.users
@@ -258,6 +294,7 @@ class Register(Resource):
             collection.insert({
                 "user": req_data["username"],
                 "password": hash_pass,
+                "team":[]
             })
             session["username"] = req_data["username"]
 
