@@ -298,7 +298,35 @@ class orginization(Resource):
         return "Orginization " + org_name + " created."
 
     def patch(self):
-        pass
+        db=client.users
+        collection = db.orginizations
+        req_data = json.loads(request.data.decode("utf-8"))
+        org_name  = request.args.get('name', None)
+        orginization = collection.find_one({"name": org_name}, {'_id': False})
+
+        if not orginization:
+            return "Orginization " + org_name + " not found."
+
+        operation = req_data["operation"]
+
+        if operation not in ["add","remove"]:
+            return "Invalid operation " + opreation + ". Valid operations are add and remove."
+        members = req_data["members"]
+        
+        if operation == "add":
+            for member in members:
+                collection.update_one({"name":org_name},{"$push": { 
+                    "members":member
+                }})
+            return "Added " + ', '.join(members) + " to" + " " + org_name + "."
+
+        if operation == "remove":
+            for member in members:
+                collection.update_one({"name":org_name},{"$pull": { 
+                    "members":member
+                }})
+            return "Removed " + ', '.join(members) + " to" + " " + org_name + "."
+        
     def delete(self):
         db=client.users
         collection = db.orginizations
