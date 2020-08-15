@@ -34,6 +34,15 @@ def get_cursor_by_prop(db_name,collection_name,prop,value,_id=False):
     cursor = collection.find_one({prop: value}, {'_id': _id})
     return cursor
 
+def delete_document_by_prop(db_name,collection_name,prop,value):
+    db=client[db_name]
+    collection = db[collection_name]
+    if collection.find_one({prop: value}, {'_id': False}):
+        collection.delete_one({prop: value})
+        return "Deleted " + value + " from " + collection_name + "."
+    else:
+        return "Couldn't find " + value + " from " + collection_name + "."
+
 @api.route('/is-alive')
 class IsAlive(Resource):
     def get(self):
@@ -322,15 +331,9 @@ class orginization(Resource):
                 }})
             return "Removed " + ', '.join(members) + " to" + " " + org_name + "."
         
-    def delete(self):
-        db=client.users
-        collection = db.orginizations
+    def delete(self):        
         org_name  = request.args.get('name', None)
-        if collection.find_one({"name": org_name}, {'_id': False}):
-            collection.delete_one({"name": org_name})
-            return "Orginization " + org_name + " deleted."
-        else:
-            return "Orginization " + org_name + " not found."
+        return delete_document_by_prop("users","orginizations","name",org_name)
 
 @api.route('/register')
 class Register(Resource):
@@ -400,12 +403,8 @@ class Forms(Resource):
         return {"message":"success"}
 
     def delete(self, user):
-        db=client.forms
-        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
-        print(req_data["id"])
-        collection.delete_one({'_id':ObjectId(req_data["id"])})
-        return {"message":"success"}
+        return delete_document_by_prop("forms","forms","_id",req_data["id"])
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',port=config.port,debug=True)
