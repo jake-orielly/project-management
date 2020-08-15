@@ -28,6 +28,12 @@ app.secret_key = 'mysecret'
 
 client = MongoClient(mongo_URL)
 
+def get_cursor_by_prop(db_name,collection_name,prop,value,_id=False):
+    db=client[db_name]
+    collection = db[collection_name]
+    cursor = collection.find_one({prop: value}, {'_id': _id})
+    return cursor
+
 @api.route('/is-alive')
 class IsAlive(Resource):
     def get(self):
@@ -51,18 +57,14 @@ class RetrieveForm(Resource):
 @api.route('/team/<user>')
 class Team(Resource):
     def get(self,user):
-        db=client.users
-        collection = db.user_credentials
-        cursor = collection.find_one({"user": user})
+        cursor = get_cursor_by_prop("users","user_credentials","user",user)
         return cursor["team"]
 
 @api.route('/inbox')
 @api.route('/inbox/<user>')
 class Inbox(Resource):
     def get(self,user):
-        db=client.users
-        collection = db.user_workloads
-        cursor = collection.find_one({"user": user})
+        cursor = get_cursor_by_prop("users","user_workloads","user",user)
         return cursor["inbox"]
 
     def put(self):
@@ -135,9 +137,7 @@ class Inbox(Resource):
 @api.route('/tasks/<user>')
 class Tasks(Resource):
     def get(self,user):
-        db=client.users
-        collection = db.user_workloads
-        cursor = collection.find_one({"user": user})
+        cursor = get_cursor_by_prop("users","user_workloads","user",user)
         return cursor["tasks"]
 
     def patch(self,user):
@@ -267,16 +267,11 @@ class User(Resource):
             workload_collection.delete_one({"user": req_data["username"]})
             return "User deleted"
 
-
 @api.route('/orginization')
 class orginization(Resource):
     def get(self):
-        db=client.users
-        collection = db.orginizations
         org_name  = request.args.get('name', None)
-        cursor = collection.find_one({"name": org_name}, {'_id': False})
-
-        return cursor
+        return get_cursor_by_prop("users","orginizations","name",org_name)
 
     def post(self):
         db=client.users
