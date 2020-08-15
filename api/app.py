@@ -277,7 +277,7 @@ class User(Resource):
             return "User deleted"
 
 @api.route('/orginization')
-class orginization(Resource):
+class Orginization(Resource):
     def get(self):
         org_name  = request.args.get('name', None)
         return get_cursor_by_prop("users","orginizations","name",org_name)
@@ -334,6 +334,65 @@ class orginization(Resource):
     def delete(self):        
         org_name  = request.args.get('name', None)
         return delete_document_by_prop("users","orginizations","name",org_name)
+
+@api.route('/team')
+class Team(Resource):
+    def get(self):
+        org_name  = request.args.get('name', None)
+        return get_cursor_by_prop("users","teams","name",org_name)
+
+    def post(self):
+        db=client.users
+        collection = db.teams
+        team_name  = request.args.get('name', None)
+
+        members = []
+
+        if request.data:
+            req_data = json.loads(request.data.decode("utf-8"))
+            if req_data["members"]:
+                members = req_data["members"]
+
+        collection.insert({
+            "name":team_name,
+            "members":members
+        })
+
+        return "Team " + team_name + " created."
+
+    def patch(self):
+        db=client.users
+        collection = db.teams
+        req_data = json.loads(request.data.decode("utf-8"))
+        team_name  = request.args.get('name', None)
+        team = collection.find_one({"name": team_name}, {'_id': False})
+
+        if not team:
+            return "Team " + team_name + " not found."
+
+        operation = req_data["operation"]
+
+        if operation not in ["add","remove"]:
+            return "Invalid operation " + opreation + ". Valid operations are add and remove."
+        members = req_data["members"]
+        
+        if operation == "add":
+            for member in members:
+                collection.update_one({"name":team_name},{"$push": { 
+                    "members":member
+                }})
+            return "Added " + ', '.join(members) + " to" + " " + team_name + "."
+
+        if operation == "remove":
+            for member in members:
+                collection.update_one({"name":team_name},{"$pull": { 
+                    "members":member
+                }})
+            return "Removed " + ', '.join(members) + " to" + " " + team_name + "."
+        
+    def delete(self):        
+        org_name  = request.args.get('name', None)
+        return delete_document_by_prop("users","teams","name",org_name)
 
 @api.route('/register')
 class Register(Resource):
