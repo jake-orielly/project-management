@@ -26,6 +26,8 @@ api = Api(app)
 
 app.secret_key = 'mysecret'
 
+client = MongoClient(mongo_URL)
+
 @api.route('/is-alive')
 class IsAlive(Resource):
     def get(self):
@@ -36,7 +38,6 @@ class RetrieveForm(Resource):
     def post(self):
         user  = request.args.get('user', None)
 
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
@@ -50,7 +51,6 @@ class RetrieveForm(Resource):
 @api.route('/team/<user>')
 class Team(Resource):
     def get(self,user):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_credentials
         cursor = collection.find_one({"user": user})
@@ -60,7 +60,6 @@ class Team(Resource):
 @api.route('/inbox/<user>')
 class Inbox(Resource):
     def get(self,user):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
@@ -74,7 +73,6 @@ class Inbox(Resource):
         task_hash = req_data["task"]
         time = req_data["time"]
         
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
 
@@ -105,7 +103,6 @@ class Inbox(Resource):
         estimate  = req_data["estimate"]
         time = req_data["time"]
 
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
@@ -138,7 +135,6 @@ class Inbox(Resource):
 @api.route('/tasks/<user>')
 class Tasks(Resource):
     def get(self,user):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
@@ -147,7 +143,6 @@ class Tasks(Resource):
     def patch(self,user):
         req_data = json.loads(request.data.decode("utf-8"))
 
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
@@ -171,7 +166,6 @@ class Responses(Resource):
         form_title  = request.args.get('form_title', None)
         user  = request.args.get('user', None)
         
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
 
@@ -184,7 +178,6 @@ class Responses(Resource):
         form_title  = request.args.get('form_title', None)
         user  = request.args.get('user', None)
 
-        client = MongoClient(mongo_URL)
         db=client.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
@@ -206,7 +199,6 @@ class Responses(Resource):
 @api.route('/login')
 class Login(Resource):
     def post(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
@@ -224,7 +216,6 @@ class Login(Resource):
 @api.route('/user')
 class User(Resource):
     def patch(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
@@ -260,7 +251,6 @@ class User(Resource):
             return "Property: " + prop + " is not eligible to be changed with this request type."
 
     def delete(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
@@ -281,7 +271,6 @@ class User(Resource):
 @api.route('/orginization')
 class orginization(Resource):
     def get(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.orginizations
         org_name  = request.args.get('name', None)
@@ -290,7 +279,6 @@ class orginization(Resource):
         return cursor
 
     def post(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.orginizations
         org_name  = request.args.get('name', None)
@@ -312,7 +300,6 @@ class orginization(Resource):
     def patch(self):
         pass
     def delete(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.orginizations
         org_name  = request.args.get('name', None)
@@ -325,7 +312,6 @@ class orginization(Resource):
 @api.route('/register')
 class Register(Resource):
     def post(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
@@ -359,7 +345,6 @@ class Forms(Resource):
     def get(self, user):
         scope  = request.args.get('scope', None)
 
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
 
@@ -378,7 +363,6 @@ class Forms(Resource):
         return results
 
     def post(self, user):
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
@@ -386,7 +370,6 @@ class Forms(Resource):
         return {"message":"success"}
 
     def patch(self, user):
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
@@ -394,7 +377,6 @@ class Forms(Resource):
         return {"message":"success"}
 
     def delete(self, user):
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
