@@ -13,6 +13,7 @@
     import Dashboard from './views/Dashboard.vue';
     import MyForms from './views/MyForms.vue';
     import MyTeam from './views/MyTeam.vue';
+    import TeamManagement from './views/TeamManagement.vue';
     import Forms from './views/Forms.vue';
 
     import Vue from 'vue'
@@ -28,6 +29,7 @@
         { path: '/dashboard', component: Dashboard },
         { path: '/my-forms', component: MyForms },
         { path: '/my-team', component: MyTeam },
+        { path: '/team-management', component: TeamManagement },
         { path: '/forms/:user/:formId', component: Forms}
     ];
 

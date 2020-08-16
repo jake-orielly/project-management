@@ -4,6 +4,7 @@
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/my-forms">My Forms</router-link>
         <router-link to="/my-team">My Team</router-link>
+        <router-link to="/team-management">Team Management</router-link>
         <img src="../images/avatar.png" id="avatar-img">
         <p id="user-name">{{$store.state.user}}</p>
     </div>
