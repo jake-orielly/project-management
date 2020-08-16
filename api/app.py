@@ -312,7 +312,8 @@ class Orginization(Resource):
 
         collection.insert_one({
             "name":org_name,
-            "members":members
+            "members":members,
+            "teams":teams
         })
 
         for member in members:
