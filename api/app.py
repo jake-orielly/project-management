@@ -228,7 +228,7 @@ class User(Resource):
         db=client.users
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
-        acceptable = ["user","password"]
+        acceptable = ["user","password","role"]
         prop = req_data["property"]
 
         if prop in acceptable:
@@ -444,6 +444,7 @@ class Register(Resource):
             collection.insert_one({
                 "user": req_data["username"],
                 "password": hash_pass,
+                "role":req_data["role"],
                 "team":[]
             })
             session["username"] = req_data["username"]
@@ -453,7 +454,6 @@ class Register(Resource):
                 "user":req_data["username"],
                 "inbox":[],
                 "tasks":[],
-                "teams":[],
             })
             return "User created"
         
