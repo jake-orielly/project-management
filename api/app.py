@@ -384,6 +384,7 @@ class Team(Resource):
         org_collection = db.orginizations
         team_name  = request.args.get('name', None)
 
+        members = []
         if request.data:
             req_data = json.loads(request.data.decode("utf-8"))
             if req_data["members"]:
@@ -393,8 +394,6 @@ class Team(Resource):
 
         if team_name in org_teams:
             return "Team name " + team_name + " is taken."
-
-        members = []
 
         collection.insert_one({
             "name":team_name,
