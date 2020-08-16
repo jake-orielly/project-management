@@ -63,12 +63,6 @@ class RetrieveForm(Resource):
             found = [i for i in collection.find({"_id": ObjectId(req_data["id"])}, {'_id': False})]
             return found
 
-@api.route('/team/<user>')
-class Team(Resource):
-    def get(self,user):
-        cursor = get_cursor_by_prop("users","user_credentials","user",user)
-        return cursor["team"]
-
 @api.route('/inbox')
 @api.route('/inbox/<user>')
 class Inbox(Resource):
@@ -387,19 +381,30 @@ class Team(Resource):
     def post(self):
         db=client.users
         collection = db.teams
+        org_collection = db.orginizations
         team_name  = request.args.get('name', None)
-
-        members = []
 
         if request.data:
             req_data = json.loads(request.data.decode("utf-8"))
             if req_data["members"]:
                 members = req_data["members"]
 
+        org_teams = org_collection.find_one({"name":req_data["orginization"]}, {'_id': False})["teams"]
+
+        if team_name in org_teams:
+            return "Team name " + team_name + " is taken."
+
+        members = []
+
         collection.insert_one({
             "name":team_name,
-            "members":members
+            "members":members,
+            "orginization":req_data["orginization"]
         })
+
+        org_collection.update_one({"name":req_data["orginization"]},{"$push": { 
+            "teams":team_name
+        }})
 
         return "Team " + team_name + " created."
 
@@ -434,8 +439,12 @@ class Team(Resource):
             return "Removed " + ', '.join(members) + " to" + " " + team_name + "."
         
     def delete(self):        
-        org_name  = request.args.get('name', None)
-        return delete_document_by_prop("users","teams","name",org_name)
+        team_name  = request.args.get('name', None)
+        orginization_name = client.users.teams.find_one({"name":team_name})["orginization"]
+        client.users.orginizations.update_one({"name":orginization_name},{"$pull": { 
+            "teams":team_name
+        }})
+        return delete_document_by_prop("users","teams","name",team_name)
 
 @api.route('/register')
 class Register(Resource):
