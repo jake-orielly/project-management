@@ -59,9 +59,9 @@
             }
         },
         mounted () {
-            requests.getUserTeam(this.$store.state.user).then(
+            requests.getUser(this.$store.state.user).then(
                 response => {
-                    for (let i of JSON.parse(response.responseText))
+                    for (let i of JSON.parse(response.responseText).team)
                         this.myTeam.push({
                             name:i,
                             open:false
