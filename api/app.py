@@ -224,6 +224,13 @@ class Login(Resource):
 
 @api.route('/user')
 class User(Resource):
+    def get(self):
+        name  = request.args.get('name', None)
+        cursor = get_cursor_by_prop("users","user_credentials","user",name)
+        if not cursor:
+            return "User " + name + " not found."
+        del cursor["password"]
+        return cursor
     def patch(self):
         db=client.users
         collection = db.user_credentials
