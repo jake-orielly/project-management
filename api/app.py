@@ -285,6 +285,7 @@ class Orginization(Resource):
     def post(self):
         db=client.users
         collection = db.orginizations
+        user_collection = db.user_credentials
         org_name  = request.args.get('name', None)
 
         members = []
@@ -294,16 +295,30 @@ class Orginization(Resource):
             if req_data["members"]:
                 members = req_data["members"]
 
-        collection.insert({
+        not_found = []
+        for member in members:
+            user = user_collection.find_one({"user":member})
+            if not user:
+                not_found.append(member)
+        if not_found:
+            return "Could not find users " + ', '.join(not_found) + "."
+
+        collection.insert_one({
             "name":org_name,
             "members":members
         })
+
+        for member in members:
+            user_collection.update_one({"user":member},{"$set": { 
+                "orginization":org_name
+            }})
 
         return "Orginization " + org_name + " created."
 
     def patch(self):
         db=client.users
         collection = db.orginizations
+        user_collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
         org_name  = request.args.get('name', None)
         orginization = collection.find_one({"name": org_name}, {'_id': False})
@@ -317,12 +332,32 @@ class Orginization(Resource):
             return "Invalid operation " + opreation + ". Valid operations are add and remove."
         members = req_data["members"]
         
+        not_found = []
+        for member in members:
+            user = user_collection.find_one({"user":member})
+            if not user:
+                not_found.append(member)
+        if not_found:
+            return "Could not find users " + ', '.join(not_found) + "."
+
         if operation == "add":
+            users_added = []
+            dupe_users = []
             for member in members:
-                collection.update_one({"name":org_name},{"$push": { 
-                    "members":member
-                }})
-            return "Added " + ', '.join(members) + " to" + " " + org_name + "."
+                curr_members = collection.find_one({"name":org_name})["members"]
+
+                if not member in curr_members:
+                    collection.update_one({"name":org_name},{"$push": { 
+                        "members":member
+                    }})
+                    user_collection.update_one({"user":member},{"$set": { 
+                        "orginization":org_name
+                    }})
+                    users_added.append(member)
+                else:
+                    dupe_users.append(member)
+
+            return "Added " + ', '.join(users_added) + " to" + " " + org_name + "." + " Users " + ', '.join(dupe_users) + " already in orginization."
 
         if operation == "remove":
             for member in members:
@@ -353,7 +388,7 @@ class Team(Resource):
             if req_data["members"]:
                 members = req_data["members"]
 
-        collection.insert({
+        collection.insert_one({
             "name":team_name,
             "members":members
         })
@@ -406,7 +441,7 @@ class Register(Resource):
         
         if existing_user is None:
             hash_pass = get_hashed_password(req_data["password"])
-            collection.insert({
+            collection.insert_one({
                 "user": req_data["username"],
                 "password": hash_pass,
                 "team":[]
@@ -414,10 +449,11 @@ class Register(Resource):
             session["username"] = req_data["username"]
 
             workload_collection = db.user_workloads
-            workload_collection.insert({
+            workload_collection.insert_one({
                 "user":req_data["username"],
                 "inbox":[],
-                "tasks":[]
+                "tasks":[],
+                "teams":[],
             })
             return "User created"
         
