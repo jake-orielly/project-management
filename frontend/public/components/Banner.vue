@@ -1,9 +1,10 @@
 <template>
     <div id="topbar">
         <img src="../images/logo.png" id="logo-img">
-        <p class="clickable" @click="setTab('dashboard')">Dashboard</p>
-        <p class="clickable" @click="setTab('myForms')">My Forms</p>
-        <p class="clickable" @click="setTab('myTeam')">My Team</p>
+        <router-link to="/dashboard">Dashboard</router-link>
+        <router-link to="/my-forms">My Forms</router-link>
+        <router-link to="/team-workload">Team Workload</router-link>
+        <router-link to="/team-management">Team Management</router-link>
         <img src="../images/avatar.png" id="avatar-img">
         <p id="user-name">{{$store.state.user}}</p>
     </div>
@@ -18,3 +19,11 @@
         }
     }
 </script>
+
+<style lang="scss" scoped>
+a {
+    color: black;
+    margin: 1rem;
+    display: inline-block;
+}
+</style>

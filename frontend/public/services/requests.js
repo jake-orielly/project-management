@@ -8,8 +8,8 @@ export default {
         let bodyData = JSON.stringify(inputData);
         return this.genericRequest("/retrieve-form" + "?user=" + user, "POST", bodyData)
     },
-    getUserTeam(user) {
-        return this.genericRequest("/team/" + user, "GET")
+    getUser(user) {
+        return this.genericRequest("/user?name=" + user, "GET")
     },
     getUserForms(user,scope) {
         console.log(user,scope)
@@ -69,6 +69,10 @@ export default {
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});
         return this.genericRequest("/login", "POST",data)
+    },
+    register(username,password) {
+        let data = JSON.stringify({"username":username,"password":password});
+        return this.genericRequest("/register", "POST",data);
     },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();

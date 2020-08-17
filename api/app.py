@@ -1,19 +1,47 @@
-from flask import Flask, request
+from flask import Flask, request, session
+from flask_api import status
 from flask_cors import CORS
+
 from werkzeug.utils import cached_property
 from flask_restplus import Resource, Api
 import json
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from datetime import date
+import bcrypt
 
 from mongo_url import mongo_URL
 
 import config
 
+def get_hashed_password(plain_text_password):
+    return bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt()).decode("utf-8")
+
+def check_password(plain_text_password, hashed_password):
+    return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
+
 app = Flask(__name__) 
 CORS(app)
 api = Api(app)
+
+app.secret_key = 'mysecret'
+
+client = MongoClient(mongo_URL)
+
+def get_cursor_by_prop(db_name,collection_name,prop,value,_id=False):
+    db=client[db_name]
+    collection = db[collection_name]
+    cursor = collection.find_one({prop: value}, {'_id': _id})
+    return cursor
+
+def delete_document_by_prop(db_name,collection_name,prop,value):
+    db=client[db_name]
+    collection = db[collection_name]
+    if collection.find_one({prop: value}, {'_id': False}):
+        collection.delete_one({prop: value})
+        return "Deleted " + value + " from " + collection_name + "."
+    else:
+        return "Couldn't find " + value + " from " + collection_name + "."
 
 @api.route('/is-alive')
 class IsAlive(Resource):
@@ -25,7 +53,6 @@ class RetrieveForm(Resource):
     def post(self):
         user  = request.args.get('user', None)
 
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
@@ -36,23 +63,11 @@ class RetrieveForm(Resource):
             found = [i for i in collection.find({"_id": ObjectId(req_data["id"])}, {'_id': False})]
             return found
 
-@api.route('/team/<user>')
-class Team(Resource):
-    def get(self,user):
-        client = MongoClient(mongo_URL)
-        db=client.users
-        collection = db.user_credentials
-        cursor = collection.find_one({"user": user})
-        return cursor["team"]
-
 @api.route('/inbox')
 @api.route('/inbox/<user>')
 class Inbox(Resource):
     def get(self,user):
-        client = MongoClient(mongo_URL)
-        db=client.users
-        collection = db.user_workloads
-        cursor = collection.find_one({"user": user})
+        cursor = get_cursor_by_prop("users","user_workloads","user",user)
         return cursor["inbox"]
 
     def put(self):
@@ -63,7 +78,6 @@ class Inbox(Resource):
         task_hash = req_data["task"]
         time = req_data["time"]
         
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
 
@@ -94,7 +108,6 @@ class Inbox(Resource):
         estimate  = req_data["estimate"]
         time = req_data["time"]
 
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
@@ -127,16 +140,12 @@ class Inbox(Resource):
 @api.route('/tasks/<user>')
 class Tasks(Resource):
     def get(self,user):
-        client = MongoClient(mongo_URL)
-        db=client.users
-        collection = db.user_workloads
-        cursor = collection.find_one({"user": user})
+        cursor = get_cursor_by_prop("users","user_workloads","user",user)
         return cursor["tasks"]
 
     def patch(self,user):
         req_data = json.loads(request.data.decode("utf-8"))
 
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_workloads
         cursor = collection.find_one({"user": user})
@@ -160,7 +169,6 @@ class Responses(Resource):
         form_title  = request.args.get('form_title', None)
         user  = request.args.get('user', None)
         
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
 
@@ -173,7 +181,6 @@ class Responses(Resource):
         form_title  = request.args.get('form_title', None)
         user  = request.args.get('user', None)
 
-        client = MongoClient(mongo_URL)
         db=client.forms
         req_data = json.loads(request.data.decode("utf-8"))
 
@@ -195,15 +202,280 @@ class Responses(Resource):
 @api.route('/login')
 class Login(Resource):
     def post(self):
-        client = MongoClient(mongo_URL)
         db=client.users
         collection = db.user_credentials
         req_data = json.loads(request.data.decode("utf-8"))
         db_user = collection.find_one({"user": req_data["user"]}, {'_id': False})
-        if (db_user != None and db_user["password"] == req_data["password"]):
+
+        if not db_user:
+            return status.HTTP_401_UNAUTHORIZED
+
+        correct_pw = check_password(req_data["password"],db_user["password"])
+        if (db_user != None and correct_pw):
             return {"message":"success"}
         else:
-            return {"message":"failure"}
+            return status.HTTP_401_UNAUTHORIZED
+
+@api.route('/user')
+class User(Resource):
+    def get(self):
+        name  = request.args.get('name', None)
+        cursor = get_cursor_by_prop("users","user_credentials","user",name)
+        if not cursor:
+            return "User " + name + " not found."
+        del cursor["password"]
+        return cursor
+    def patch(self):
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+        acceptable = ["user","password","role"]
+        prop = req_data["property"]
+
+        if prop in acceptable:
+            if prop == "user":
+                existing_user = collection.find_one({"user": req_data["value"]}, {'_id': False})
+
+                if existing_user is not None:
+                    return "That username is taken"
+
+
+            if prop == "user":
+                db.user_workloads.update_one({"user": req_data["username"]},{"$set": { 
+                    "user": req_data["value"]
+                }})
+
+            if prop == "password":
+                collection.update_one({"user": req_data["username"]},{"$set": { 
+                    prop: get_hashed_password(req_data["value"])
+                }})
+
+            else:
+                collection.update_one({"user": req_data["username"]},{"$set": { 
+                    prop: req_data["value"]
+                }})
+
+            return "User " + req_data["username"] + " " + prop + " changed to " + req_data["value"]
+                
+        else:
+            return "Property: " + prop + " is not eligible to be changed with this request type."
+
+    def delete(self):
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+
+        # check if username exists in db
+        existing_user = collection.find_one({"user": req_data["username"]}, {'_id': False})
+
+        if existing_user is None:
+            return "User not found"
+        
+        else:
+            collection.delete_one({"user": req_data["username"]})
+            workload_collection = db.user_workloads
+            workload_collection.delete_one({"user": req_data["username"]})
+            return "User deleted"
+
+@api.route('/orginization')
+class Orginization(Resource):
+    def get(self):
+        org_name  = request.args.get('name', None)
+        return get_cursor_by_prop("users","orginizations","name",org_name)
+
+    def post(self):
+        db=client.users
+        collection = db.orginizations
+        user_collection = db.user_credentials
+        org_name  = request.args.get('name', None)
+
+        members = []
+
+        if request.data:
+            req_data = json.loads(request.data.decode("utf-8"))
+            if req_data["members"]:
+                members = req_data["members"]
+
+        not_found = []
+        for member in members:
+            user = user_collection.find_one({"user":member})
+            if not user:
+                not_found.append(member)
+        if not_found:
+            return "Could not find users " + ', '.join(not_found) + "."
+
+        collection.insert_one({
+            "name":org_name,
+            "members":members,
+            "teams":teams
+        })
+
+        for member in members:
+            user_collection.update_one({"user":member},{"$set": { 
+                "orginization":org_name
+            }})
+
+        return "Orginization " + org_name + " created."
+
+    def patch(self):
+        db=client.users
+        collection = db.orginizations
+        user_collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+        org_name  = request.args.get('name', None)
+        orginization = collection.find_one({"name": org_name}, {'_id': False})
+
+        if not orginization:
+            return "Orginization " + org_name + " not found."
+
+        operation = req_data["operation"]
+
+        if operation not in ["add","remove"]:
+            return "Invalid operation " + opreation + ". Valid operations are add and remove."
+        members = req_data["members"]
+        
+        not_found = []
+        for member in members:
+            user = user_collection.find_one({"user":member})
+            if not user:
+                not_found.append(member)
+        if not_found:
+            return "Could not find users " + ', '.join(not_found) + "."
+
+        if operation == "add":
+            users_added = []
+            dupe_users = []
+            for member in members:
+                curr_members = collection.find_one({"name":org_name})["members"]
+
+                if not member in curr_members:
+                    collection.update_one({"name":org_name},{"$push": { 
+                        "members":member
+                    }})
+                    user_collection.update_one({"user":member},{"$set": { 
+                        "orginization":org_name
+                    }})
+                    users_added.append(member)
+                else:
+                    dupe_users.append(member)
+
+            return "Added " + ', '.join(users_added) + " to" + " " + org_name + "." + " Users " + ', '.join(dupe_users) + " already in orginization."
+
+        if operation == "remove":
+            for member in members:
+                collection.update_one({"name":org_name},{"$pull": { 
+                    "members":member
+                }})
+            return "Removed " + ', '.join(members) + " to" + " " + org_name + "."
+        
+    def delete(self):        
+        org_name  = request.args.get('name', None)
+        return delete_document_by_prop("users","orginizations","name",org_name)
+
+@api.route('/team')
+class Team(Resource):
+    def get(self):
+        org_name  = request.args.get('name', None)
+        return get_cursor_by_prop("users","teams","name",org_name)
+
+    def post(self):
+        db=client.users
+        collection = db.teams
+        org_collection = db.orginizations
+        team_name  = request.args.get('name', None)
+
+        if request.data:
+            req_data = json.loads(request.data.decode("utf-8"))
+            if req_data["members"]:
+                members = req_data["members"]
+
+        org_teams = org_collection.find_one({"name":req_data["orginization"]}, {'_id': False})["teams"]
+
+        if team_name in org_teams:
+            return "Team name " + team_name + " is taken."
+
+        members = []
+
+        collection.insert_one({
+            "name":team_name,
+            "members":members,
+            "orginization":req_data["orginization"]
+        })
+
+        org_collection.update_one({"name":req_data["orginization"]},{"$push": { 
+            "teams":team_name
+        }})
+
+        return "Team " + team_name + " created."
+
+    def patch(self):
+        db=client.users
+        collection = db.teams
+        req_data = json.loads(request.data.decode("utf-8"))
+        team_name  = request.args.get('name', None)
+        team = collection.find_one({"name": team_name}, {'_id': False})
+
+        if not team:
+            return "Team " + team_name + " not found."
+
+        operation = req_data["operation"]
+
+        if operation not in ["add","remove"]:
+            return "Invalid operation " + opreation + ". Valid operations are add and remove."
+        members = req_data["members"]
+        
+        if operation == "add":
+            for member in members:
+                collection.update_one({"name":team_name},{"$push": { 
+                    "members":member
+                }})
+            return "Added " + ', '.join(members) + " to" + " " + team_name + "."
+
+        if operation == "remove":
+            for member in members:
+                collection.update_one({"name":team_name},{"$pull": { 
+                    "members":member
+                }})
+            return "Removed " + ', '.join(members) + " to" + " " + team_name + "."
+        
+    def delete(self):        
+        team_name  = request.args.get('name', None)
+        orginization_name = client.users.teams.find_one({"name":team_name})["orginization"]
+        client.users.orginizations.update_one({"name":orginization_name},{"$pull": { 
+            "teams":team_name
+        }})
+        return delete_document_by_prop("users","teams","name",team_name)
+
+@api.route('/register')
+class Register(Resource):
+    def post(self):
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+
+        # check if username exists in db
+        existing_user = collection.find_one({"user": req_data["username"]}, {'_id': False})
+        
+        if existing_user is None:
+            hash_pass = get_hashed_password(req_data["password"])
+            collection.insert_one({
+                "user": req_data["username"],
+                "password": hash_pass,
+                "role":req_data["role"],
+                "team":[]
+            })
+            session["username"] = req_data["username"]
+
+            workload_collection = db.user_workloads
+            workload_collection.insert_one({
+                "user":req_data["username"],
+                "inbox":[],
+                "tasks":[],
+            })
+            return "User created"
+        
+        else:
+            return "That username is taken"
 
 @api.route('/forms', defaults={'user': None})
 @api.route('/forms/<user>')
@@ -211,7 +483,6 @@ class Forms(Resource):
     def get(self, user):
         scope  = request.args.get('scope', None)
 
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
 
@@ -230,7 +501,6 @@ class Forms(Resource):
         return results
 
     def post(self, user):
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
@@ -238,7 +508,6 @@ class Forms(Resource):
         return {"message":"success"}
 
     def patch(self, user):
-        client = MongoClient(mongo_URL)
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
@@ -246,13 +515,8 @@ class Forms(Resource):
         return {"message":"success"}
 
     def delete(self, user):
-        client = MongoClient(mongo_URL)
-        db=client.forms
-        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
-        print(req_data["id"])
-        collection.delete_one({'_id':ObjectId(req_data["id"])})
-        return {"message":"success"}
+        return delete_document_by_prop("forms","forms","_id",req_data["id"])
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',port=config.port,debug=True)

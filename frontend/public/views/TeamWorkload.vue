@@ -1,6 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
+        <Banner></Banner>
         <div id="team-container" v-if="!formPreview">
             <div class="clickable">
                 <div class="user-forms-container" v-for="user in myTeam" v-bind:key="user.name">
@@ -34,12 +35,14 @@
     import '@fortawesome/fontawesome-free/js/all.js'
 
     import requests from '../services/requests.js';
+    import Banner from '../components/Banner.vue';
     import FormDisplay from '../components/FormDisplay.vue';
     import Calendar from '../components/Calendar.vue';
     import TaskList from '../components/TaskList.vue';
 
     export default {
         components: {
+            Banner,
             FormDisplay,
             Calendar,
             TaskList
@@ -49,13 +52,16 @@
                 forms: [],
                 formPreview: false,
                 currForm: "",
-                myTeam: [],
+                myTeam: [{
+                    name:this.$store.state.user,
+                    open:false
+                }],
             }
         },
         mounted () {
-            requests.getUserTeam(this.$store.state.user).then(
+            requests.getUser(this.$store.state.user).then(
                 response => {
-                    for (let i of JSON.parse(response.responseText))
+                    for (let i of JSON.parse(response.responseText).team)
                         this.myTeam.push({
                             name:i,
                             open:false

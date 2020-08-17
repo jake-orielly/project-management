@@ -70,6 +70,7 @@
             }
         },
         mounted() {
+            /* What is this doing here?
             requests.getUserTeam(this.$store.state.user).then(
                 response => {
                     for (let i of JSON.parse(response.responseText))
@@ -81,6 +82,7 @@
                         });
                 }
             )
+            */
         },
         methods: {
             openInboxItem(item) {
