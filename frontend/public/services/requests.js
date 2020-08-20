@@ -74,6 +74,9 @@ export default {
         let data = JSON.stringify({"username":username,"password":password});
         return this.genericRequest("/register", "POST",data);
     },
+    getTeamMembers(teamName) {
+        return this.genericRequest("/team?name=" + teamName, "GET");
+    },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();
         const baseUrl = "http://23.254.164.217:" + config.flaskPort();
