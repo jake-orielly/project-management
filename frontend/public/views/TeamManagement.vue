@@ -3,11 +3,20 @@
     <div>
         <Banner></Banner>
         <div id="main-container">
-            <p class="title">My Team</p>
-            <p v-for="user in myTeam">
-                {{user.name}}
-                <i class="fa fa-user-minus"></i>
-            </p>
+            <p class="title">My Teams</p>
+            <div v-for="team in myTeams" class="team-container">
+                <p>
+                    {{team.name}}
+                </p>
+                <div v-for="user in team.members" class="member-container">
+                    <p>
+                        {{user}}
+                    </p>
+                    <div @click="removeTeamMember">
+                        <i class="fa fa-user-minus"></i>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -27,21 +36,32 @@
         },
         data () {
             return {
-                myTeam:[]
+                myTeams:[]
             }
         },
         mounted () {
             requests.getUser(this.$store.state.user).then(
                 response => {
-                    for (let i of JSON.parse(response.responseText).team)
-                        this.myTeam.push({
-                            name:i,
-                            open:false
-                        });
+                    let teams = JSON.parse(response.responseText).teams;
+                    for (let team of teams) {
+                        requests.getTeamMembers(team).then(
+                            response => {
+                                this.myTeams.push(
+                                    {
+                                        name:team,
+                                        members:JSON.parse(response.responseText).members
+                                    }
+                                );
+                            }
+                        );
+                    }
                 }
             )
         },
         methods: {
+            removeTeamMember() {
+                console.log(1)
+            }
         }
     }
 </script>
@@ -54,5 +74,14 @@
     .title {
         font-weight: bold;
         text-decoration: underline;
+    }
+
+    .team-container, .member-container{
+        padding: 0rem 2rem;
+    }
+
+    .member-container * {
+        display: inline-block;
+        padding-right: 0.5rem;
     }
 </style>
