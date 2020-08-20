@@ -77,6 +77,10 @@ export default {
     getTeamMembers(teamName) {
         return this.genericRequest("/team?name=" + teamName, "GET");
     },
+    removeTeamMember(teamName,name) {
+        let data = JSON.stringify({"operation":"remove","members":[name]});
+        return this.genericRequest("/team?name=" + teamName, "PATCH",data);
+    },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();
         const baseUrl = "http://23.254.164.217:" + config.flaskPort();

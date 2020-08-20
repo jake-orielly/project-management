@@ -12,7 +12,7 @@
                     <p>
                         {{user}}
                     </p>
-                    <div @click="removeTeamMember" v-if="user != $store.state.user">
+                    <div class="clickable" @click="removeTeamMember(team.name,user)" v-if="user != $store.state.user">
                         <i class="fa fa-user-minus"></i>
                     </div>
                 </div>
@@ -44,23 +44,34 @@
                 response => {
                     let teams = JSON.parse(response.responseText).teams;
                     for (let team of teams) {
-                        requests.getTeamMembers(team).then(
-                            response => {
-                                this.myTeams.push(
-                                    {
-                                        name:team,
-                                        members:JSON.parse(response.responseText).members
-                                    }
-                                );
-                            }
-                        );
+                        this.retrieveTeam(team);
                     }
                 }
             )
         },
         methods: {
-            removeTeamMember() {
-                console.log(1)
+            removeTeamMember(team,member) {
+                requests.removeTeamMember(team,member).then(
+                    () => {
+                        this.retrieveTeam(team)
+                    }
+                );
+            },
+            retrieveTeam(team) {
+                requests.getTeamMembers(team).then(
+                    response => {
+                        let newTeam = {
+                            name:team,
+                            members:JSON.parse(response.responseText).members
+                        }
+                        for (let i = 0; i < this.myTeams.length; i++)
+                            if (this.myTeams[i].name == team) {
+                                this.myTeams.splice(i, 1, newTeam);
+                                return
+                            }
+                        this.myTeams.push(newTeam);
+                    }
+                );
             }
         }
     }
