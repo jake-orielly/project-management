@@ -4,22 +4,25 @@
         <Banner></Banner>
         <div id="team-container" v-if="!formPreview">
             <div class="clickable">
-                <div class="user-forms-container" v-for="user in myTeam" v-bind:key="user.name">
-                    <p class="user-name">
-                        {{user.name}}
-                    </p>
-                    <div v-if="!user.open" class="open-icon">
-                        <span @click="toggleForms(user)">
-                            <i class="fa fa-plus"></i>
+                <div class="user-forms-container" v-for="team in myTeams" v-bind:key="team.name">
+                    <p class="title">{{team.name}}</p>
+                    <div v-for="user in team.members">
+                        <p class="user-name">
+                            {{user.name}}
+                        </p>
+                        <div v-if="!user.open" class="open-icon">
+                            <span @click="toggleForms(user)">
+                                <i class="fa fa-plus"></i>
+                            </span>
+                        </div>
+                        <span v-if="user.open" @click="toggleForms(user)">
+                            <i class="fa fa-minus"></i>
                         </span>
-                    </div>
-                    <span v-if="user.open" @click="toggleForms(user)">
-                        <i class="fa fa-minus"></i>
-                    </span>
-                    <div v-if="user.open" id="user-container">
-                        <p class="clickable" v-for="form in forms.filter(form => form.creator == user.name)" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
-                        <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false"></TaskList>
-                        <Calendar ref="calendar" v-bind:user="user.name"></Calendar>
+                        <div v-if="user.open" id="user-container">
+                            <p class="clickable" v-for="form in forms.filter(form => form.creator == user.name)" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
+                            <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false"></TaskList>
+                            <Calendar ref="calendar" v-bind:user="user.name"></Calendar>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -52,20 +55,31 @@
                 forms: [],
                 formPreview: false,
                 currForm: "",
-                myTeam: [{
-                    name:this.$store.state.user,
-                    open:false
-                }],
+                myTeams: [],
             }
         },
         mounted () {
             requests.getUser(this.$store.state.user).then(
                 response => {
-                    for (let i of JSON.parse(response.responseText).team)
-                        this.myTeam.push({
-                            name:i,
-                            open:false
-                        });
+                    let teams = JSON.parse(response.responseText).teams;
+                    for (let team of teams) {
+                        requests.getTeamMembers(team).then(
+                            response => {
+                                let newTeam = {
+                                    name:team,
+                                    members:[],
+                                    open:false
+                                }
+
+                                for (let user of JSON.parse(response.responseText).members)
+                                    newTeam.members.push({
+                                        name:user,
+                                        open:false
+                                    })
+                                this.myTeams.push(newTeam);
+                            }
+                        );
+                    }
                 }
             )
         },
@@ -125,5 +139,9 @@
 
     .open-icon {
         display: inline-block;
+    }
+
+    .title {
+        text-decoration: underline;
     }
 </style>
