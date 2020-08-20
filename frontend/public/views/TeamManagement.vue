@@ -5,9 +5,14 @@
         <div id="main-container">
             <p class="title">My Teams</p>
             <div v-for="team in myTeams" class="team-container">
-                <p>
-                    {{team.name}}
-                </p>
+                <div>
+                    <p class="team-header">
+                        {{team.name}}
+                    </p>
+                    <div class="team-header clickable" @click="openAddTeamModal(team)">
+                        <i class="fa fa-user-plus"></i>
+                    </div>
+                </div>
                 <div v-for="user in team.members" class="member-container">
                     <p>
                         {{user}}
@@ -15,6 +20,23 @@
                     <div class="clickable" @click="removeTeamMember(team.name,user)" v-if="user != $store.state.user">
                         <i class="fa fa-user-minus"></i>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-container">
+            <div id="team-member-modal">
+                <p>
+                    Add team member to 
+                    <span>team</span>
+                </p>
+                <div class="team-header">
+                    <input type="text">
+                </div>
+                <div class="team-header clickable" @click="addTeamMember()">
+                    <i class="fa fa-user-plus"></i>
+                </div>
+                <div @click="closeAddTeamModal" class="close-container">
+                    <i class="fa fa-times clickable"></i>
                 </div>
             </div>
         </div>
@@ -91,8 +113,32 @@
         padding: 0rem 2rem;
     }
 
-    .member-container * {
+    .member-container *, .team-header {
         display: inline-block;
         padding-right: 0.5rem;
+    }
+
+    #modal-container {
+        position: absolute;
+        width: 100%;
+        top: 20%;
+        display: flex;
+        justify-content: center;
+    }
+
+    #team-member-modal {
+        position: relative;
+        display: inline-block;
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 1rem;
+        padding: 2rem 3rem;
+    }
+
+    .fa-times {
+        position: absolute;
+        right: 0.5rem;
+        top: 0.5rem;
+        font-size: 1.2rem;
     }
 </style>
