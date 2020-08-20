@@ -12,7 +12,7 @@
                     <p>
                         {{user}}
                     </p>
-                    <div @click="removeTeamMember">
+                    <div @click="removeTeamMember" v-if="user != $store.state.user">
                         <i class="fa fa-user-minus"></i>
                     </div>
                 </div>
