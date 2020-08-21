@@ -30,7 +30,7 @@
                     <span>team</span>
                 </p>
                 <div class="team-header">
-                    <input type="text" v-model="addUserName">
+                    <autocomplete :suggestions="orgMembers" :selection.sync="addUserName"></autocomplete>
                 </div>
                 <div class="team-header clickable" @click="addTeamMember()">
                     <i class="fa fa-user-plus"></i>
@@ -52,10 +52,12 @@
     import '@fortawesome/fontawesome-free/js/all.js'
 
     import requests from '../services/requests.js';
+    import Autocomplete from '../components/Autocomplete.vue';
     import Banner from '../components/Banner.vue';
 
     export default {
         components: {
+            Autocomplete,
             Banner
         },
         data () {
@@ -63,16 +65,24 @@
                 myTeams:[],
                 showingModal: false,
                 addUserName:"",
-                modalTeam: ""   
+                modalTeam: "",
+                orgMembers: []
             }
         },
         mounted () {
             requests.getUser(this.$store.state.user).then(
                 response => {
-                    let teams = JSON.parse(response.responseText).teams;
-                    for (let team of teams) {
+                    let responseText = JSON.parse(response.responseText)
+                    for (let team of responseText.teams) {
                         this.retrieveTeam(team);
                     }
+                    requests.getOrginization(responseText.orginization).then(
+                        response => {
+                            this.orgMembers = JSON.parse(response.responseText).members.filter(
+                                user => user != this.$store.state.user
+                            );
+                        }
+                    )
                 }
             )
         },
@@ -137,6 +147,10 @@
         padding-right: 0.5rem;
     }
 
+    #team-member-modal .team-header {
+        float: left;
+    }
+
     #modal-container {
         position: absolute;
         width: 100%;
@@ -151,6 +165,7 @@
         background-color: white;
         border: 1px solid black;
         border-radius: 1rem;
+        font-size: 1.25rem;
         padding: 2rem 3rem;
         z-index: 2;
     }

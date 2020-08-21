@@ -85,6 +85,9 @@ export default {
         let data = JSON.stringify({"operation":"remove","members":[name]});
         return this.genericRequest("/team?name=" + teamName, "PATCH",data);
     },
+    getOrginization(orgName){
+        return this.genericRequest("/orginization?name=" + orgName, "GET");
+    },
     genericRequest(url,type,body) {
         var request = new XMLHttpRequest();
         const baseUrl = "http://23.254.164.217:" + config.flaskPort();
