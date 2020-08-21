@@ -23,7 +23,7 @@
                 </div>
             </div>
         </div>
-        <div id="modal-container">
+        <div id="modal-container" v-if="showingModal">
             <div id="team-member-modal">
                 <p>
                     Add team member to 
@@ -39,6 +39,8 @@
                     <i class="fa fa-times clickable"></i>
                 </div>
             </div>
+        </div>
+        <div v-if="showingModal" id="modal-tint">
         </div>
     </div>
 </template>
@@ -59,8 +61,9 @@
         data () {
             return {
                 myTeams:[],
+                showingModal: false,
                 addUserName:"",
-                modalTeam: "Buzzbeam Creators"
+                modalTeam: ""   
             }
         },
         mounted () {
@@ -74,8 +77,12 @@
             )
         },
         methods: {
+            openAddTeamModal(team) {
+                this.modalTeam = team;
+                this.showingModal = true;
+            },
             closeAddTeamModal() {
-                console.log(2)
+                this.showingModal = false;
             },
             addTeamMember() {
                 requests.addTeamMember(this.modalTeam,this.addUserName).then(
@@ -145,6 +152,7 @@
         border: 1px solid black;
         border-radius: 1rem;
         padding: 2rem 3rem;
+        z-index: 2;
     }
 
     .fa-times {
@@ -152,5 +160,15 @@
         right: 0.5rem;
         top: 0.5rem;
         font-size: 1.2rem;
+    }
+
+    #modal-tint {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #00000066;
+        z-index: 1;
     }
 </style>
