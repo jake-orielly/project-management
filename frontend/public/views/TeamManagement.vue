@@ -30,7 +30,7 @@
                     <span>team</span>
                 </p>
                 <div class="team-header">
-                    <input type="text">
+                    <input type="text" v-model="addUserName">
                 </div>
                 <div class="team-header clickable" @click="addTeamMember()">
                     <i class="fa fa-user-plus"></i>
@@ -58,7 +58,9 @@
         },
         data () {
             return {
-                myTeams:[]
+                myTeams:[],
+                addUserName:"",
+                modalTeam: "Buzzbeam Creators"
             }
         },
         mounted () {
@@ -72,6 +74,16 @@
             )
         },
         methods: {
+            closeAddTeamModal() {
+                console.log(2)
+            },
+            addTeamMember() {
+                requests.addTeamMember(this.modalTeam,this.addUserName).then(
+                    () => {
+                        this.retrieveTeam(this.modalTeam)
+                    }
+                );
+            },
             removeTeamMember(team,member) {
                 requests.removeTeamMember(team,member).then(
                     () => {

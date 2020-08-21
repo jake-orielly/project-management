@@ -77,6 +77,10 @@ export default {
     getTeamMembers(teamName) {
         return this.genericRequest("/team?name=" + teamName, "GET");
     },
+    addTeamMember(teamName,name) {
+        let data = JSON.stringify({"operation":"add","members":[name]});
+        return this.genericRequest("/team?name=" + teamName, "PATCH",data);
+    },
     removeTeamMember(teamName,name) {
         let data = JSON.stringify({"operation":"remove","members":[name]});
         return this.genericRequest("/team?name=" + teamName, "PATCH",data);
