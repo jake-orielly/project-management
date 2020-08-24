@@ -95,16 +95,16 @@
                 this.showingModal = false;
             },
             addTeamMember() {
-                requests.addTeamMember(this.modalTeam,this.addUserName).then(
+                requests.addTeamMember(this.modalTeam.name,this.addUserName).then(
                     () => {
-                        this.retrieveTeam(this.modalTeam)
+                        this.retrieveTeam(this.modalTeam.name)
                     }
                 );
             },
             removeTeamMember(team,member) {
-                requests.removeTeamMember(team,member).then(
+                requests.removeTeamMember(this.modalTeam.name,member).then(
                     () => {
-                        this.retrieveTeam(team)
+                        this.retrieveTeam(this.modalTeam.name)
                     }
                 );
             },
