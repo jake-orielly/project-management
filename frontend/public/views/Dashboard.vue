@@ -35,6 +35,7 @@
             return {
                 currTab: "dashboard",
                 inbox: [],
+                modalTint: false
             }
         },
         mounted() {
