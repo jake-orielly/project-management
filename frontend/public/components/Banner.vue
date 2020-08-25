@@ -32,4 +32,18 @@
         margin-right: 2em;
         padding: 5px;
     }
+
+    #topbar {
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    #topbar p {
+        display: inline-block;
+        margin-top: 1em;
+        margin-right: 2rem;
+        margin-bottom: 0.5em;
+        text-decoration: underline;
+    }
+
 </style>
