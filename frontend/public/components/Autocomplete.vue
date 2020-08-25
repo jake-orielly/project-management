@@ -1,19 +1,20 @@
 <template>
     <div style="position:relative" v-bind:class="{'open':openSuggestion}">
-        <input class="form-control" type="text" v-model="selection"
+        <input class="form-control" type="text" v-model="$parent.autocompleteVal"
             @keydown.enter="enter"
             @keydown.down="down"
             @keydown.up="up"  
             @input="change"
         />
         <ul class="dropdown-menu" style="width:100%">
-            <li v-for="suggestion,index in matches"
+            <li v-for="(suggestion, index) in matches"
+                :key="suggestion"
                 v-bind:class="{'active': isActive(index)}"
                 @click="suggestionClick(index)"
             >
                 <p>
-                    <span id="selection">{{selection}}</span>
-                    <span>{{ suggestion.substr(selection.length) }}</span>
+                    <span id="selection">{{$parent.autocompleteVal}}</span>
+                    <span>{{ suggestion.substr($parent.autocompleteVal.length) }}</span>
                 </p>
             </li>
         </ul>
@@ -26,11 +27,6 @@
             suggestions: {
                 type: Array,
                 required: true
-            },
-            selection: {
-                type: String,
-                required: true,
-                twoWay: true
             }
         },
         data() {
@@ -43,19 +39,19 @@
         computed: {
             matches() {
                 return this.suggestions.filter((str) => {
-                    return str.substr(0,this.selection.length) == this.selection;
+                    return str.substr(0,this.$parent.autocompleteVal.length) == this.$parent.autocompleteVal;
                 });
             },
 
             openSuggestion() {
-                return this.selection !== "" &&
+                return this.$parent.autocompleteVal !== "" &&
                     this.matches.length != 0 &&
                     this.open === true;
             }
         },
         methods: {
             enter() {
-                this.selection = this.matches[this.current];
+                this.$parent.autocompleteVal = this.matches[this.current];
                 this.open = false;
             },
 
@@ -81,7 +77,7 @@
             },
 
             suggestionClick(index) {
-                this.selection = this.matches[index];
+                this.$parent.autocompleteVal = this.matches[index];
                 this.open = false;
             },
         }

@@ -30,7 +30,7 @@
                     <span>team</span>
                 </p>
                 <div class="team-header">
-                    <autocomplete :suggestions="orgMembers" :selection.sync="addUserName"></autocomplete>
+                    <autocomplete :suggestions="orgMembers"></autocomplete>
                 </div>
                 <div class="team-header clickable" @click="addTeamMember()">
                     <i class="fa fa-user-plus"></i>
@@ -64,7 +64,7 @@
             return {
                 myTeams:[],
                 showingModal: false,
-                addUserName:"",
+                autocompleteVal:"",
                 modalTeam: "",
                 orgMembers: []
             }
@@ -95,7 +95,7 @@
                 this.showingModal = false;
             },
             addTeamMember() {
-                requests.addTeamMember(this.modalTeam.name,this.addUserName).then(
+                requests.addTeamMember(this.modalTeam.name,this.autocompleteVal).then(
                     () => {
                         this.retrieveTeam(this.modalTeam.name)
                     }
