@@ -1,6 +1,6 @@
 <template>
     <div id="topbar">
-        <img src="../images/logo.png" id="logo-img">
+        <img src="../images/logo.svg" id="logo-img">
         <router-link to="/dashboard">Dashboard</router-link>
         <router-link to="/my-forms">My Forms</router-link>
         <router-link to="/team-workload">Team Workload</router-link>
@@ -21,9 +21,15 @@
 </script>
 
 <style lang="scss" scoped>
-a {
-    color: black;
-    margin: 1rem;
-    display: inline-block;
-}
+    a {
+        color: black;
+        margin: 1rem;
+        display: inline-block;
+    }
+
+    #logo-img {
+        float: left;
+        margin-right: 2em;
+        padding: 5px;
+    }
 </style>
