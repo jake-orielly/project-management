@@ -102,9 +102,9 @@
                 );
             },
             removeTeamMember(team,member) {
-                requests.removeTeamMember(this.modalTeam.name,member).then(
+                requests.removeTeamMember(team,member).then(
                     () => {
-                        this.retrieveTeam(this.modalTeam.name)
+                        this.retrieveTeam(team)
                     }
                 );
             },
