@@ -9,13 +9,38 @@
             </p>
         </div>
         <div id="inbox-inner" v-if="viewing == undefined">
-            <ul>
-                <li v-for="item in $parent.inbox" v-bind:key="$parent.inbox.indexOf(item)">
-                    <div class="dashboard-card">
-                        <p @click="openInboxItem(item)">{{item.description}}: {{item.title}}</p>
-                    </div>
-                </li>
-            </ul>
+            <table id="inbox-table">
+                <tbody>
+                    <tr>
+                        <th>
+                            Project
+                        </th>
+                        <th>
+                            Task
+                        </th>
+                        <th>
+                            Requester
+                        </th>
+                        <th>
+                            Due Date
+                        </th>
+                    </tr>
+                    <tr v-for="item in $parent.inbox" v-bind:key="$parent.inbox.indexOf(item)" @click="openInboxItem(item)">
+                        <td>
+                            {{item.title}}
+                        </td>
+                        <td>
+                            {{item.description}}
+                        </td>
+                        <td>
+                            {{item.from}}
+                        </td>
+                        <td>
+                            {{item.fields.due_date}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div id="estimate-container" v-if="viewing != undefined">
             <p>{{viewing.fields.description}}</p>
@@ -152,6 +177,7 @@
     #inbox-inner {
         border: 3px solid #445E93;
         border-radius: 1em;
+        padding: 3rem;
     }
 
     .team-container {
@@ -222,5 +248,30 @@
         p:nth-child(4){
             background: rgba(126, 189, 194, 0.5);
         }
+    }
+
+    #inbox-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #inbox-table td, #inbox-table th {
+        border: 1px solid #C4C4C4;
+        padding: 8px;
+    }
+
+    #inbox-table tr:nth-child(even){
+        background-color: #f2f2f2;
+    }
+
+    #inbox-table tr:hover {
+        background-color: #ddd;
+    }
+
+    #inbox-table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: #c4c4c480;
     }
 </style>
