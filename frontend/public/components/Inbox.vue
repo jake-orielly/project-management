@@ -4,8 +4,11 @@
             <i class="fa fa-times clickable"></i>
         </div>
         <div id="tab-container">
-            <p v-for="tab in tabs">
+            <p v-for="tab in tabs" class="clickable">
                 {{tab}}
+                <span class="tab-badge" :class="{'hidden' : tab != 'New'}">
+                    {{$parent.inbox.length}}
+                </span>
             </p>
         </div>
         <div id="inbox-inner" v-if="viewing == undefined">
@@ -238,6 +241,9 @@
         p:first-child {
             background: #C4C4C4;
             margin-left: 1rem;
+            font-weight: bold;
+            color: #445E93;
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         }
         p:nth-child(2){
             background: rgba(228, 179, 99, 0.5);
@@ -273,5 +279,21 @@
         padding-bottom: 12px;
         text-align: left;
         background-color: #c4c4c480;
+    }
+
+    .tab-badge {
+        display: inline-block;
+        background: #445E93;
+        color: #FFFFFF;
+        font-weight: 400;
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 0.75rem;
+        text-align: center;
+
+        &.hidden {
+            background: none;
+            color: transparent;
+        }
     }
 </style>

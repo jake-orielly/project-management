@@ -2,12 +2,20 @@
     <div>
         <div v-if="modalTint" id="modal-tint"></div>
         <Banner active="dashboard"></Banner>
-        <div id="dashboard">
-            <Inbox v-if="focused == 'inbox'"></Inbox>
-            <Calendar v-if="focused == 'calendar'" ref="calendar" v-bind:user="$store.state.user"></Calendar>
-            <TaskList v-if="focused == 'task-list'"ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
-            <History v-if="focused == 'history'"></History>
-            <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
+        <div id="dashboard-container">
+            <div id="focus-container">
+                <p class="title">Jake's Dashboard</p>
+                <p v-for="option in focusOptions">
+                    {{option}}
+                </p>
+            </div>
+            <div id="dashboard">
+                <Inbox v-if="focused == 'inbox'"></Inbox>
+                <Calendar v-if="focused == 'calendar'" ref="calendar" v-bind:user="$store.state.user"></Calendar>
+                <TaskList v-if="focused == 'task-list'"ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
+                <History v-if="focused == 'history'"></History>
+                <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
+            </div>
         </div>
     </div>
 </template>
@@ -36,6 +44,7 @@
                 currTab: "dashboard",
                 inbox: [],
                 modalTint: false,
+                focusOptions: ["Inbox","Reporting","My Calendar","Team Calendar"],
                 focused: "inbox"
             }
         },
@@ -77,6 +86,20 @@
 </script>
 
 <style lang="scss" scoped>
+    #dashboard-container {
+        display: grid;
+        grid-template-columns: 15% 70%;
+    }
+
+    #focus-container {
+        margin-left: 3rem;
+        margin-top: 3rem;
+
+        .title {
+            font-weight: bold;
+        }
+    }
+
     #dashboard {
         margin-left: 2em;
         margin-right: 2rem;
