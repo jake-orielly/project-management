@@ -37,6 +37,20 @@
         box-shadow: inset 0px -1px 0px rgba(0, 0, 0, 0.25);
     }
 
+    #logo-img, #avatar-img {
+        height: 3rem;
+    }
+
+    #user-name, #avatar-img {
+        float: right;
+    }
+
+    #topbar #user-name {
+        font-size: 1.15rem;
+        text-decoration: none;
+        margin-right: 1rem;
+    }
+
     #logo-img {
         float: left;
         margin-right: 2em;

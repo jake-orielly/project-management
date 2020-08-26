@@ -121,25 +121,6 @@ textarea {
     cursor: pointer;
 }
 
-#logo-img, #avatar-img {
-    height: 2em;
-}
-
-#user-name, #avatar-img {
-    float: right;
-}
-
-#avatar-img {
-    border: 3px solid #2C666E;
-    border-radius: 2rem;
-}
-
-#topbar #user-name {
-    margin-top: 0.75rem;
-    margin-right: 0.75rem;
-    text-decoration: none;
-}
-
 #inbox, #taskList, #calendar {
     display: inline-block;
     margin-left: 2em;
