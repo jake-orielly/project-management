@@ -3,8 +3,12 @@
         <div v-if="viewing" class="close-icon-container" @click="closeView">
             <i class="fa fa-times clickable"></i>
         </div>
-        <div v-if="viewing == undefined">
-            <p class="title">Inbox</p>
+        <div id="tab-container">
+            <p v-for="tab in tabs">
+                {{tab}}
+            </p>
+        </div>
+        <div id="inbox-inner" v-if="viewing == undefined">
             <ul>
                 <li v-for="item in $parent.inbox" v-bind:key="$parent.inbox.indexOf(item)">
                     <div class="dashboard-card">
@@ -66,7 +70,8 @@
             return {
                 viewing: undefined,
                 mode: undefined,
-                myTeam:[]
+                myTeam:[],
+                tabs: ["New","In Progress","Blocked","Complete"]
             }
         },
         mounted() {
@@ -144,6 +149,11 @@
     }
 </script>
 <style lang="scss" scoped>
+    #inbox-inner {
+        border: 3px solid #445E93;
+        border-radius: 1em;
+    }
+
     .team-container {
         font-size: 1.25rem;
     }
@@ -187,5 +197,30 @@
         color: #313638;
         width: 30rem;
         height: 10rem;
+    }
+
+    #tab-container {
+        margin: 0;
+
+        p {
+            display: inline-block;
+            padding: 0.75rem 3rem;;
+            margin: 0;
+            border-radius: 1rem 1rem 0px 0px;
+        }
+
+        p:first-child {
+            background: #C4C4C4;
+            margin-left: 1rem;
+        }
+        p:nth-child(2){
+            background: rgba(228, 179, 99, 0.5);
+        }
+        p:nth-child(3){
+            background: rgba(187, 68, 48, 0.5);
+        }
+        p:nth-child(4){
+            background: rgba(126, 189, 194, 0.5);
+        }
     }
 </style>

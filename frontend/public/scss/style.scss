@@ -121,13 +121,6 @@ textarea {
     cursor: pointer;
 }
 
-#inbox, #taskList, #calendar {
-    display: inline-block;
-    margin-left: 2em;
-    border: 3px solid #2C666E;
-    border-radius: 1em;
-}
-
 #inbox .title, #taskList .title, #calendar .title {
     margin-left: 1em;
     text-decoration: underline;

@@ -3,11 +3,11 @@
         <div v-if="modalTint" id="modal-tint"></div>
         <Banner active="dashboard"></Banner>
         <div id="dashboard">
-            <Inbox></Inbox>
-            <Calendar ref="calendar" v-bind:user="$store.state.user"></Calendar>
-            <TaskList ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
+            <Inbox v-if="focused == 'inbox'"></Inbox>
+            <Calendar v-if="focused == 'calendar'" ref="calendar" v-bind:user="$store.state.user"></Calendar>
+            <TaskList v-if="focused == 'task-list'"ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
+            <History v-if="focused == 'history'"></History>
             <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
-            <History></History>
         </div>
     </div>
 </template>
@@ -35,7 +35,8 @@
             return {
                 currTab: "dashboard",
                 inbox: [],
-                modalTint: false
+                modalTint: false,
+                focused: "inbox"
             }
         },
         mounted() {
@@ -77,9 +78,7 @@
 
 <style lang="scss" scoped>
     #dashboard {
-        height: 90vh;
-        display: grid;
-        grid-template-columns: 2fr 1fr;
+        margin-left: 2em;
         margin-right: 2rem;
     
         & div {
