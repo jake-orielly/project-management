@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="modalTint" id="modal-tint"></div>
-        <Banner></Banner>
+        <Banner active="dashboard"></Banner>
         <div id="dashboard">
             <Inbox></Inbox>
             <Calendar ref="calendar" v-bind:user="$store.state.user"></Calendar>

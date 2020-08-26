@@ -1,7 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <Banner></Banner>
+        <Banner active="team-management"></Banner>
         <div id="main-container">
             <p class="title">My Teams</p>
             <div v-for="team in myTeams" class="team-container">

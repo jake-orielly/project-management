@@ -1,7 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <Banner></Banner>
+        <Banner active="team-workload"></Banner>
         <div id="team-container" v-if="!formPreview">
             <div class="clickable">
                 <div class="user-forms-container" v-for="team in myTeams" v-bind:key="team.name">

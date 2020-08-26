@@ -183,7 +183,8 @@
 
     #pushback-comment {
         font-size: 1.5rem;
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Poppins', sans-serif;
+        color: #313638;
         width: 30rem;
         height: 10rem;
     }
