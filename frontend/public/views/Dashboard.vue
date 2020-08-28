@@ -5,15 +5,18 @@
         <div id="dashboard-container">
             <div id="focus-container">
                 <p class="title">{{$store.state.user + "'s Dashboard"}}</p>
-                <p v-for="option in focusOptions" v-bind:key="option" :class="{'focused':focused == option.toLowerCase()}" class="clickable">
+                <p v-for="option in focusOptions" v-bind:key="option" 
+                    :class="{'focused':focused == option.toLowerCase()}" class="clickable"
+                    @click="focused = optionMap[option]"
+                >
                     {{option}}
                 </p>
             </div>
             <div id="dashboard">
                 <Inbox v-if="focused == 'inbox'"></Inbox>
+                <History v-if="focused == 'history'"></History>
                 <Calendar v-if="focused == 'calendar'" ref="calendar" v-bind:user="$store.state.user"></Calendar>
                 <TaskList v-if="focused == 'task-list'"ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
-                <History v-if="focused == 'history'"></History>
                 <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             </div>
         </div>
@@ -45,7 +48,12 @@
                 inbox: [],
                 modalTint: false,
                 focusOptions: ["Inbox","Reporting","My Calendar","Team Calendar"],
-                focused: "inbox"
+                focused: "inbox",
+                optionMap: {
+                    "Inbox":"inbox",
+                    "Reporting":"history",
+                    "My Calendar":"calendar"
+                }
             }
         },
         mounted() {
