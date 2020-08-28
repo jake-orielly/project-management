@@ -6,7 +6,7 @@
             <div id="focus-container">
                 <p class="title">{{$store.state.user + "'s Dashboard"}}</p>
                 <p v-for="option in focusOptions" v-bind:key="option" 
-                    :class="{'focused':focused == option.toLowerCase()}" class="clickable"
+                    :class="{'focused':focused == optionMap[option]}" class="clickable"
                     @click="focused = optionMap[option]"
                 >
                     {{option}}
