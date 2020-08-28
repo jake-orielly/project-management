@@ -4,8 +4,8 @@
         <Banner active="dashboard"></Banner>
         <div id="dashboard-container">
             <div id="focus-container">
-                <p class="title">Jake's Dashboard</p>
-                <p v-for="option in focusOptions">
+                <p class="title">{{$store.state.user + "'s Dashboard"}}</p>
+                <p v-for="option in focusOptions" v-bind:key="option" :class="{'focused':focused == option.toLowerCase()}" class="clickable">
                     {{option}}
                 </p>
             </div>
@@ -117,5 +117,11 @@
         height: 100%;
         background-color: #00000066;
         z-index: 1;
+    }
+
+    .focused {
+        font-weight: bold;
+        color: #445E93;
+        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 </style>
