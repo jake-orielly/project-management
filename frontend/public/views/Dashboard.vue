@@ -6,7 +6,7 @@
             <div id="focus-container">
                 <p class="title">{{$store.state.user + "'s Dashboard"}}</p>
                 <p v-for="option in focusOptions" v-bind:key="option" 
-                    :class="{'focused':focused == optionMap[option]}" class="clickable"
+                    :class="{'buzz-bold':focused == optionMap[option]}" class="clickable"
                     @click="focused = optionMap[option]"
                 >
                     {{option}}
@@ -126,11 +126,5 @@
         height: 100%;
         background-color: #00000066;
         z-index: 1;
-    }
-
-    .focused {
-        font-weight: bold;
-        color: #445E93;
-        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 </style>

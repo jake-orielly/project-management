@@ -1,10 +1,10 @@
 <template>
     <div id="topbar">
         <img src="../images/logo.svg" id="logo-img">
-        <router-link to="/dashboard" :class="{'active': active == 'dashboard'}">Dashboard</router-link>
-        <router-link to="/my-forms" :class="{'active': active == 'my-forms'}">My Forms</router-link>
-        <router-link to="/team-workload" :class="{'active': active == 'team-workload'}">Team Workload</router-link>
-        <router-link to="/team-management" :class="{'active': active == 'team-management'}">Team Management</router-link>
+        <router-link to="/dashboard" :class="{'buzz-bold': active == 'dashboard'}">Dashboard</router-link>
+        <router-link to="/my-forms" :class="{'buzz-bold': active == 'my-forms'}">My Forms</router-link>
+        <router-link to="/team-workload" :class="{'buzz-bold': active == 'team-workload'}">Team Workload</router-link>
+        <router-link to="/team-management" :class="{'buzz-bold': active == 'team-management'}">Team Management</router-link>
         <img src="../images/avatar.png" id="avatar-img">
         <p id="user-name">{{$store.state.user}}</p>
     </div>
@@ -70,11 +70,5 @@
         margin-right: 2rem;
         margin-bottom: 0.5em;
         text-decoration: underline;
-    }
-
-    .active {
-        font-weight: bold;
-        color: #445E93;
-        text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     }
 </style>
