@@ -7,21 +7,36 @@
                     :class="{'buzz-bold':curr_scope == scope}" class="clickable"
                     @click="scopeChange(scope)">{{scope}}</p>
             </div>
-            <p v-for="form in forms" v-bind:key="form.name" class="form">
-                {{form.name}}
-                <span class="clickable" @click="edit(form)">
-                    <i class="fa fa-pencil-alt"></i>
-                </span>
-                <span class="clickable" @click="showResponses(form)">
-                    <i class="fa fa-reply"></i>
-                </span>
-                <span class="clickable" @click="copyUrl(form)">
-                    <i class="fa fa-paperclip"></i>
-                </span>
-                <span class="clickable" @click="deleteForm(form)">
-                    <i class="fa fa-times"></i>
-                </span>
-            </p>
+            <div v-for="form in forms" v-bind:key="form.name" class="form">
+                <p class="title">
+                    {{form.name}}
+                </p>
+                <p class="description">
+                    {{"This is a form."}}
+                </p>
+                <p class="icon-row">
+                    <span class="clickable" @click="edit(form)">
+                        <i class="fa fa-pencil-alt"></i>
+                    </span>
+                    <span class="clickable" @click="showResponses(form)">
+                        <i class="fa fa-reply"></i>
+                    </span>
+                    <span class="clickable" @click="copyUrl(form)">
+                        <i class="fa fa-paperclip"></i>
+                    </span>
+                    <span class="clickable" @click="deleteForm(form)">
+                        <i class="fa fa-times"></i>
+                    </span>
+                </p>
+                <div class="star-container">
+                    <span class="clickable" @click="unFavorite(form)">
+                        <i class="far fa-star outline"></i>
+                    </span>
+                    <span class="clickable" @click="favorite(form)">
+                        <i class="fa fa-star"></i>
+                    </span>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -120,11 +135,46 @@
 
     }
     .form {
-        height: 10rem;
+        position: relative;
+        height: 13rem;
         border: 3px solid $buzz-blue;
         border-radius: 1rem;
-    }
-    span {
-        margin-left: 0.25rem;
+
+        .icon-row {
+            position: absolute;
+            width: 100%;
+            bottom: 1rem;
+
+            span {
+                margin-left: 0.5rem;
+            }
+        }
+
+        .star-container {
+            position: absolute;
+            right: 1rem;
+            bottom:1rem;
+
+            .fa-star {
+                color: $buzz-yellow;
+
+                &.outline {
+                    color:$buzz-grey;
+                }
+            }
+        }
+
+        .icon-row, .star-container span {
+            font-size: 1.15rem;
+        }
+
+        .title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .description {
+            font-size: 1.15rem;
+        }
     }
 </style>
