@@ -180,8 +180,10 @@
     }
 </script>
 <style lang="scss" scoped>
+    @import "../scss/_variables.scss";
+
     #inbox-inner {
-        border: 3px solid #445E93;
+        border: 3px solid $buzz-blue;
         border-radius: 1em;
         padding: 3rem;
     }
@@ -242,20 +244,20 @@
         }
 
         p:first-child {
-            background: #C4C4C4;
+            background: $buzz-grey;
             margin-left: 1rem;
             font-weight: bold;
             color: #445E93;
             text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         }
         p:nth-child(2){
-            background: rgba(228, 179, 99, 0.5);
+            background: $buzz-light-yellow;
         }
         p:nth-child(3){
-            background: rgba(187, 68, 48, 0.5);
+            background: $buzz-light-orange;
         }
         p:nth-child(4){
-            background: rgba(126, 189, 194, 0.5);
+            background: $buzz-light-teal;
         }
     }
 
@@ -265,7 +267,7 @@
     }
 
     #inbox-table td, #inbox-table th {
-        border: 1px solid #C4C4C4;
+        border: 1px solid $buzz-grey;
         padding: 8px;
     }
 
@@ -281,7 +283,7 @@
         padding-top: 12px;
         padding-bottom: 12px;
         text-align: left;
-        background-color: #c4c4c480;
+        background-color: $buzz-light-grey;
     }
 
     .tab-badge {
