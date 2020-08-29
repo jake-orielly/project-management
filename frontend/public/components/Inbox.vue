@@ -15,7 +15,7 @@
             <table id="inbox-table">
                 <tbody>
                     <tr>
-                        <th v-for="header in headings" v-bind:key="header" @click="changeSort(header)" class="clickable">
+                        <th v-for="header in Object.keys(cols)" v-bind:key="header" @click="changeSort(header)" class="clickable">
                             {{header}}
                             <span v-if="sortBy == header" :class="{'up':sortOrder == 'ascending'}">
                                 <i class="fa fa-caret-down"></i>
@@ -23,17 +23,8 @@
                         </th>
                     </tr>
                     <tr v-for="item in inbox" v-bind:key="inbox.indexOf(item)" @click="openInboxItem(item)">
-                        <td>
-                            {{item.title}}
-                        </td>
-                        <td>
-                            {{item.description}}
-                        </td>
-                        <td>
-                            {{item.from}}
-                        </td>
-                        <td>
-                            {{item.fields.due_date}}
+                        <td v-for="col in Object.values(cols)" v-bind:key="col">
+                            {{item[col]}}
                         </td>
                     </tr>
                 </tbody>
@@ -94,9 +85,14 @@
                 mode: undefined,
                 myTeam:[],
                 tabs: ["New","In Progress","Blocked","Complete"],
-                headings: ["Project","Task","Requester","Due Date"],
+                cols: {
+                    "Project":"title",
+                    "Task":"description",
+                    "Requester":"from",
+                    "Due Date":"due_date"
+                },
                 sortBy:"Project",
-                sortOrder:"descending"
+                sortOrder:"descending",
             }
         },
         computed: {
@@ -104,18 +100,15 @@
                 let sorted = this.$parent.inbox.concat()
                 let app = this;
                 sorted.sort(function(a, b) {
-                    let val;
+                    let val = (app.sortOrder == "ascending" ? -1 : 1);
+                    let key = app.cols[app.sortBy];
 
-                    if (a.fields.due_date > b.fields.due_date)
-                        val = 1;
-                    if (b.fields.due_date > a.fields.due_date)
-                        val = -1;
+                    if (a[key] > b[key])
+                        return 1 * val;
+                    if (b[key] > a[key])
+                        return -1 * val;
                     else
-                        val = 0;
-
-                    if (app.sortOrder == "ascending")
-                        val *= -1;
-                    return val;
+                        return 0;
                 });
                 return sorted;
             }
