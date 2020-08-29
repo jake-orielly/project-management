@@ -4,7 +4,7 @@
             <i class="fa fa-times clickable"></i>
         </div>
         <div id="tab-container">
-            <p v-for="tab in tabs" class="clickable">
+            <p v-for="tab in tabs" v-bind:key="tab" class="clickable">
                 {{tab}}
                 <span class="tab-badge" :class="{'hidden' : tab != 'New'}">
                     {{$parent.inbox.length}}
@@ -15,20 +15,14 @@
             <table id="inbox-table">
                 <tbody>
                     <tr>
-                        <th>
-                            Project
-                        </th>
-                        <th>
-                            Task
-                        </th>
-                        <th>
-                            Requester
-                        </th>
-                        <th>
-                            Due Date
+                        <th v-for="header in headings" v-bind:key="header" @click="changeSort(header)" class="clickable">
+                            {{header}}
+                            <span v-if="sortBy == header" :class="{'up':sortOrder == 'ascending'}">
+                                <i class="fa fa-caret-down"></i>
+                            </span>
                         </th>
                     </tr>
-                    <tr v-for="item in $parent.inbox" v-bind:key="$parent.inbox.indexOf(item)" @click="openInboxItem(item)">
+                    <tr v-for="item in inbox" v-bind:key="inbox.indexOf(item)" @click="openInboxItem(item)">
                         <td>
                             {{item.title}}
                         </td>
@@ -99,23 +93,32 @@
                 viewing: undefined,
                 mode: undefined,
                 myTeam:[],
-                tabs: ["New","In Progress","Blocked","Complete"]
+                tabs: ["New","In Progress","Blocked","Complete"],
+                headings: ["Project","Task","Requester","Due Date"],
+                sortBy:"Project",
+                sortOrder:"descending"
             }
         },
-        mounted() {
-            /* What is this doing here?
-            requests.getUserTeam(this.$store.state.user).then(
-                response => {
-                    for (let i of JSON.parse(response.responseText))
-                        this.myTeam.push({
-                            name:i,
-                            open:false,
-                            selected:false,
-                            expanded:false
-                        });
-                }
-            )
-            */
+        computed: {
+            inbox: function() {
+                let sorted = this.$parent.inbox.concat()
+                let app = this;
+                sorted.sort(function(a, b) {
+                    let val;
+
+                    if (a.fields.due_date > b.fields.due_date)
+                        val = 1;
+                    if (b.fields.due_date > a.fields.due_date)
+                        val = -1;
+                    else
+                        val = 0;
+
+                    if (app.sortOrder == "ascending")
+                        val *= -1;
+                    return val;
+                });
+                return sorted;
+            }
         },
         methods: {
             openInboxItem(item) {
@@ -165,6 +168,13 @@
                 for (let user of this.myTeam)
                     user.selected = false;
                 givenUser.selected = true;
+            },
+            changeSort(header){
+                if (header == this.sortBy)
+                    this.sortOrder = (this.sortOrder == 'ascending' ? 'descending' : 'ascending') 
+                else 
+                    this.sortBy = header   
+                console.log(this.sortBy,this.sortOrder)
             },
             fromLabel(s) {
                 s = s.replace(/_/g,' ')
@@ -295,5 +305,9 @@
             background: none;
             color: transparent;
         }
+    }
+
+    .up *{
+        transform: rotate(180deg);
     }
 </style>

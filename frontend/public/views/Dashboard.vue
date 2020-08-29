@@ -16,7 +16,7 @@
                 <Inbox v-if="focused == 'inbox'"></Inbox>
                 <History v-if="focused == 'history'"></History>
                 <Calendar v-if="focused == 'calendar'" ref="calendar" v-bind:user="$store.state.user"></Calendar>
-                <TaskList v-if="focused == 'task-list'"ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
+                <TaskList v-if="focused == 'task-list'" ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
                 <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             </div>
         </div>
