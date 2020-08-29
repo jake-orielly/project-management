@@ -2,7 +2,7 @@
     <div id="topbar">
         <img src="../images/logo.svg" id="logo-img">
         <router-link to="/dashboard" :class="{'buzz-bold': active == 'dashboard'}">Dashboard</router-link>
-        <router-link to="/my-forms" :class="{'buzz-bold': active == 'my-forms'}">My Forms</router-link>
+        <router-link to="/my-forms" :class="{'buzz-bold': active == 'my-forms'}">Request Forms</router-link>
         <router-link to="/team-workload" :class="{'buzz-bold': active == 'team-workload'}">Team Workload</router-link>
         <router-link to="/team-management" :class="{'buzz-bold': active == 'team-management'}">Team Management</router-link>
         <img src="../images/avatar.png" id="avatar-img">

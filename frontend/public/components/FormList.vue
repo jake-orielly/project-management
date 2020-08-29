@@ -1,26 +1,28 @@
 <template>
-    <div id="form-list">
-        <p class="title">My Forms</p>
-        <select id="form-list-scope" @change="scopeChange">
-            <option value="mine">Mine</option>
-            <option value="team">Team</option>
-            <option value="orginization">Orginization</option>n>
-        </select>
-        <p v-for="form in forms" v-bind:key="form.name">
-            {{form.name}}
-            <span class="clickable" @click="edit(form)">
-                <i class="fa fa-pencil-alt"></i>
-            </span>
-            <span class="clickable" @click="showResponses(form)">
-                <i class="fa fa-reply"></i>
-            </span>
-            <span class="clickable" @click="copyUrl(form)">
-                <i class="fa fa-paperclip"></i>
-            </span>
-             <span class="clickable" @click="deleteForm(form)">
-                <i class="fa fa-times"></i>
-            </span>
-        </p>
+    <div>
+        <div id="form-container">
+            <div id="scope-container">
+                <p class="bold">Scope</p>
+                <p v-for="scope in scopes" v-bind:key="scope" 
+                    :class="{'buzz-bold':curr_scope == scope}" class="clickable"
+                    @click="scopeChange(scope)">{{scope}}</p>
+            </div>
+            <p v-for="form in forms" v-bind:key="form.name" class="form">
+                {{form.name}}
+                <span class="clickable" @click="edit(form)">
+                    <i class="fa fa-pencil-alt"></i>
+                </span>
+                <span class="clickable" @click="showResponses(form)">
+                    <i class="fa fa-reply"></i>
+                </span>
+                <span class="clickable" @click="copyUrl(form)">
+                    <i class="fa fa-paperclip"></i>
+                </span>
+                <span class="clickable" @click="deleteForm(form)">
+                    <i class="fa fa-times"></i>
+                </span>
+            </p>
+        </div>
     </div>
 </template>
 
@@ -37,10 +39,12 @@
         data() {
             return {
                 forms: [],
+                scopes:["Mine","Team","Orginization"],
+                curr_scope:"Mine"
             }
         },
         mounted() {
-            this.updateFormList("mine");
+            this.updateFormList();
         },
         methods: {
             copyUrl(form) {
@@ -68,9 +72,9 @@
                     }
                 )
             },
-            updateFormList(scope) {
+            updateFormList() {
                 this.forms = [];
-                requests.getUserForms(this.targetUser,scope).then(
+                requests.getUserForms(this.targetUser,this.curr_scope).then(
                     response => {
                         let responseData = JSON.parse(response.responseText);
                         for (let form of responseData) {
@@ -79,9 +83,9 @@
                     }
                 )
             },
-            scopeChange() {
-                let scope = document.getElementById("form-list-scope").value;
-                this.updateFormList(scope);
+            scopeChange(value) {
+                this.curr_scope = value;
+                this.updateFormList();
             },
             showResponses(form) {
                 this.$parent.showForm(form.name);
@@ -101,21 +105,25 @@
 </script>
 
 <style lang="scss" scoped>
-    #form-list {
-        width: 90%;
-        margin-left: 2em;
-        margin-top: 1em;
-        padding: 1rem;
-        border: 3px solid #2C666E;
+    @import "../scss/_variables.scss";
+
+    #scope-container {
+        margin-top: 1rem;
+        margin-left: 3rem;
+        text-align: left;
+    }
+
+    #form-container {
+        display: grid;
+        grid-template-columns: 15% 25% 25% 25%;
+        grid-gap: 10px;
+
+    }
+    .form {
+        height: 10rem;
+        border: 3px solid $buzz-blue;
         border-radius: 1rem;
-        font-size: 1.15rem;
     }
-
-    .title {
-        text-decoration: underline;
-        font-weight: bold;
-    }
-
     span {
         margin-left: 0.25rem;
     }
