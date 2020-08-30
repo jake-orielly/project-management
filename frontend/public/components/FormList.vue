@@ -1,5 +1,8 @@
 <template>
     <div>
+        <p>
+            <autocomplete :suggestions="forms.map(form => form.name)" id="search-bar"></autocomplete>
+        </p>
         <div id="form-container">
             <div id="scope-container">
                 <p class="bold">Scope</p>
@@ -32,10 +35,12 @@
 <script>
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
     import requests from '../services/requests.js';
+    import Autocomplete from '../components/Autocomplete.vue';
 
     export default {
         components: {
-            FontAwesomeIcon
+            FontAwesomeIcon,
+            Autocomplete
         },
         props: {
             targetUser: {
@@ -48,12 +53,14 @@
                 forms: [],
                 scopes:["Mine","Team","Orginization"],
                 currScope:"Mine",
-                favoriteForms:[]
+                favoriteForms:[],
+                autocompleteVal:""
             }
         },
         computed: {
             sortedForms: function() {
                 let app = this;
+                let forms = this.forms;
                 function compare(a, b) {
                     let aIndex = app.favoriteForms.indexOf(a.name);
                     let bIndex = app.favoriteForms.indexOf(b.name); 
@@ -64,8 +71,11 @@
                     else
                         return 0;
                 };
-
-                return this.forms.sort(compare);
+                forms = forms.sort(compare);
+                forms = forms.filter(form => {
+                    return form.name.substr(0,this.autocompleteVal.length) == this.autocompleteVal;
+                });
+                return forms;
             }
         },
         mounted() {
@@ -201,5 +211,10 @@
         .description {
             font-size: 1.15rem;
         }
+    }
+
+    #search-bar {
+        float: right;
+        margin-right: 10%;
     }
 </style>
