@@ -77,7 +77,7 @@
                             return -1
                         else
                             return 0;
-                };
+                }
                 forms = forms.sort(compare);
                 forms = forms.filter(form => {
                     return form.name.substr(0,this.autocompleteVal.length) == this.autocompleteVal;
