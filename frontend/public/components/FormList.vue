@@ -1,7 +1,7 @@
 <template>
     <div>
         <p>
-            <autocomplete :suggestions="forms.map(form => form.name)" id="search-bar"></autocomplete>
+            <autocomplete :suggestions="sortedForms.map(form => form.name)" id="search-bar"></autocomplete>
         </p>
         <div id="form-container">
             <div id="scope-container">
@@ -10,22 +10,24 @@
                     :class="{'buzz-bold':currScope == scope}" class="clickable"
                     @click="scopeChange(scope)">{{scope}}</p>
             </div>
-            <div v-for="form in sortedForms" v-bind:key="form.name" class="form">
-                <p class="title">
-                    {{form.name}}
-                </p>
-                <p class="description">
-                    {{"This is a form."}}
-                </p>
-                <p class="icon-row">
-                    <font-awesome-icon icon="pencil-alt" @click="edit(form)" class="clickable"/>
-                    <font-awesome-icon icon="reply" @click="showResponses(form)" class="clickable"/>
-                    <font-awesome-icon icon="paperclip" @click="copyUrl(form)" class="clickable"/>
-                    <font-awesome-icon icon="times" @click="deleteForm(form)" class="clickable"/>
-                </p>
-                <div class="star-container">
-                    <font-awesome-icon icon="star" v-if="isFavorited(form)" @click="unFavorite(form)" class="clickable"/>
-                    <font-awesome-icon :icon="['far', 'star']" v-if="!isFavorited(form)" @click="favorite(form)" class="clickable outline"/>
+            <div id="form-container-inner">
+                <div v-for="form in sortedForms" v-bind:key="form.name" class="form">
+                    <p class="title">
+                        {{form.name}}
+                    </p>
+                    <p class="description">
+                        {{"This is a form."}}
+                    </p>
+                    <p class="icon-row">
+                        <font-awesome-icon icon="pencil-alt" @click="edit(form)" class="clickable"/>
+                        <font-awesome-icon icon="reply" @click="showResponses(form)" class="clickable"/>
+                        <font-awesome-icon icon="paperclip" @click="copyUrl(form)" class="clickable"/>
+                        <font-awesome-icon icon="times" @click="deleteForm(form)" class="clickable"/>
+                    </p>
+                    <div class="star-container">
+                        <font-awesome-icon icon="star" v-if="isFavorited(form)" @click="unFavorite(form)" class="clickable"/>
+                        <font-awesome-icon :icon="['far', 'star']" v-if="!isFavorited(form)" @click="favorite(form)" class="clickable outline"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,10 +172,18 @@
 
     #form-container {
         display: grid;
-        grid-template-columns: 15% 25% 25% 25%;
+        grid-template-columns: 15% 80%;
         grid-gap: 10px;
 
     }
+
+    #form-container-inner {
+        display: grid;
+        grid-template-columns: 30% 30% 30%;
+        grid-gap: 2rem;
+
+    }
+
     .form {
         position: relative;
         height: 13rem;
