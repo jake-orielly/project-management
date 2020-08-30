@@ -12,7 +12,6 @@ export default {
         return this.genericRequest("/user?name=" + user, "GET")
     },
     getUserForms(user,scope) {
-        console.log(user,scope)
         return this.genericRequest("/forms/" + user + "?scope=" + scope, "GET")
     },
     postForm(form,user) {
@@ -36,6 +35,7 @@ export default {
         return this.genericRequest("/favorite-forms/" + user, "GET")
     },
     postFavoriteForms(user,operation,formName) {
+        
         let data = JSON.stringify({operation:operation, form_name: formName});
         return this.genericRequest("/favorite-forms/" + user, "PATCH",data)
     },

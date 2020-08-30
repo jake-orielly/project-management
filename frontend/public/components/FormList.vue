@@ -4,7 +4,7 @@
             <div id="scope-container">
                 <p class="bold">Scope</p>
                 <p v-for="scope in scopes" v-bind:key="scope" 
-                    :class="{'buzz-bold':curr_scope == scope}" class="clickable"
+                    :class="{'buzz-bold':currScope == scope}" class="clickable"
                     @click="scopeChange(scope)">{{scope}}</p>
             </div>
             <div v-for="form in forms" v-bind:key="form.name" class="form">
@@ -21,8 +21,8 @@
                     <font-awesome-icon icon="times" @click="deleteForm(form)" class="clickable"/>
                 </p>
                 <div class="star-container">
-                    <font-awesome-icon icon="star" v-if="form.favorited" @click="unFavorite(form.id)" class="clickable"/>
-                    <font-awesome-icon :icon="['far', 'star']" v-if="!form.favorited" @click="favorite(form.id)" class="clickable outline"/>
+                    <font-awesome-icon icon="star" v-if="isFavorited(form)" @click="unFavorite(form)" class="clickable"/>
+                    <font-awesome-icon :icon="['far', 'star']" v-if="!isFavorited(form)" @click="favorite(form)" class="clickable outline"/>
                 </div>
             </div>
         </div>
@@ -47,11 +47,17 @@
             return {
                 forms: [],
                 scopes:["Mine","Team","Orginization"],
-                curr_scope:"Mine"
+                currScope:"Mine",
+                favoriteForms:[]
             }
         },
         mounted() {
             this.updateFormList();
+            requests.getFavoriteForms(this.$store.state.user).then(
+                response => {
+                    this.favoriteForms = JSON.parse(response.responseText);
+                }
+            );
         },
         methods: {
             copyUrl(form) {
@@ -81,7 +87,7 @@
             },
             updateFormList() {
                 this.forms = [];
-                requests.getUserForms(this.targetUser,this.curr_scope).then(
+                requests.getUserForms(this.targetUser,this.currScope).then(
                     response => {
                         let responseData = JSON.parse(response.responseText);
                         for (let form of responseData) {
@@ -91,7 +97,7 @@
                 )
             },
             scopeChange(value) {
-                this.curr_scope = value;
+                this.currScope = value;
                 this.updateFormList();
             },
             showResponses(form) {
@@ -107,15 +113,16 @@
                     );
                 }
             },
-            favorite(formId) {
-                const matchedId = (element) => element.id == formId;
-                let index = this.forms.findIndex(matchedId);
-                this.$set(this.forms[index], 'favorited', true)
+            isFavorited(form) {
+                return this.favoriteForms.indexOf(form.name) != -1;
             },
-            unFavorite(formId) {
-                const matchedId = (element) => element.id == formId;
-                let index = this.forms.findIndex(matchedId);
-                this.$set(this.forms[index], 'favorited', false)
+            favorite(form) {
+                this.favoriteForms.push(form.name);
+                requests.postFavoriteForms(this.$store.state.user,"favorite",form.name);
+            },
+            unFavorite(form) {
+                this.favoriteForms.splice(this.favoriteForms.indexOf(form.name),1);
+                requests.postFavoriteForms(this.$store.state.user,"unfavorite",form.name)
             }
         }
     }
