@@ -83,6 +83,7 @@
             },
             filteredForms: function() {
                 return this.sortedForms.filter(form => {
+                    console.log(this.autocompleteVal)
                     return form.name.toLowerCase().match(this.autocompleteVal.toLowerCase());
                 });
             }

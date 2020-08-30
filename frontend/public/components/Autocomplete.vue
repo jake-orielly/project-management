@@ -54,18 +54,19 @@
         },
         methods: {
             enter() {
-                this.$parent.autocompleteVal = this.matches[this.current];
+                console.log(this.current)
+                this.$parent.autocompleteVal = this.matches[this.current].input;
                 this.open = false;
             },
 
             up() {
-                this.current = Math.abs(this.current - 1)
-                this.current %= this.suggestions.length;
+                this.current = this.current - 1;
+                this.current = Math.abs(this.current % this.matches.length);
             },
 
             down() {
                 this.current++;
-                this.current %= this.suggestions.length;
+                this.current %= this.matches.length;
             },
 
             isActive(index) {
@@ -80,7 +81,8 @@
             },
 
             suggestionClick(index) {
-                this.$parent.autocompleteVal = this.matches[index];
+                console.log(index)
+                this.$parent.autocompleteVal = this.matches[index].input;
                 this.open = false;
             },
         }
