@@ -15,18 +15,10 @@
                     {{"This is a form."}}
                 </p>
                 <p class="icon-row">
-                    <span @click="edit(form)" class="clickable">
-                        <i class="fa fa-pencil-alt"></i>
-                    </span>
-                    <span @click="showResponses(form)" class="clickable">
-                        <i class="fa fa-reply"></i>
-                    </span>
-                    <span @click="copyUrl(form)" class="clickable">
-                        <i class="fa fa-paperclip"></i>
-                    </span>
-                    <span @click="deleteForm(form)" class="clickable">
-                        <i class="fa fa-times"></i>
-                    </span>
+                    <font-awesome-icon icon="pencil-alt" @click="edit(form)" class="clickable"/>
+                    <font-awesome-icon icon="reply" @click="showResponses(form)" class="clickable"/>
+                    <font-awesome-icon icon="paperclip" @click="copyUrl(form)" class="clickable"/>
+                    <font-awesome-icon icon="times" @click="deleteForm(form)" class="clickable"/>
                 </p>
                 <div class="star-container">
                     <font-awesome-icon icon="star" v-if="form.favorited" @click="unFavorite(form.id)" class="clickable"/>
@@ -155,7 +147,7 @@
             width: 100%;
             bottom: 1rem;
 
-            span {
+            * {
                 margin-left: 0.5rem;
             }
         }
