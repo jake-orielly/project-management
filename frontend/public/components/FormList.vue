@@ -15,26 +15,22 @@
                     {{"This is a form."}}
                 </p>
                 <p class="icon-row">
-                    <span class="clickable" @click="edit(form)">
+                    <span @click="edit(form)" class="clickable">
                         <i class="fa fa-pencil-alt"></i>
                     </span>
-                    <span class="clickable" @click="showResponses(form)">
+                    <span @click="showResponses(form)" class="clickable">
                         <i class="fa fa-reply"></i>
                     </span>
-                    <span class="clickable" @click="copyUrl(form)">
+                    <span @click="copyUrl(form)" class="clickable">
                         <i class="fa fa-paperclip"></i>
                     </span>
-                    <span class="clickable" @click="deleteForm(form)">
+                    <span @click="deleteForm(form)" class="clickable">
                         <i class="fa fa-times"></i>
                     </span>
                 </p>
                 <div class="star-container">
-                    <span class="clickable" @click="unFavorite(form)">
-                        <i class="far fa-star outline"></i>
-                    </span>
-                    <span class="clickable" @click="favorite(form)">
-                        <i class="fa fa-star"></i>
-                    </span>
+                    <font-awesome-icon icon="star" v-if="form.favorited" @click="unFavorite(form.id)" class="clickable"/>
+                    <font-awesome-icon :icon="['far', 'star']" v-if="!form.favorited" @click="favorite(form.id)" class="clickable outline"/>
                 </div>
             </div>
         </div>
@@ -42,9 +38,13 @@
 </template>
 
 <script>
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
     import requests from '../services/requests.js';
 
     export default {
+        components: {
+            FontAwesomeIcon
+        },
         props: {
             targetUser: {
                 type: String,
@@ -114,6 +114,16 @@
                         }
                     );
                 }
+            },
+            favorite(formId) {
+                const matchedId = (element) => element.id == formId;
+                let index = this.forms.findIndex(matchedId);
+                this.$set(this.forms[index], 'favorited', true)
+            },
+            unFavorite(formId) {
+                const matchedId = (element) => element.id == formId;
+                let index = this.forms.findIndex(matchedId);
+                this.$set(this.forms[index], 'favorited', false)
             }
         }
     }
