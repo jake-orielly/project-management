@@ -7,7 +7,7 @@
                     :class="{'buzz-bold':currScope == scope}" class="clickable"
                     @click="scopeChange(scope)">{{scope}}</p>
             </div>
-            <div v-for="form in forms" v-bind:key="form.name" class="form">
+            <div v-for="form in sortedForms" v-bind:key="form.name" class="form">
                 <p class="title">
                     {{form.name}}
                 </p>
@@ -51,6 +51,23 @@
                 favoriteForms:[]
             }
         },
+        computed: {
+            sortedForms: function() {
+                let app = this;
+                function compare(a, b) {
+                    let aIndex = app.favoriteForms.indexOf(a.name);
+                    let bIndex = app.favoriteForms.indexOf(b.name); 
+                    if (aIndex != -1 && bIndex == -1)
+                        return -1;
+                    if (aIndex == -1 && bIndex != -1)
+                        return 1;
+                    else
+                        return 0;
+                };
+
+                return this.forms.sort(compare);
+            }
+        },
         mounted() {
             this.updateFormList();
             requests.getFavoriteForms(this.$store.state.user).then(
@@ -90,9 +107,8 @@
                 requests.getUserForms(this.targetUser,this.currScope).then(
                     response => {
                         let responseData = JSON.parse(response.responseText);
-                        for (let form of responseData) {
+                        for (let form of responseData)
                             this.forms.push({name:form.title,id:form._id});
-                        }
                     }
                 )
             },
