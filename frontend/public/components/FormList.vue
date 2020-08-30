@@ -11,7 +11,7 @@
                     @click="scopeChange(scope)">{{scope}}</p>
             </div>
             <div id="form-container-inner">
-                <div v-for="form in sortedForms" v-bind:key="form.name" class="form">
+                <div v-for="form in filteredForms" v-bind:key="form.name" class="form">
                     <p class="title">
                         {{form.name}}
                     </p>
@@ -79,10 +79,12 @@
                             return 0;
                 }
                 forms = forms.sort(compare);
-                forms = forms.filter(form => {
-                    return form.name.substr(0,this.autocompleteVal.length) == this.autocompleteVal;
-                });
                 return forms;
+            },
+            filteredForms: function() {
+                return this.sortedForms.filter(form => {
+                    return form.name.toLowerCase().match(this.autocompleteVal.toLowerCase());
+                });
             }
         },
         mounted() {

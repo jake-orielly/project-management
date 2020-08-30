@@ -8,13 +8,14 @@
         />
         <ul class="dropdown-menu" style="width:100%" v-if="$parent.autocompleteVal">
             <li v-for="(suggestion, index) in matches"
-                :key="suggestion"
+                :key="suggestion.input"
                 v-bind:class="{'active': isActive(index)}"
                 @click="suggestionClick(index)"
             >
                 <p>
-                    <span id="selection">{{$parent.autocompleteVal}}</span>
-                    <span>{{ suggestion.substr($parent.autocompleteVal.length) }}</span>
+                    <span>{{ suggestion.input.substr(0,matches[index].index) }}</span>
+                    <span id="selection">{{suggestion.input.substr(matches[index].index,$parent.autocompleteVal.length)}}</span>
+                    <span>{{suggestion.input.substr(matches[index].index + $parent.autocompleteVal.length) }}</span>
                 </p>
             </li>
         </ul>
@@ -38,8 +39,10 @@
         },
         computed: {
             matches() {
-                return this.suggestions.filter((str) => {
-                    return str.substr(0,this.$parent.autocompleteVal.length) == this.$parent.autocompleteVal;
+                return this.suggestions.filter(str => {
+                    return str.toLowerCase().match(this.$parent.autocompleteVal.toLowerCase());
+                }).map(str => {
+                    return str.match(this.$parent.autocompleteVal);
                 });
             },
 
