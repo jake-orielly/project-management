@@ -283,6 +283,17 @@ class Favorite_Forms(Resource):
         cursor = get_cursor_by_prop("users","user_credentials","user",user)
         return cursor["favorite_forms"]
 
+    def patch(self,user):
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+        form_name = req_data["form_name"]
+        operation = "$push" if req_data["operation"] == "favorite" else "$pull"
+        collection.update_one({"user":user},{operation: { 
+            "favorite_forms":form_name
+        }})
+        return "Form " + operation + " successful."
+
 @api.route('/orginization')
 class Orginization(Resource):
     def get(self):
