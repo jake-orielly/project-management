@@ -66,10 +66,15 @@
                     let bIndex = app.favoriteForms.indexOf(b.name); 
                     if (aIndex != -1 && bIndex == -1)
                         return -1;
-                    if (aIndex == -1 && bIndex != -1)
+                    else if (aIndex == -1 && bIndex != -1)
                         return 1;
                     else
-                        return 0;
+                        if (a.name > b.name)
+                            return 1;
+                        else if (b.name > a.name)
+                            return -1
+                        else
+                            return 0;
                 };
                 forms = forms.sort(compare);
                 forms = forms.filter(form => {
