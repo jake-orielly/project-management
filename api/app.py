@@ -277,6 +277,12 @@ class User(Resource):
             workload_collection.delete_one({"user": req_data["username"]})
             return "User deleted"
 
+@api.route('/favorite-forms/<user>')
+class Favorite_Forms(Resource):
+    def get(self,user):
+        cursor = get_cursor_by_prop("users","user_credentials","user",user)
+        return cursor["favorite_forms"]
+
 @api.route('/orginization')
 class Orginization(Resource):
     def get(self):
@@ -461,7 +467,8 @@ class Register(Resource):
                 "user": req_data["username"],
                 "password": hash_pass,
                 "role":req_data["role"],
-                "team":[]
+                "team":[],
+                "favorite_forms":[]
             })
             session["username"] = req_data["username"]
 

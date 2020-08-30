@@ -32,6 +32,9 @@ export default {
         let data = JSON.stringify({ id:formID });
         return this.genericRequest("/forms/" + user, "DELETE",data)
     },
+    getFavoriteForms(user) {
+        return this.genericRequest("/favorite-forms/" + user, "GET")
+    },
     getInbox(user) {
         return this.genericRequest("/inbox/" + user, "GET")
     },
