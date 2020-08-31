@@ -3,15 +3,32 @@
         <div v-if="viewing" class="close-icon-container" @click="closeView">
             <i class="fa fa-times clickable"></i>
         </div>
-        <div v-if="viewing == undefined">
-            <p class="title">Inbox</p>
-            <ul>
-                <li v-for="item in $parent.inbox" v-bind:key="$parent.inbox.indexOf(item)">
-                    <div class="dashboard-card">
-                        <p @click="openInboxItem(item)">{{item.description}}: {{item.title}}</p>
-                    </div>
-                </li>
-            </ul>
+        <div id="tab-container">
+            <p v-for="tab in tabs" v-bind:key="tab" class="clickable">
+                {{tab}}
+                <span class="tab-badge" :class="{'hidden' : tab != 'New'}">
+                    {{$parent.inbox.length}}
+                </span>
+            </p>
+        </div>
+        <div id="inbox-inner" v-if="viewing == undefined">
+            <table id="inbox-table">
+                <tbody>
+                    <tr>
+                        <th v-for="header in Object.keys(cols)" v-bind:key="header" @click="changeSort(header)" class="clickable">
+                            {{header}}
+                            <span v-if="sortBy == header" :class="{'up':sortOrder == 'ascending'}">
+                                <i class="fa fa-caret-down"></i>
+                            </span>
+                        </th>
+                    </tr>
+                    <tr v-for="item in inbox" v-bind:key="inbox.indexOf(item)" @click="openInboxItem(item)">
+                        <td v-for="col in Object.values(cols)" v-bind:key="col">
+                            {{item[col]}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div id="estimate-container" v-if="viewing != undefined">
             <p>{{viewing.fields.description}}</p>
@@ -66,23 +83,35 @@
             return {
                 viewing: undefined,
                 mode: undefined,
-                myTeam:[]
+                myTeam:[],
+                tabs: ["New","In Progress","Blocked","Complete"],
+                cols: {
+                    "Project":"title",
+                    "Task":"description",
+                    "Requester":"from",
+                    "Due Date":"due_date"
+                },
+                sortBy:"Project",
+                sortOrder:"descending",
             }
         },
-        mounted() {
-            /* What is this doing here?
-            requests.getUserTeam(this.$store.state.user).then(
-                response => {
-                    for (let i of JSON.parse(response.responseText))
-                        this.myTeam.push({
-                            name:i,
-                            open:false,
-                            selected:false,
-                            expanded:false
-                        });
-                }
-            )
-            */
+        computed: {
+            inbox: function() {
+                let sorted = this.$parent.inbox.concat()
+                let app = this;
+                sorted.sort(function(a, b) {
+                    let val = (app.sortOrder == "ascending" ? -1 : 1);
+                    let key = app.cols[app.sortBy];
+
+                    if (a[key] > b[key])
+                        return 1 * val;
+                    if (b[key] > a[key])
+                        return -1 * val;
+                    else
+                        return 0;
+                });
+                return sorted;
+            }
         },
         methods: {
             openInboxItem(item) {
@@ -133,6 +162,13 @@
                     user.selected = false;
                 givenUser.selected = true;
             },
+            changeSort(header){
+                if (header == this.sortBy)
+                    this.sortOrder = (this.sortOrder == 'ascending' ? 'descending' : 'ascending') 
+                else 
+                    this.sortBy = header   
+                console.log(this.sortBy,this.sortOrder)
+            },
             fromLabel(s) {
                 s = s.replace(/_/g,' ')
                 s = s.split(' ');
@@ -144,6 +180,14 @@
     }
 </script>
 <style lang="scss" scoped>
+    @import "../scss/_variables.scss";
+
+    #inbox-inner {
+        border: 3px solid $buzz-blue;
+        border-radius: 1em;
+        padding: 3rem;
+    }
+
     .team-container {
         font-size: 1.25rem;
     }
@@ -183,8 +227,82 @@
 
     #pushback-comment {
         font-size: 1.5rem;
-        font-family: 'Montserrat', sans-serif;
+        font-family: 'Poppins', sans-serif;
+        color: #313638;
         width: 30rem;
         height: 10rem;
+    }
+
+    #tab-container {
+        margin: 0;
+
+        p {
+            display: inline-block;
+            padding: 0.75rem 3rem;;
+            margin: 0;
+            border-radius: 1rem 1rem 0px 0px;
+        }
+
+        p:first-child {
+            background: $buzz-grey;
+            margin-left: 1rem;
+            font-weight: bold;
+            color: #445E93;
+            text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+        }
+        p:nth-child(2){
+            background: $buzz-light-yellow;
+        }
+        p:nth-child(3){
+            background: $buzz-light-orange;
+        }
+        p:nth-child(4){
+            background: $buzz-light-teal;
+        }
+    }
+
+    #inbox-table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    #inbox-table td, #inbox-table th {
+        border: 1px solid $buzz-grey;
+        padding: 8px;
+    }
+
+    #inbox-table tr:nth-child(even){
+        background-color: #f2f2f2;
+    }
+
+    #inbox-table tr:hover {
+        background-color: #ddd;
+    }
+
+    #inbox-table th {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        text-align: left;
+        background-color: $buzz-light-grey;
+    }
+
+    .tab-badge {
+        display: inline-block;
+        background: #445E93;
+        color: #FFFFFF;
+        font-weight: 400;
+        height: 1.5rem;
+        width: 1.5rem;
+        border-radius: 0.75rem;
+        text-align: center;
+
+        &.hidden {
+            background: none;
+            color: transparent;
+        }
+    }
+
+    .up *{
+        transform: rotate(180deg);
     }
 </style>

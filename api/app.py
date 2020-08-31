@@ -277,6 +277,23 @@ class User(Resource):
             workload_collection.delete_one({"user": req_data["username"]})
             return "User deleted"
 
+@api.route('/favorite-forms/<user>')
+class Favorite_Forms(Resource):
+    def get(self,user):
+        cursor = get_cursor_by_prop("users","user_credentials","user",user)
+        return cursor["favorite_forms"]
+
+    def patch(self,user):
+        db=client.users
+        collection = db.user_credentials
+        req_data = json.loads(request.data.decode("utf-8"))
+        form_name = req_data["form_name"]
+        operation = "$push" if req_data["operation"] == "favorite" else "$pull"
+        collection.update_one({"user":user},{operation: { 
+            "favorite_forms":form_name
+        }})
+        return "Form " + operation + " successful."
+
 @api.route('/orginization')
 class Orginization(Resource):
     def get(self):
@@ -384,6 +401,7 @@ class Team(Resource):
         org_collection = db.orginizations
         team_name  = request.args.get('name', None)
 
+        members = []
         if request.data:
             req_data = json.loads(request.data.decode("utf-8"))
             if req_data["members"]:
@@ -393,8 +411,6 @@ class Team(Resource):
 
         if team_name in org_teams:
             return "Team name " + team_name + " is taken."
-
-        members = []
 
         collection.insert_one({
             "name":team_name,
@@ -462,7 +478,8 @@ class Register(Resource):
                 "user": req_data["username"],
                 "password": hash_pass,
                 "role":req_data["role"],
-                "team":[]
+                "team":[],
+                "favorite_forms":[]
             })
             session["username"] = req_data["username"]
 

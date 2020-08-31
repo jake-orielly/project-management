@@ -15,7 +15,7 @@
                                 v-bind:class="[
                                 isWeekend(calendarToDate(row,col))? weekendClass : '',(calendarToDate(row,col) < 1 || 
                                 calendarToDate(row,col) > monthLength)? blankDateClass : '',
-                                (new Date() > new Date(2020, 5, calendarToDate(row,col), 23) ? pastDateClass : ''),
+                                (today.getDate() > calendarToDate(row,col) ? pastDateClass : ''),
                                 workloadClasses(calendarToDate(row,col))]"
                             >
                                 {{dayInMonth(row,col) ? calendarToDate(row,col) :''}}
@@ -51,21 +51,24 @@
             return {
                 daysOfWeek: ["Su","Mo","Tu","We","Th","Fr","Sa"],
                 dayShowing: undefined,
-                monthStartOffset: 1,
-                monthLength: 30,
-                calendarDays: 30,
+                monthStartOffset: 0,
+                monthLength: 0,
                 weekendClass: "weekend-cell",
                 blankDateClass: "blank-cell",
                 pastDateClass: "past-cell",
-                today: new Date(),
+                today: "",
                 workload: [],
                 dayHighlighted: {},
                 dayHighlightedClass: 'cell-highlighted',
             }
         },
-/*        mounted() {
-            this.updateWorkload();
-        },*/
+        created() {
+            this.today = new Date();
+            let firstOfTheMonth = new Date();
+            firstOfTheMonth.setDate(1);
+            this.monthStartOffset = firstOfTheMonth.getDay();
+            this.monthLength = new Date(this.today.getYear(),this.today.getMonth(),0).getDate()
+        },
         methods: {
             showDay(row,col) {
                 this.dayShowing = this.calendarToDate(row,col);

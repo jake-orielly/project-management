@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="modalTint" id="modal-tint"></div>
-        <Banner></Banner>
+        <Banner     active="my-forms"></Banner>
         <div v-if="!formPreview" id="form-creation">
             <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
             <FormResponses ref="formResponses"></FormResponses>
