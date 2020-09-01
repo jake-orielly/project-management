@@ -9,17 +9,15 @@
                     <p class="team-header">
                         {{team.name}}
                     </p>
-                    <div class="team-header clickable" @click="openAddTeamModal(team)">
-                        <i class="fa fa-user-plus"></i>
-                    </div>
+                    <font-awesome-icon icon="user-plus" @click="openAddTeamModal(team)" class="team-header clickable"/>
                 </div>
                 <div v-for="user in team.members" class="member-container">
                     <p>
                         {{user}}
                     </p>
-                    <div class="clickable" @click="removeTeamMember(team.name,user)" v-if="user != $store.state.user">
-                        <i class="fa fa-user-minus"></i>
-                    </div>
+                    <font-awesome-icon icon="user-minus" 
+                    v-if="user != $store.state.user" @click="removeTeamMember(team.name,user)" 
+                    class="clickable"/>
                 </div>
             </div>
         </div>
@@ -32,12 +30,8 @@
                 <div class="team-header">
                     <autocomplete :suggestions="orgMembers"></autocomplete>
                 </div>
-                <div class="team-header clickable" @click="addTeamMember()">
-                    <i class="fa fa-user-plus"></i>
-                </div>
-                <div @click="closeAddTeamModal" class="close-container">
-                    <i class="fa fa-times clickable"></i>
-                </div>
+                <font-awesome-icon icon="user-plus" @click="addTeamMember()" class="team-header clickable"/>
+                <font-awesome-icon icon="times" @click="closeAddTeamModal" class="team-header clickable"/>
             </div>
         </div>
         <div v-if="showingModal" id="modal-tint">
@@ -48,15 +42,14 @@
 <script>
     import '../css/style.css'
 
-    import '@fortawesome/fontawesome-free/css/all.css'
-    import '@fortawesome/fontawesome-free/js/all.js'
-
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
     import Autocomplete from '../components/Autocomplete.vue';
     import Banner from '../components/Banner.vue';
 
     export default {
         components: {
+            FontAwesomeIcon,
             Autocomplete,
             Banner
         },
