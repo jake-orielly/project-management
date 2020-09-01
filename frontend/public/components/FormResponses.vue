@@ -6,7 +6,7 @@
         <p class="title" id="component-title">
             Form Responses
         </p>
-        <i class="fa fa-filter clickable"></i>
+        <font-awesome-icon icon="filter" class="clickable"/>
         <div id="filter-input-container">
             <input type="text" id="filter-input">
             <button @click="applyFilter">Apply</button>
@@ -76,12 +76,14 @@
 </template>
 
 <script>
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
     import BarChart from '../components/BarChart.vue';
     import PieChart from '../components/PieChart.vue';
     
     export default {
         components: {
+            FontAwesomeIcon,
             BarChart,
             PieChart
         },

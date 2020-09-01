@@ -24,7 +24,7 @@
                             v-if="dayShowing == calendarToDate(row,col) && workload[calendarToDate(row,col)].tasks.length">
                                 <div class="date-info-inner">
                                     <div class="close-icon-container" @click="hideDay">
-                                        <i class="fa fa-times clickable"></i>
+                                        <font-awesome-icon icon="times" class="clickable"/>
                                     </div>
                                     <p v-for="task in workload[calendarToDate(row,col)].tasks" v-bind:key="task.hash">
                                         {{task.name + ": " + task.time + " hours"}}
@@ -40,7 +40,12 @@
 </template>
 
 <script>
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
     export default {
+        components: {
+            FontAwesomeIcon
+        },
         props: {
             user: {
                 type: String,

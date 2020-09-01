@@ -37,7 +37,7 @@
             >
                 <input type="checkbox" class="multi-select-input">
                 <input type="text" class="multi-select-label" placeholder="New Item Label">
-                <i class="fa fa-bars clickable"></i>
+                <font-awesome-icon icon="bars" class="clickable"/>
             </li>
         </ul>
         <div v-if="currField == 'slider'">
@@ -64,7 +64,12 @@
 </template>
 
 <script>
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
     export default {
+        components: {
+            FontAwesomeIcon
+        },
         data() {
             return {
                 fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],

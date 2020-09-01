@@ -2,12 +2,8 @@
     <div id="form-container">
         <div id="form-content" v-if="!$parent.formSaved">
             <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="$parent.formTitle">
-            <div @click="openFormPreview">
-                <i class="fa fa-eye eye-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
-            </div>
-            <div @click="saveForm">
-                <i class="fa fa-save save-icon clickable" style="font-size:2rem; color:#2C666E;"></i>
-            </div>
+            <font-awesome-icon icon="eye" @click="openFormPreview" class="eye-icon clickable"/>
+            <font-awesome-icon icon="save" @click="saveForm" class="save-icon clickable"/>
             <div v-for="field in $parent.fields" class="field-card" v-bind:key="$parent.fields.indexOf(field)"
             draggable 
             @dragstart='onDrag(field)' 
@@ -17,10 +13,8 @@
                 <div class="field-card-inner">
                     <input class="field-label" v-model="field.label" @input="resizeInput(field)">
                     <span class="field-type">{{"(" + $parent.caps(field.type) + ")"}}</span>
-                    <i class="fa fa-bars clickable"></i>
-                    <div class="close-container" @click="deleteField(field)">
-                        <i class="fa fa-times clickable"></i>
-                    </div>
+                    <font-awesome-icon icon="bars" class="clickable"/>
+                    <font-awesome-icon icon="times" @click="deleteField(field)" class="close-icon clickable"/>
                     <ul v-for="option in field.options" v-bind:key="option">
                         <li>{{option}}</li>
                     </ul>
@@ -37,9 +31,13 @@
 </template>
 
 <script>
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
 
     export default {
+        components: {
+            FontAwesomeIcon
+        },
         data() {
             return {
             }
@@ -142,7 +140,9 @@
 </script>
 
 <style lang="scss" scoped>
-    .close-container {
+    @import "../scss/_variables.scss";
+
+    .close-icon {
         display: inline-block;
     }
 
@@ -152,5 +152,21 @@
 
     .field-label {
         margin-right: 0;
+    }
+
+    .save-icon {
+        position: absolute;
+        right: 3rem;
+        font-size: 2rem;
+    }
+
+    .eye-icon {
+        position: absolute;
+        right: 5.5rem;
+    }
+
+    .eye-icon, .save-icon {
+        font-size:2rem; 
+        color:$buzz-black;
     }
 </style>

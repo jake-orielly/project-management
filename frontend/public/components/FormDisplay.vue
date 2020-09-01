@@ -1,7 +1,9 @@
 <template>
     <div id="form-preview-modal" v-if="$parent.formPreview">
-        <div v-if="preview" @click="closeFormPreview" class="close-container">
-            <i class="fa fa-times clickable"></i>
+        <div class="close-icon-container">
+            <font-awesome-icon icon="times" 
+            v-if="preview" @click="closeFormPreview"
+            class="clickable close-icon"/>
         </div>
         <p class="title">{{$parent.formTitle}}</p>
         <div v-for="field in $parent.fields" class="form-field" v-bind:key="$parent.fields.indexOf(field)">
@@ -31,9 +33,13 @@
 </template>
 
 <script>
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
 
     export default {
+        components: {
+            FontAwesomeIcon
+        },
         props: {
             preview: {
                 type: Boolean,
@@ -90,11 +96,16 @@
 </script>
 
 <style lang="scss" scoped>
-    .close-container {
+    @import "../scss/_variables.scss";
+
+    .close-icon-container {
         text-align: right;
+    }
+
+    .close-icon {
         margin-right: 2rem;
         font-size: 2rem;
-        color:#2C666E;
+        color:$buzz-black;
     }
 
     .incomplete-field {
