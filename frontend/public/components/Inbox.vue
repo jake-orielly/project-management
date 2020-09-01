@@ -1,7 +1,7 @@
 <template>
     <div id="inbox" :class="{'focused':viewing}">
-        <div v-if="viewing" class="close-icon-container" @click="closeView">
-            <i class="fa fa-times clickable"></i>
+        <div v-if="viewing" class="close-icon-container">
+            <font-awesome-icon icon="times" @click="closeView" class="clickable"/>
         </div>
         <div id="tab-container">
             <p v-for="tab in tabs" v-bind:key="tab" class="clickable">
@@ -17,9 +17,8 @@
                     <tr>
                         <th v-for="header in Object.keys(cols)" v-bind:key="header" @click="changeSort(header)" class="clickable">
                             {{header}}
-                            <span v-if="sortBy == header" :class="{'up':sortOrder == 'ascending'}">
-                                <i class="fa fa-caret-down"></i>
-                            </span>
+                            <font-awesome-icon v-if="sortBy == header && sortOrder == 'descending'" icon="caret-down"/>
+                            <font-awesome-icon v-if="sortBy == header && sortOrder == 'ascending'" icon="caret-up"/>
                         </th>
                     </tr>
                     <tr v-for="item in inbox" v-bind:key="inbox.indexOf(item)" @click="openInboxItem(item)">
@@ -72,11 +71,13 @@
 </template>
 
 <script>
+    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
     import TaskList from '../components/TaskList.vue';
 
     export default {
         components: {
+            FontAwesomeIcon,
             TaskList
         },
         data() {
