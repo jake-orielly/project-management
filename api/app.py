@@ -106,6 +106,7 @@ class Tasks(Resource):
         req_data = json.loads(request.data.decode("utf-8"))
         obj_hash  = req_data["hash"]
         estimate  = req_data["estimate"]
+        status = req_data["status"]
         time = req_data["time"]
 
         db=client.users
@@ -130,12 +131,9 @@ class Tasks(Resource):
                 "time":time
             }
         )
-        collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
-
-        new_tasks = cursor["tasks"]
-        new_tasks.pop(index)
-        collection.update_one({"_id":doc_id},{"$set": { "tasks": new_tasks}})
-        return "success"
+        task["status"] = status
+        collection.update_one({"_id":ObjectId(doc_id)},{"$set": { "tasks." + str(index): task}})
+        return "success " + task["status"] + " " + str(index)
 
 @api.route('/responses')
 class Responses(Resource):
@@ -169,7 +167,7 @@ class Responses(Resource):
         cursor = collection.find_one({"user": form_owner})
         doc_id = cursor["_id"]
         req_data["form_title"] = form_title
-        req_data["status"] = "new"
+        req_data["status"] = "New"
         collection.update_one({"_id":doc_id},{'$push': {'tasks': req_data}})
 
         return {"message":"success"}

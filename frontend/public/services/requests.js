@@ -66,7 +66,8 @@ export default {
         let data = JSON.stringify({
             hash:hash,
             estimate:estimate,
-            time:String(new Date())
+            time:String(new Date()),
+            status:"In Progress"
         });
         return this.genericRequest("/tasks/" + user, "PATCH",data)
     },
