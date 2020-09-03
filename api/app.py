@@ -100,6 +100,7 @@ class Tasks(Resource):
         cursor = collection.find_one({"user": userTo})
         doc_id = cursor["_id"]
         collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
+        return "sucess"
 
     def patch(self,user):
         req_data = json.loads(request.data.decode("utf-8"))
@@ -134,7 +135,7 @@ class Tasks(Resource):
         new_tasks = cursor["tasks"]
         new_tasks.pop(index)
         collection.update_one({"_id":doc_id},{"$set": { "tasks": new_tasks}})
-        return success"
+        return "success"
 
 @api.route('/responses')
 class Responses(Resource):
