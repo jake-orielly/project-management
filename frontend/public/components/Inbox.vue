@@ -6,13 +6,13 @@
         <div id="tab-container">
             <p v-for="tab in tabs" v-bind:key="tab" @click="setTab(tab)" class="clickable">
                 {{tab}}
-                <span v-if="$parent.inbox.length" class="tab-badge" :class="{'hidden' : tab != 'New'}">
-                    {{$parent.inbox.length}}
+                <span v-if="$parent.taskList.length" class="tab-badge" :class="{'hidden' : tab != 'New'}">
+                    {{$parent.taskList.length}}
                 </span>
             </p>
         </div>
         <div id="inbox-inner" v-if="viewing == undefined">
-            <table v-if="$parent.inbox.length" id="inbox-table">
+            <table v-if="$parent.taskList.length" id="inbox-table">
                 <tbody>
                     <tr>
                         <th v-for="header in Object.keys(cols)" v-bind:key="header" @click="changeSort(header)" class="clickable">
@@ -28,7 +28,7 @@
                     </tr>
                 </tbody>
             </table>
-            <p v-if="!$parent.inbox.length">
+            <p v-if="!$parent.taskList.length">
                 No {{currTab.toLowerCase()}} items
             </p>
         </div>
@@ -102,7 +102,7 @@
         },
         computed: {
             inbox: function() {
-                let sorted = this.$parent.inbox.concat()
+                let sorted = this.$parent.taskList.concat()
                 let app = this;
                 sorted.sort(function(a, b) {
                     let val = (app.sortOrder == "ascending" ? -1 : 1);
