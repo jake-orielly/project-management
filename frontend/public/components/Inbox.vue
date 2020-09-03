@@ -6,13 +6,13 @@
         <div id="tab-container">
             <p v-for="tab in tabs" v-bind:key="tab" @click="setTab(tab)" class="clickable">
                 {{tab}}
-                <span v-if="$parent.taskList.length" class="tab-badge" :class="{'hidden' : tab != 'New'}">
-                    {{$parent.taskList.length}}
+                <span v-if="inbox(tab).length" class="tab-badge">
+                    {{inbox(tab).length}}
                 </span>
             </p>
         </div>
         <div id="inbox-inner" v-if="viewing == undefined">
-            <table v-if="$parent.taskList.length" id="inbox-table">
+            <table v-if="inbox(currTab).length" id="inbox-table">
                 <tbody>
                     <tr>
                         <th v-for="header in Object.keys(cols)" v-bind:key="header" @click="changeSort(header)" class="clickable">
@@ -21,14 +21,14 @@
                             <font-awesome-icon v-if="sortBy == header && sortOrder == 'ascending'" icon="caret-up"/>
                         </th>
                     </tr>
-                    <tr v-for="item in inbox" v-bind:key="inbox.indexOf(item)" @click="openInboxItem(item)">
+                    <tr v-for="item in inbox(currTab)" v-bind:key="inbox(currTab).indexOf(item)" @click="openInboxItem(item)">
                         <td v-for="col in Object.values(cols)" v-bind:key="col">
                             {{item[col]}}
                         </td>
                     </tr>
                 </tbody>
             </table>
-            <p v-if="!$parent.taskList.length">
+            <p v-if="!inbox(currTab).length">
                 No {{currTab.toLowerCase()}} items
             </p>
         </div>
@@ -100,10 +100,11 @@
                 currTab: "New"
             }
         },
-        computed: {
-            inbox: function() {
+        methods: {
+            inbox: function(status) {
                 let sorted = this.$parent.taskList.concat()
                 let app = this;
+                sorted = sorted.filter(item => item.fields.status == status);
                 sorted.sort(function(a, b) {
                     let val = (app.sortOrder == "ascending" ? -1 : 1);
                     let key = app.cols[app.sortBy];
@@ -116,9 +117,7 @@
                         return 0;
                 });
                 return sorted;
-            }
-        },
-        methods: {
+            },
             openInboxItem(item) {
                 this.viewing = item;
                 console.log(item)
