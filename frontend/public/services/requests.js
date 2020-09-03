@@ -39,9 +39,6 @@ export default {
         let data = JSON.stringify({operation:operation, form_name: formName});
         return this.genericRequest("/favorite-forms/" + user, "PATCH",data)
     },
-    getInbox(user) {
-        return this.genericRequest("/inbox/" + user, "GET")
-    },
     getTasks(user) {
         return this.genericRequest("/tasks/" + user, "GET");
     },
@@ -56,7 +53,7 @@ export default {
             task:task,
             time:time
         });
-        return this.genericRequest("/inbox", "PUT",data);
+        return this.genericRequest("/tasks", "POST",data);
     },
     getResponses(form,user){
         return this.genericRequest("/responses" + "?form_title=" + form + "&user=" + user, "GET")
@@ -71,7 +68,7 @@ export default {
             estimate:estimate,
             time:String(new Date())
         });
-        return this.genericRequest("/inbox/" + user, "PATCH",data)
+        return this.genericRequest("/tasks/" + user, "PATCH",data)
     },
     postLogin(username,password) {
         let data = JSON.stringify({"user":username,"password":password});

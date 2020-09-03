@@ -45,7 +45,7 @@
         data () {
             return {
                 currTab: "dashboard",
-                inbox: [],
+                taskList: [],
                 modalTint: false,
                 focusOptions: ["Inbox","Reporting","My Calendar","Team Calendar"],
                 focused: "inbox",
@@ -57,21 +57,21 @@
             }
         },
         mounted() {
-            this.updateInbox();
+            this.updateTaskList();
             let app = this;
             setInterval(
-                () => {app.updateInbox()},
+                () => {app.updateTaskList()},
                 2500
             )
         },
         methods: {
-            updateInbox() {
-                requests.getInbox(this.$store.state.user).then(
+            updateTaskList() {
+                requests.getTasks(this.$store.state.user).then(
                     response => {
                         let responseData = JSON.parse(response.responseText);
-                        this.inbox = [];
+                        this.taskList = [];
                         for (let response of responseData) {
-                            this.inbox.push({
+                            this.taskList.push({
                                 "description": "Give Estimate",
                                 "from": "Leslie Knope",
                                 "title":response.form_title,
