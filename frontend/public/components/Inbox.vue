@@ -4,15 +4,15 @@
             <font-awesome-icon icon="times" @click="closeView" class="clickable"/>
         </div>
         <div id="tab-container">
-            <p v-for="tab in tabs" v-bind:key="tab" class="clickable">
+            <p v-for="tab in tabs" v-bind:key="tab" @click="setTab(tab)" class="clickable">
                 {{tab}}
-                <span class="tab-badge" :class="{'hidden' : tab != 'New'}">
+                <span v-if="$parent.inbox.length" class="tab-badge" :class="{'hidden' : tab != 'New'}">
                     {{$parent.inbox.length}}
                 </span>
             </p>
         </div>
         <div id="inbox-inner" v-if="viewing == undefined">
-            <table id="inbox-table">
+            <table v-if="$parent.inbox.length" id="inbox-table">
                 <tbody>
                     <tr>
                         <th v-for="header in Object.keys(cols)" v-bind:key="header" @click="changeSort(header)" class="clickable">
@@ -28,6 +28,9 @@
                     </tr>
                 </tbody>
             </table>
+            <p v-if="!$parent.inbox.length">
+                No {{currTab.toLowerCase()}} items
+            </p>
         </div>
         <div id="estimate-container" v-if="viewing != undefined">
             <p>{{viewing.fields.description}}</p>
@@ -94,6 +97,7 @@
                 },
                 sortBy:"Project",
                 sortOrder:"descending",
+                currTab: "New"
             }
         },
         computed: {
@@ -176,6 +180,9 @@
                 for (let i = 0; i < s.length; i++)
                     s[i] = s[i].substr(0,1).toUpperCase() + s[i].substr(1)
                 return s.join(' ');
+            },
+            setTab(tab) {
+                this.currTab = tab;
             }
         }
     }
