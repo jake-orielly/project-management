@@ -63,14 +63,13 @@ class RetrieveForm(Resource):
             found = [i for i in collection.find({"_id": ObjectId(req_data["id"])}, {'_id': False})]
             return found
 
-@api.route('/inbox')
-@api.route('/inbox/<user>')
-class Inbox(Resource):
+@api.route('/tasks/<user>')
+class Tasks(Resource):
     def get(self,user):
         cursor = get_cursor_by_prop("users","user_workloads","user",user)
-        return cursor["inbox"]
+        return cursor["tasks"]
 
-    def put(self):
+    def post(self):
         req_data = json.loads(request.data.decode("utf-8"))
         
         userFrom = req_data["userFrom"]
@@ -84,10 +83,10 @@ class Inbox(Resource):
         cursor = collection.find_one({"user": userFrom})
         doc_id = cursor["_id"]
 
-        task = list(filter(lambda item: item["hash"] == task_hash, cursor["inbox"]))[0]
+        task = list(filter(lambda item: item["hash"] == task_hash, cursor["tasks"]))[0]
 
-        collection.update_one({"_id":doc_id},{"$set": { "inbox": 
-            list(filter(lambda item: item["hash"] != task_hash, cursor["inbox"]))
+        collection.update_one({"_id":doc_id},{"$set": { "tasks": 
+            list(filter(lambda item: item["hash"] != task_hash, cursor["tasks"]))
         }})
 
         task["history"].append(
@@ -97,10 +96,10 @@ class Inbox(Resource):
                 "time":time
             }
         )
-
+        task.status = "new"
         cursor = collection.find_one({"user": userTo})
         doc_id = cursor["_id"]
-        collection.update_one({"_id":doc_id},{'$push': {'inbox': task}})
+        collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
 
     def patch(self,user):
         req_data = json.loads(request.data.decode("utf-8"))
@@ -114,13 +113,13 @@ class Inbox(Resource):
         doc_id = cursor["_id"]
 
 
-        for index, item in enumerate(cursor["inbox"]):
+        for index, item in enumerate(cursor["tasks"]):
             if item["hash"] == obj_hash:
                 break
         else:
             return {"message":"Error: could not find item in task list"}
 
-        task = cursor["inbox"][index]
+        task = cursor["tasks"][index]
         task["estimate"] = estimate
         task["status"] = "In Progress"
         task["history"].append(
@@ -132,36 +131,10 @@ class Inbox(Resource):
         )
         collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
 
-        new_inbox = cursor["inbox"]
-        new_inbox.pop(index)
-        collection.update_one({"_id":doc_id},{"$set": { "inbox": new_inbox}})
-        return {"message":"success"}
-
-@api.route('/tasks/<user>')
-class Tasks(Resource):
-    def get(self,user):
-        cursor = get_cursor_by_prop("users","user_workloads","user",user)
-        return cursor["tasks"]
-
-    def patch(self,user):
-        req_data = json.loads(request.data.decode("utf-8"))
-
-        db=client.users
-        collection = db.user_workloads
-        cursor = collection.find_one({"user": user})
-        doc_id = cursor["_id"]
-
-        for index, item in enumerate(cursor["tasks"]):
-            if item["hash"] == req_data["hash"]:
-                break
-        else:
-            return {"message":"Error: could not find item in task list"}
-
         new_tasks = cursor["tasks"]
-        new_tasks[index] = req_data
-
+        new_tasks.pop(index)
         collection.update_one({"_id":doc_id},{"$set": { "tasks": new_tasks}})
-        return {"message":"success"}
+        return success"
 
 @api.route('/responses')
 class Responses(Resource):
@@ -195,7 +168,8 @@ class Responses(Resource):
         cursor = collection.find_one({"user": form_owner})
         doc_id = cursor["_id"]
         req_data["form_title"] = form_title
-        collection.update_one({"_id":doc_id},{'$push': {'inbox': req_data}})
+        req_data["status"] = "new"
+        collection.update_one({"_id":doc_id},{'$push': {'tasks': req_data}})
 
         return {"message":"success"}
 
@@ -486,7 +460,6 @@ class Register(Resource):
             workload_collection = db.user_workloads
             workload_collection.insert_one({
                 "user":req_data["username"],
-                "inbox":[],
                 "tasks":[],
             })
             return "User created"
