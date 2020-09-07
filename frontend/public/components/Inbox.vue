@@ -278,7 +278,7 @@
         padding: 8px;
     }
 
-    #inbox-table tr:nth-child(even){
+    #inbox-table tr:nth-child(odd){
         background-color: #f2f2f2;
     }
 
