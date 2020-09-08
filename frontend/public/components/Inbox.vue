@@ -217,8 +217,4 @@
             color: transparent;
         }
     }
-
-    .up *{
-        transform: rotate(180deg);
-    }
 </style>
