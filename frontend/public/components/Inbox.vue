@@ -47,7 +47,6 @@
         data() {
             return {
                 viewing: undefined,
-                myTeam:[],
                 tabs: ["New","In Progress","Blocked","Complete"],
                 cols: {
                     "Project":"title",

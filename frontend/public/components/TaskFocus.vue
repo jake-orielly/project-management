@@ -58,9 +58,25 @@
         },
         data() {
             return {
-                mode: undefined,
-                myTeam:[]
+                myTeam: [],
+                mode: undefined
             }
+        },
+        created() {
+            requests.getUser(this.$store.state.user).then(
+                response => {
+                    // Todo: allow for multiple teams
+                    let team = JSON.parse(response.responseText).teams[0];
+                    requests.getTeamMembers(team).then( 
+                        teamResponse => {
+                            let teamMembers = JSON.parse(teamResponse.responseText).members;
+                            for (let name of teamMembers)
+                                if (name != this.$store.state.user)
+                                    this.myTeam.push(new TeamMate(name));
+                        }
+                    )
+                }
+            )
         },
         methods: {
             setMode(mode) {
@@ -113,6 +129,14 @@
                     s[i] = s[i].substr(0,1).toUpperCase() + s[i].substr(1)
                 return s.join(' ');
             },
+        }
+    }
+
+    class TeamMate {
+        constructor(name) {
+            this.name = name;
+            this.selected = false;
+            this.expanded = false;
         }
     }
 </script>
