@@ -30,7 +30,7 @@
             </p>
         </div>
         <div id="estimate-container" v-if="viewing != undefined">
-            <TaskFocus v-bind:task="viewing"></TaskFocus>
+            <TaskFocus v-bind:task="viewing" ref="taskFocus"></TaskFocus>
         </div>
     </div>
 </template>
@@ -90,6 +90,7 @@
             },
             setTab(tab) {
                 this.currTab = tab;
+                this.$refs.taskFocus.closeView();
             }
         }
     }
