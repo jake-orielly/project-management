@@ -3,7 +3,9 @@
         <p class="title">Calendar</p>
         <div id="calendar-table-container">
             <p class="month-title buzz-bold">
+                <font-awesome-icon icon="angle-left" class="clickable"/>
                 {{"" + today.toLocaleString('default', { month: 'long' })}}
+                <font-awesome-icon icon="angle-right" class="clickable"/>
             </p>
             <table id="calendar-table" cellspacing="0">
                 <thead>
