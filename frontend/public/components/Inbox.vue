@@ -79,18 +79,17 @@
             },
             openInboxItem(item) {
                 this.viewing = item;
-                console.log(item)
             },
             changeSort(header){
                 if (header == this.sortBy)
                     this.sortOrder = (this.sortOrder == 'ascending' ? 'descending' : 'ascending') 
                 else 
-                    this.sortBy = header   
-                console.log(this.sortBy,this.sortOrder)
+                    this.sortBy = header;
             },
             setTab(tab) {
                 this.currTab = tab;
-                this.$refs.taskFocus.closeView();
+                if (this.$refs.taskFocus)
+                    this.$refs.taskFocus.closeView();
             }
         }
     }

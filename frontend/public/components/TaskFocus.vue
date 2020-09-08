@@ -87,22 +87,23 @@
             },
             confirm() {
                 if (this.mode == 'estimate') {
+                    console.log(this.mode)
                     let estimateVal = parseFloat(document.getElementById("estimate-input").value);
-                    requests.submitEstimate(this.$store.state.user,this.viewing.fields.hash,estimateVal).then(
+                    requests.submitEstimate(this.$store.state.user,this.task.fields.hash,estimateVal).then(
                         () => {
                             this.closeView();
                     })
                 }
                 else if (this.mode == 'assign') {
                     let user = this.myTeam.filter(user => user.selected)[0];
-                    requests.assignTask(this.$store.state.user,user.name,this.viewing.fields.hash, new Date()).then(
+                    requests.assignTask(this.$store.state.user,user.name,this.task.fields.hash, new Date()).then(
                         () => {
                             this.closeView();
                     })
                 }
                 else if (this.mode == 'pushBack') {
                     let comment = document.getElementById("pushback-comment").value;
-                    requests.returnTask(this.$store.state.user,this.viewing.fields.hash,comment).then(
+                    requests.returnTask(this.$store.state.user,this.task.fields.hash,comment).then(
                         () => {
                             this.closeView();
                     })
