@@ -116,7 +116,8 @@
 
         p {
             display: inline-block;
-            padding: 0.75rem 3rem;;
+            height: 1.25rem;
+            padding: 0.75rem 3rem;
             margin: 0;
             border-radius: 1rem 1rem 0px 0px;
         }
