@@ -104,49 +104,12 @@
         padding: 3rem;
     }
 
-    .team-container {
-        font-size: 1.25rem;
-    }
-
-    .selected {
-        color: #2C666E;
-        text-decoration: underline;
-    }
-
     #inbox.focused {
         position: absolute;
         background: white;
         z-index: 100;
         width: 90%;
         height: 90%;
-    }
-
-    .close-icon-container {
-        text-align: right;
-        margin: 1rem;
-        font-size: 1.5rem;
-    }
-
-    .user-container {
-        & * {
-            display: inline-block;
-        }
-
-        & p {
-            margin-right: 1rem;
-        }
-
-        & .user-info {
-            display: block;
-        }
-    }
-
-    #pushback-comment {
-        font-size: 1.5rem;
-        font-family: 'Poppins', sans-serif;
-        color: #313638;
-        width: 30rem;
-        height: 10rem;
     }
 
     #tab-container {

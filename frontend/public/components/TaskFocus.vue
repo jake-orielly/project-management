@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="top-level-container">
         <font-awesome-icon icon="times" @click="closeView" class="clickable"/>
         <p>{{task.fields.description}}</p>
         <p>{{'Due: ' + task.fields.due_date}}</p>
@@ -119,6 +119,11 @@
 <style lang="scss" scoped>
     @import "../scss/_variables.scss";
 
+    #top-level-container {
+        display: inline-block;
+        position: relative;
+    }
+
     .team-container {
         font-size: 1.25rem;
     }
@@ -126,12 +131,6 @@
     .selected {
         color: #2C666E;
         text-decoration: underline;
-    }
-
-    .close-icon-container {
-        text-align: right;
-        margin: 1rem;
-        font-size: 1.5rem;
     }
 
     .user-container {
