@@ -2,6 +2,9 @@
     <div id="calendar">
         <p class="title">Calendar</p>
         <div id="calendar-table-container">
+            <p class="month-title buzz-bold">
+                {{"" + today.toLocaleString('default', { month: 'long' })}}
+            </p>
             <table id="calendar-table" cellspacing="0">
                 <thead>
                     <tr>
@@ -170,6 +173,87 @@
 </script>
 
 <style lang="scss" scoped>
+    #calendar-table-container {
+        display: grid;
+        justify-content: center;
+
+        .month-title {
+            text-align: center;
+        }
+    }
+
+    #calendar-table td {
+        position: relative;
+        padding: 0.2em;
+        margin: 0;
+    }
+
+    .cell-highlighted {
+        background-color: #90DDF0;
+    }
+
+    .cell-highlighted .calendar-cell {
+        border: none;
+    }
+
+    .calendar-cell {
+        border: 2px solid #445E93;
+        background-color: white;
+        width: 2em;
+        height: 2em;
+        text-align: center;
+    }
+
+    .green-day {
+        background-color: green;
+    }
+
+    .yellow-day {
+        background-color: gold;
+    }
+
+    .red-day {
+        background-color: red;
+    }
+
+    .past-cell {
+        background-color: #ebebeb;
+    }
+
+    .weekend-cell {
+        border: 2px solid grey;
+        background-color:lightgrey;
+    }
+
+    .blank-cell {
+        border: none;
+        background-color:white;
+    }
+
+    .date-info {
+        position: absolute;
+        background-color: white;
+        top: 0;
+        left: 3em;
+        border: 2px solid #2C666E;
+        z-index: 10;
+        white-space: nowrap;
+    }
+
+    .date-info-inner {
+        position: relative;
+        display: inline-block;
+        padding: 0.5em 1em;
+    }
+
+    .date-info-inner .fa {
+        font-size: 1.5rem;
+        color: rgb(44, 102, 110);
+        position: absolute;
+        top: 0;
+        right: 3px;
+    }
+
     .close-icon-container {
         text-align: right;
     }
