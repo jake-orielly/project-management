@@ -1,6 +1,6 @@
 <template>
     <div id="top-level-container">
-        <font-awesome-icon icon="times" @click="closeView" class="clickable"/>
+        <font-awesome-icon icon="times" @click="closeView" class="clickable close-icon"/>
         <p>{{task.fields.description}}</p>
         <p>{{'Due: ' + task.fields.due_date}}</p>
         <p v-for="field in Object.keys(task.fields.fields)" v-bind:key="field">
@@ -146,6 +146,11 @@
     #top-level-container {
         display: inline-block;
         position: relative;
+    }
+
+    .close-icon {
+        position: absolute;
+        right: 0;
     }
 
     .team-container {
