@@ -23,7 +23,8 @@ li {
 }
 
 button {
-    border: 3px solid #2C666E;
+    border: 3px solid #445e93ff;
+    background-color: white;
     border-radius: 4px;
     font-size: 1.25rem;
     margin: 1em;
@@ -115,7 +116,7 @@ textarea {
     right: 3rem;
 }
 
-.clickable {
+.clickable, button {
     user-select: none;
     cursor: pointer;
 }
