@@ -4,7 +4,7 @@
             Recent Responses
         </p>
         <div v-if="!task">
-            <div class="task-item" v-for="task in $store.state.taskList.reverse()" v-bind:key="task.hash">
+            <div class="task-item" v-for="task in taskList.reverse()" v-bind:key="task.hash">
                 <p>
                     {{task.description}}
                 </p>
@@ -38,12 +38,33 @@
 </template>
 
 <script>
-    //import requests from '../services/requests.js';
+    import requests from '../services/requests.js';
 
     export default {
+        mounted() {
+            requests.getTasks(this.$store.state.user).then(
+                response => {
+                    let responseData = JSON.parse(response.responseText);
+                    for (let response of responseData) {
+                        this.taskList.push({
+                            "description": response.description,
+                            "from": response.assigner,
+                            "title":response.form_title,
+                            "fields":response.fields,
+                            "estimate":response.estimate,
+                            "due_date":response.due_date,
+                            "hash":response.hash,
+                            "status":response.status,
+                            "history":response.history
+                        })
+                    }
+                }
+            )
+        },
         data() {
             return {
-                task: undefined
+                task: undefined,
+                taskList: [],
             }
         },
         methods: {
