@@ -21,7 +21,6 @@
                         <div v-if="user.open" id="user-container">
                             <p class="clickable" v-for="form in forms.filter(form => form.creator == user.name)" v-bind:key="form.name" @click="requestForm(form.name)">{{form.name}}</p>
                             <TaskList ref="taskList" v-bind:user="user.name" v-bind:mine="false"></TaskList>
-                            <Calendar ref="calendar" v-bind:user="user.name"></Calendar>
                         </div>
                     </div>
                 </div>
@@ -40,14 +39,12 @@
     import requests from '../services/requests.js';
     import Banner from '../components/Banner.vue';
     import FormDisplay from '../components/FormDisplay.vue';
-    import Calendar from '../components/Calendar.vue';
     import TaskList from '../components/TaskList.vue';
 
     export default {
         components: {
             Banner,
             FormDisplay,
-            Calendar,
             TaskList
         },
         data () {
