@@ -68,7 +68,7 @@
                         i.classList.add("incomplete-field");
                         alert("Some mandatory fields incomplete")
                     }
-                    if (["description","due_date"].indexOf(i.dataset.label) != -1)
+                    if (["description"].indexOf(i.dataset.label) != -1)
                         response[i.dataset.label] = i.value;
                     else
                         response.fields[i.dataset.label] = i.value;

@@ -124,12 +124,6 @@
                         type: "text",
                         mandatory: true,
                         default: true
-                    },
-                    {
-                        label: "Due Date",
-                        type: "date",
-                        mandatory: true,
-                        default: true
                     }
                 ]
                 this.$parent.formSaved = false;

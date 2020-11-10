@@ -51,8 +51,7 @@
                 cols: {
                     "Project":"title",
                     "Task":"description",
-                    "Requester":"from",
-                    "Due Date":"due_date"
+                    "Requester":"from"
                 },
                 sortBy:"Project",
                 sortOrder:"descending",
