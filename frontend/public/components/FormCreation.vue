@@ -15,11 +15,16 @@
                     <span class="field-type">{{"(" + $parent.caps(field.type) + ")"}}</span>
                     <font-awesome-icon icon="bars" class="clickable"/>
                     <font-awesome-icon icon="times" @click="deleteField(field)" class="close-icon clickable"/>
-                    <ul v-for="option in field.options" v-bind:key="option">
-                        <li>{{option}}</li>
+                    <ul v-for="(option, index) in field.options" v-bind:key="option">
+                        <li>
+                            <input v-model="field.options[index]">
+                        </li>
                     </ul>
                     <ul v-for="property in (field.slider ? Object.keys(field.slider) : [])" v-bind:key="field.label + property">
-                        <li>{{$parent.caps(property) + ": " + field.slider[property]}}</li>
+                        <li>
+                            {{$parent.caps(property) + ": "}}
+                            <input v-model="field.slider[property]">
+                        </li>
                     </ul>
                 </div>
             </div>
