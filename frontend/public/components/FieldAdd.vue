@@ -15,6 +15,14 @@
             Mandatory:
             <input type="checkbox" id="field-mandatory" checked>
         </p>
+        <ul v-if="currField == 'binary'">
+            <li>
+                <input type="text" class="binary-label" placeholder="Yes">
+            </li>
+            <li>
+                <input type="text" class="binary-label" placeholder="No">
+            </li>
+        </ul>
         <ul v-if="currField == 'dropdown'">
             <li>
                 <button id="dropdown-add" @click="dropdownAdd">Add Dropdown Option</button>
@@ -72,7 +80,7 @@
         },
         data() {
             return {
-                fieldTypes: ['text','number','text (long)','date','dropdown','multi-select','slider'],
+                fieldTypes: ['text','number','text (long)','date','binary','dropdown','multi-select','slider'],
                 currField: '',
                 numDropdownFields: 0,
                 numMultiSelectFields: 0,
@@ -85,14 +93,20 @@
                     type: document.getElementById("field-dropdown").value,
                     mandatory: document.getElementById("field-mandatory").checked
                 };
-                if (this.currField == 'dropdown') {
+                if (this.currField == 'binary') {
+                    newField.options = [];
+                    for (let i of document.getElementsByClassName("binary-label")) {
+                        newField.options.push(i.value);
+                        i.value = "";
+                    }
+                    
+                }
+                else if (this.currField == 'dropdown') {
                     newField.options = [];
                     for (let i of document.getElementsByClassName("currDropdownOption"))
                         newField.options.push(i.value);
                     this.numDropdownFields = 0;
-                    
                 }
-
                 else if (this.currField == "multi-select") {
                     newField.options = [];
                     for (let i of document.getElementsByClassName("multi-select-input"))

@@ -9,12 +9,22 @@
         <div v-for="field in $parent.fields" class="form-field" v-bind:key="$parent.fields.indexOf(field)">
             <p> 
                 {{field.label}}
-                <br>
                 <span v-if="field.mandatory">*</span>
+                <br>
                 <input v-if="field.type == 'text'" :data-label="toLabel(field.label)" type="text">
                 <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
                 <textarea v-if="field.type == 'text (long)'" :data-label="toLabel(field.label)" type="number"></textarea>
                 <input v-if="field.type == 'date'" :data-label="toLabel(field.label)" type="date">
+                <div v-if="field.type == 'binary'">
+                    <input class="binary-input" type="radio" :data-label="toLabel(field.label)" :id="field.label + '-0'" :name="field.label" :value="0">
+                    <label :for="field.label + '-0'">
+                        {{field.options[0]}}
+                    </label>
+                    <input class="binary-input" type="radio" :data-label="toLabel(field.label)" :id="field.label + '-1'" :name="field.label" :value="1">
+                    <label :for="field.label + '-1'">
+                        {{field.options[1]}}
+                    </label>
+                </div>
                 <select v-if="field.type == 'dropdown'" :data-label="toLabel(field.label)">
                     <option v-for="option in field.options" v-bind:key="$parent.fields.indexOf(field) + ':' + field.options.indexOf(option)" :value="option">{{option}}</option>
                 </select>
@@ -68,11 +78,16 @@
                         i.classList.add("incomplete-field");
                         alert("Some mandatory fields incomplete")
                     }
-                    if (["description"].indexOf(i.dataset.label) != -1)
+                    if (i.classList.value.indexOf("binary-input") != -1) {
+                        if (i.checked)
+                            response.fields[i.dataset.label] = i.value;
+                    }
+                    else if (["description"].indexOf(i.dataset.label) != -1)
                         response[i.dataset.label] = i.value;
                     else
                         response.fields[i.dataset.label] = i.value;
                 }
+                console.log(response)
                 response.hash = Math.random().toString(36).substring(2, 15);
                 response.history =[
                     {
