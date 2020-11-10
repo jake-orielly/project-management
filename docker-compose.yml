@@ -22,8 +22,8 @@ services:
     volumes:
       - ./mongodb-storage:/data/db
     command: [--auth]
-  cypress:
-    image: cypress/included:3.2.0
-    volumes: 
-      - ./cypress_volume:/cypress
-      - ./cypress_volume/cypress.json:/cypress.json
+#  cypress:
+#    image: cypress/included:3.2.0
+#    volumes: 
+#      - ./cypress_volume:/cypress
+#      - ./cypress_volume/cypress.json:/cypress.json

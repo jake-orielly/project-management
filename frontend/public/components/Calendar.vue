@@ -3,9 +3,9 @@
         <p class="title">Calendar</p>
         <div id="calendar-table-container">
             <p class="month-title buzz-bold">
-                <font-awesome-icon icon="angle-left" class="clickable"/>
+                <font-awesome-icon icon="angle-left" @click="changeMonth(-1)" class="clickable"/>
                 {{"" + today.toLocaleString('default', { month: 'long' })}}
-                <font-awesome-icon icon="angle-right" class="clickable"/>
+                <font-awesome-icon icon="angle-right" @click="changeMonth(1)" class="clickable"/>
             </p>
             <table id="calendar-table" cellspacing="0">
                 <thead>
@@ -170,6 +170,9 @@
                 }
                 this.workload = workload;
             },
+            changeMonth(amount) {
+                console.log(amount)
+            }
         }
     }
 </script>
