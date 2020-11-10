@@ -116,9 +116,7 @@
                     response => {
                         let form = JSON.parse(response.responseText)[0];
                         this.$parent.formTitle = form.title;
-                        for (let i of form.fields) {
-                            this.$parent.fields.push(i)
-                        }
+                        this.$parent.fields = form.fields;
                     }
                 )
             },

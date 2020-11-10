@@ -123,14 +123,7 @@
                 this.$parent.fields.splice(this.$parent.fields.indexOf(field),1);
             },
             createForm() {
-                this.$parent.fields = [
-                    {
-                        label: "Description",
-                        type: "text",
-                        mandatory: true,
-                        default: true
-                    }
-                ]
+                this.$parent.fields = [];
                 this.$parent.formSaved = false;
                 this.$parent.formTitle = "";
             }
