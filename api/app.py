@@ -39,9 +39,9 @@ def delete_document_by_prop(db_name,collection_name,prop,value):
     collection = db[collection_name]
     if collection.find_one({prop: value}, {'_id': False}):
         collection.delete_one({prop: value})
-        return "Deleted " + value + " from " + collection_name + "."
+        return "Deleted " + str(value) + " from " + collection_name + "."
     else:
-        return "Couldn't find " + value + " from " + collection_name + "."
+        return "Couldn't find " + str(value) + " from " + collection_name + "."
 
 @api.route('/is-alive')
 class IsAlive(Resource):
@@ -505,7 +505,7 @@ class Forms(Resource):
 
     def delete(self, user):
         req_data = json.loads(request.data.decode("utf-8"))
-        return delete_document_by_prop("forms","forms","_id",req_data["id"])
+        return delete_document_by_prop("forms","forms","_id",ObjectId(req_data["id"]))
 
 if __name__ == '__main__':
     app.run(host= '0.0.0.0',port=config.port,debug=True)
