@@ -15,25 +15,9 @@
                 <input v-if="field.type == 'number'" :data-label="toLabel(field.label)" type="number">
                 <textarea v-if="field.type == 'text (long)'" :data-label="toLabel(field.label)" type="number"></textarea>
                 <input v-if="field.type == 'date'" :data-label="toLabel(field.label)" type="date">
-                <div v-if="field.type == 'binary'">
-                    <input class="binary-input" type="radio" :data-label="toLabel(field.label)" :id="field.label + '-0'" :name="field.label" :value="0">
-                    <label :for="field.label + '-0'">
-                        {{field.options[0]}}
-                    </label>
-                    <input class="binary-input" type="radio" :data-label="toLabel(field.label)" :id="field.label + '-1'" :name="field.label" :value="1">
-                    <label :for="field.label + '-1'">
-                        {{field.options[1]}}
-                    </label>
-                </div>
-                <select v-if="field.type == 'dropdown'" :data-label="toLabel(field.label)">
-                    <option v-for="option in field.options" v-bind:key="$parent.fields.indexOf(field) + ':' + field.options.indexOf(option)" :value="option">{{option}}</option>
-                </select>
-                <input v-if="field.type == 'slider'" :data-label="toLabel(field.label)" type="range" 
-                    :min="field.slider.min" 
-                    :max="field.slider.max" 
-                    :value="field.slider.initial" 
-                    :step="field.slider.step" 
-                    class="slider" id="myRange">
+                <Binary v-if="field.type == 'binary'" :field="field" />
+                <Dropdown v-if="field.type == 'dropdown'" :field="field" />
+                <Slider v-if="field.type == 'slider'" :field="field" />
             </p>
         </div>
         <div id="submit-container">
@@ -45,10 +29,17 @@
 <script>
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
+    import Binary from './field-displays/BinaryDisplay';
+    import Dropdown from './field-displays/DropdownDisplay';
+    import Slider from './field-displays/SliderDisplay';
+    
 
     export default {
         components: {
-            FontAwesomeIcon
+            FontAwesomeIcon,
+            Binary,
+            Dropdown,
+            Slider
         },
         props: {
             preview: {
