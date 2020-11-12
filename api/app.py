@@ -12,8 +12,6 @@ import bcrypt
 
 from mongo_url import mongo_URL
 
-import config
-
 def get_hashed_password(plain_text_password):
     return bcrypt.hashpw(plain_text_password.encode('utf-8'), bcrypt.gensalt()).decode("utf-8")
 
@@ -506,6 +504,3 @@ class Forms(Resource):
     def delete(self, user):
         req_data = json.loads(request.data.decode("utf-8"))
         return delete_document_by_prop("forms","forms","_id",ObjectId(req_data["id"]))
-
-if __name__ == '__main__':
-    app.run(host= '0.0.0.0',port=config.port,debug=True)

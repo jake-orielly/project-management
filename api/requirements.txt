@@ -2,6 +2,7 @@ flask
 flask_api
 flask_cors
 bcrypt
+gunicorn
 
 # Prevents flask_restplus from installing problematic newer version
 Werkzeug==0.16.0
