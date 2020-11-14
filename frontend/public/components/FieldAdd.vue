@@ -100,39 +100,45 @@
                     mandatory: this.fieldMandatory,
                     id: this.idGenerator()
                 };
-                if (this.currField == 'binary') {
-                    newField.options = [];
-                    for (let i of document.getElementsByClassName("binary-label")) {
-                        newField.options.push(i.value);
-                        i.value = "";
-                    }
-                    
-                }
-                else if (this.currField == 'dropdown') {
-                    newField.options = [];
-                    for (let i of document.getElementsByClassName("currDropdownOption"))
-                        newField.options.push(i.value);
-                    this.numDropdownFields = 0;
-                }
-                else if (this.currField == "multi-select") {
-                    newField.options = [];
-                    for (let i of document.getElementsByClassName("multi-select-input"))
-                        newField.options.push(i.value);
-                    this.numMultiSelectFields = 0;
-                }
-
-                else if (this.currField == 'slider') {
-                    newField.slider = {};
-                    newField.slider.min = this.sliderMin;
-                    newField.slider.max = this.sliderMax;
-                    newField.slider.step = this.sliderStep;
-                    newField.slider.initial = this.sliderInitial;
-                }
+                if (this.currField == 'binary') 
+                    this.addBinaryField();
+                else if (this.currField == 'dropdown')
+                    this.addDropdownField();
+                else if (this.currField == "multi-select") 
+                    this.addMultiField();
+                else if (this.currField == 'slider')
+                    this.addSliderField();
 
                 this.$parent.fields.push(newField);
 
                 this.currField = "";
                 this.fieldLabel = "";
+            },
+            addBinaryField() {
+                newField.options = [];
+                for (let i of document.getElementsByClassName("binary-label")) {
+                    newField.options.push(i.value);
+                    i.value = "";
+                }
+            },
+            addDropdownField() {
+                newField.options = [];
+                for (let i of document.getElementsByClassName("currDropdownOption"))
+                    newField.options.push(i.value);
+                this.numDropdownFields = 0;
+            },
+            addMultiField() {
+                newField.options = [];
+                for (let i of document.getElementsByClassName("multi-select-input"))
+                    newField.options.push(i.value);
+                this.numMultiSelectFields = 0;
+            },
+            addSliderField() {
+                newField.slider = {};
+                newField.slider.min = this.sliderMin;
+                newField.slider.max = this.sliderMax;
+                newField.slider.step = this.sliderStep;
+                newField.slider.initial = this.sliderInitial;
             },
             idGenerator() {
                 const S4 = () => {
