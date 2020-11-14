@@ -6,7 +6,7 @@
             @keydown.up="up"  
             @input="change"
         />
-        <ul class="dropdown-menu" style="width:100%" v-if="$parent.autocompleteVal && matches.length > 1">
+        <ul class="dropdown-menu" style="width:100%" v-if="$parent.autocompleteVal">
             <li v-for="(suggestion, index) in matches"
                 :key="suggestion.input"
                 v-bind:class="{'active': isActive(index)}"
