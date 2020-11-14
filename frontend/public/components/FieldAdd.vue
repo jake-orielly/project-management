@@ -1,5 +1,5 @@
 <template>
-    <div id="field-input-container" v-if="!$parent.formSaved">
+    <div id="field-input-container">
         <p>Add a field:</p>
         <p>
             Type:
@@ -51,19 +51,19 @@
         <div v-if="currField == 'slider'">
             <p>
                 Min: 
-                <input type="number" id="slider-min">
+                <input type="number" v-model="sliderMin" id="slider-min">
             </p>
             <p>
                 Max
-                <input type="number" id="slider-max">
+                <input type="number" v-model="sliderMax" id="slider-max">
             </p>
             <p>
                 Step
-                <input type="number" id="slider-step">
+                <input type="number" v-model="sliderStep" id="slider-step">
             </p>
             <p>
                 Initial
-                <input type="number" id="slider-initial">
+                <input type="number" v-model="sliderInitial" id="slider-initial">
             </p>
         </div>
         <br>
@@ -85,7 +85,11 @@
                 numDropdownFields: 0,
                 numMultiSelectFields: 0,
                 fieldLabel:"",
-                fieldMandatory:true
+                fieldMandatory:true,
+                sliderMin:0,
+                sliderMax:0,
+                sliderStep:0,
+                sliderInitial:0
             }
         },
         methods: {
@@ -119,17 +123,16 @@
 
                 else if (this.currField == 'slider') {
                     newField.slider = {};
-                    newField.slider.min = document.getElementById("slider-min").value;
-                    newField.slider.max = document.getElementById("slider-max").value;
-                    newField.slider.step = document.getElementById("slider-step").value;
-                    newField.slider.initial = document.getElementById("slider-initial").value;
+                    newField.slider.min = this.sliderMin;
+                    newField.slider.max = this.sliderMax;
+                    newField.slider.step = this.sliderStep;
+                    newField.slider.initial = this.sliderInitial;
                 }
 
                 this.$parent.fields.push(newField);
 
-                document.getElementById("field-dropdown").value = "";
                 this.currField = "";
-                document.getElementById("field-label").value = "";
+                this.fieldLabel = "";
             },
             idGenerator() {
                 const S4 = () => {
