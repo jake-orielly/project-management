@@ -101,44 +101,48 @@
                     id: this.idGenerator()
                 };
                 if (this.currField == 'binary') 
-                    this.addBinaryField();
+                    newField = this.addBinaryField(newField);
                 else if (this.currField == 'dropdown')
-                    this.addDropdownField();
+                    newField = this.addDropdownField(newField);
                 else if (this.currField == "multi-select") 
-                    this.addMultiField();
+                    newField = this.addMultiField(newField);
                 else if (this.currField == 'slider')
-                    this.addSliderField();
+                    newField = this.addSliderField(newField);
 
                 this.$parent.fields.push(newField);
 
                 this.currField = "";
                 this.fieldLabel = "";
             },
-            addBinaryField() {
+            addBinaryField(newField) {
                 newField.options = [];
                 for (let i of document.getElementsByClassName("binary-label")) {
                     newField.options.push(i.value);
                     i.value = "";
                 }
+                return newField;
             },
-            addDropdownField() {
+            addDropdownField(newField) {
                 newField.options = [];
                 for (let i of document.getElementsByClassName("currDropdownOption"))
                     newField.options.push(i.value);
                 this.numDropdownFields = 0;
+                return newField;
             },
-            addMultiField() {
+            addMultiField(newField) {
                 newField.options = [];
                 for (let i of document.getElementsByClassName("multi-select-input"))
                     newField.options.push(i.value);
                 this.numMultiSelectFields = 0;
+                return newField;
             },
-            addSliderField() {
+            addSliderField(newField) {
                 newField.slider = {};
                 newField.slider.min = this.sliderMin;
                 newField.slider.max = this.sliderMax;
                 newField.slider.step = this.sliderStep;
                 newField.slider.initial = this.sliderInitial;
+                return newField;
             },
             idGenerator() {
                 const S4 = () => {
