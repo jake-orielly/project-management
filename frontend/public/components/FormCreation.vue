@@ -55,6 +55,8 @@
                 let form = {};
                 form.title = this.$parent.formTitle;
                 form.fields = this.$parent.fields.slice();
+                form.record_fields = this.$parent.recordFields;
+                
                 requests.retrieveForm(
                     {"title":this.$parent.formTitle},
                     this.$store.state.user

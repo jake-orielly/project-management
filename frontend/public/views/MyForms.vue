@@ -46,6 +46,7 @@
                 draggingPos: undefined,
                 draggingField: undefined,
                 modalTint: false,
+                recordFields: []
             }
         },
         mounted() {

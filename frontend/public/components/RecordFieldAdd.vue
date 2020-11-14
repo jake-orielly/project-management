@@ -42,13 +42,14 @@
         methods: {
             fieldAdd: function() {
                 let recordField = this.recordFields.filter(
-                        field => field.label == this.autocompleteVal
-                    )[0];
+                    field => field.label == this.autocompleteVal
+                )[0];
                
                 if (!recordField) {
                     alert("Record field not found");
                     return;
                 }
+
                 let newField = {
                     label: recordField.label,
                     type: recordField.type,
@@ -57,7 +58,7 @@
                 };
 
                 this.$parent.fields.push(newField);
-
+                this.$parent.recordFields.push(recordField.id);
                 this.autocompleteVal = "";
             },
         },

@@ -491,7 +491,13 @@ class Forms(Resource):
         db=client.forms
         collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
-        collection.insert_one(req_data)
+        form = collection.insert_one(req_data)
+        record_collection = db.record_fields
+        for field in req_data["record_fields"]:
+            record_collection.update(
+                {'id': field}, 
+                {'$push': {'forms': str(form.inserted_id)}}
+            )
         return {"message":"success"}
 
     def patch(self, user):
