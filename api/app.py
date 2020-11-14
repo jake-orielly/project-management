@@ -504,3 +504,13 @@ class Forms(Resource):
     def delete(self, user):
         req_data = json.loads(request.data.decode("utf-8"))
         return delete_document_by_prop("forms","forms","_id",ObjectId(req_data["id"]))
+
+@api.route('/record-fields')
+class Record_Fields(Resource):
+    def get(self):
+        db=client.forms
+        collection = db.record_fields
+        results = [field for field in collection.find()]
+        for i in results:
+            i["_id"] = str(i["_id"])
+        return results
