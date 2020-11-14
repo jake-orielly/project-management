@@ -5,7 +5,8 @@
         <div v-if="!formPreview" id="form-creation">
             <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
             <FormResponses ref="formResponses"></FormResponses>
-            <FieldAdd></FieldAdd>
+            <FieldAdd v-if="!formSaved"></FieldAdd>
+            <RecordFieldAdd v-if="!formSaved"></RecordFieldAdd>
             <FormCreation></FormCreation>
         </div>
         <FormDisplay v-bind:preview="true"></FormDisplay>
@@ -21,6 +22,7 @@
     import FormDisplay from '../components/FormDisplay.vue';
     import FormList from '../components/FormList.vue';
     import FormResponses from '../components/FormResponses.vue';
+    import RecordFieldAdd from '../components/RecordFieldAdd.vue';
 
     export default {
         components: {
@@ -29,7 +31,8 @@
             FormCreation,
             FormDisplay,
             FormList,
-            FormResponses
+            FormResponses,
+            RecordFieldAdd
         },
         data () {
             return {

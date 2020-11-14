@@ -79,6 +79,9 @@ export default {
         let data = JSON.stringify({"username":username,"password":password});
         return this.genericRequest("/register", "POST",data);
     },
+    getRecordFields() {
+        return this.genericRequest("/record-fields", "GET");
+    },
     getTeamMembers(teamName) {
         return this.genericRequest("/team?name=" + teamName, "GET");
     },
