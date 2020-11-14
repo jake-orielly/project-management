@@ -6,7 +6,7 @@
             @keydown.up="up"  
             @input="change"
         />
-        <ul class="dropdown-menu" style="width:100%" v-if="$parent.autocompleteVal">
+        <ul class="dropdown-menu" style="width:100%" v-if="$parent.autocompleteVal && matches[0]">
             <li v-for="(suggestion, index) in matches"
                 :key="suggestion.input"
                 v-bind:class="{'active': isActive(index)}"
@@ -40,9 +40,9 @@
         computed: {
             matches() {
                 return this.suggestions.filter(str => {
-                    return str.toLowerCase().match(this.$parent.autocompleteVal.toLowerCase());
+                    return str.match(new RegExp(this.$parent.autocompleteVal,"i"));
                 }).map(str => {
-                    return str.match(this.$parent.autocompleteVal);
+                    return str.match(new RegExp(this.$parent.autocompleteVal,"i"));
                 });
             },
 
