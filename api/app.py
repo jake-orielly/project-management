@@ -520,3 +520,11 @@ class Record_Fields(Resource):
         for i in results:
             i["_id"] = str(i["_id"])
         return results
+
+    def post(self):
+        db=client.forms
+        collection = db.record_fields
+        req_data = json.loads(request.data.decode("utf-8"))
+        req_data["forms"] = []
+        collection.insert_one(req_data)
+        return {"message":"success"}

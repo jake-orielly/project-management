@@ -54,7 +54,8 @@
                     label: recordField.label,
                     type: recordField.type,
                     mandatory: this.fieldMandatory,
-                    id: recordField.id
+                    id: recordField.id,
+                    recordField: true
                 };
 
                 this.$parent.fields.push(newField);

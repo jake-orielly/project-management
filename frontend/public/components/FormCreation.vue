@@ -14,6 +14,8 @@
                     <input class="field-label" v-model="field.label" @input="resizeInput(field)">
                     <span class="field-type">{{"(" + $parent.caps(field.type) + ")"}}</span>
                     <font-awesome-icon icon="bars" class="clickable"/>
+                    <font-awesome-icon v-if="!field.recordField" @click="makeRecordField(field)" icon="unlock" class="clickable"/>
+                    <font-awesome-icon v-if="field.recordField" icon="lock"/>
                     <font-awesome-icon icon="times" @click="deleteField(field)" class="close-icon clickable"/>
                     <ul v-for="(option, index) in field.options" v-bind:key="option">
                         <li>
@@ -128,6 +130,21 @@
                 this.$parent.fields = [];
                 this.$parent.formSaved = false;
                 this.$parent.formTitle = "";
+            },
+            makeRecordField(field) {
+                let confirmation = confirm("Create a new record field based on " + field.label + "?")
+                if (confirmation) {
+                    requests.createRecordField({
+                        label:field.label,
+                        type:field.type,
+                        id:field.id
+                    }).then(
+                        () => {
+                            this.$parent.recordFields.push(field.id);
+                            field.recordField = true;
+                        }
+                    )
+                }
             }
         }
     }

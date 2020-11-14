@@ -82,6 +82,10 @@ export default {
     getRecordFields() {
         return this.genericRequest("/record-fields", "GET");
     },
+    createRecordField(field) {
+        let data = JSON.stringify(field);
+        return this.genericRequest("/record-fields", "POST",data);
+    },
     getTeamMembers(teamName) {
         return this.genericRequest("/team?name=" + teamName, "GET");
     },

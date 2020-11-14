@@ -98,7 +98,8 @@
                     label: this.fieldLabel,
                     type: this.currField,
                     mandatory: this.fieldMandatory,
-                    id: this.idGenerator()
+                    id: this.idGenerator(),
+                    recordField: false
                 };
                 if (this.currField == 'binary') 
                     newField = this.addBinaryField(newField);
