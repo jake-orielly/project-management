@@ -9,11 +9,11 @@
         </p>
         <p>
             Label: 
-            <input type="text" id="field-label">
+            <input type="text" v-model="fieldLabel" id="field-label">
         </p>
         <p>
             Mandatory:
-            <input type="checkbox" id="field-mandatory" checked>
+            <input type="checkbox" v-model="fieldMandatory" id="field-mandatory" checked>
         </p>
         <ul v-if="currField == 'binary'">
             <li>
@@ -84,14 +84,17 @@
                 currField: '',
                 numDropdownFields: 0,
                 numMultiSelectFields: 0,
+                fieldLabel:"",
+                fieldMandatory:true
             }
         },
         methods: {
             fieldAdd: function() {
                 let newField = {
-                    label: document.getElementById("field-label").value,
-                    type: document.getElementById("field-dropdown").value,
-                    mandatory: document.getElementById("field-mandatory").checked
+                    label: this.fieldLabel,
+                    type: this.currField,
+                    mandatory: this.fieldMandatory,
+                    id: this.idGenerator()
                 };
                 if (this.currField == 'binary') {
                     newField.options = [];
@@ -127,6 +130,12 @@
                 document.getElementById("field-dropdown").value = "";
                 this.currField = "";
                 document.getElementById("field-label").value = "";
+            },
+            idGenerator() {
+                const S4 = () => {
+                    return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+                };
+                return (S4()+"-"+S4()+"-"+S4()+"-"+S4());
             },
             dropdownAdd: function() {
                 this.numDropdownFields++;
