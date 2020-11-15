@@ -508,8 +508,17 @@ class Forms(Resource):
         return {"message":"success"}
 
     def delete(self, user):
+        db=client.forms
+        collection = db.forms
         req_data = json.loads(request.data.decode("utf-8"))
-        return delete_document_by_prop("forms","forms","_id",ObjectId(req_data["id"]))
+        record_fields = collection.find_one({"_id": ObjectId(req_data["id"])})["record_fields"]
+        delete_document_by_prop("forms","forms","_id", ObjectId(req_data["id"]))
+        record_collection = db.record_fields
+        for field in record_fields:
+            record_collection.update_one({"id": field},{"$pull": { 
+                    "forms":req_data["id"]
+                }})
+        return {"message":"success"}
 
 @api.route('/record-fields')
 class Record_Fields(Resource):
