@@ -163,8 +163,9 @@
             },
             getData(response,field) {
                 field = field.replace(/ /g,'_');
-                if (field == "due_date")
+                if (field == "due_date") {
                     return this.formatDate(response[field])
+                }
                 else if (field == "description")
                     return response[field]
                 else {
@@ -220,6 +221,8 @@
                 this.filters.splice(filterIndex,1);
             },
             formatDate(date) {
+                if (!date)
+                    return date;
                 let dateSplit = date.split('-');
                 return dateSplit[1] + "-" + dateSplit[2] + "-" + dateSplit[0];
             },
