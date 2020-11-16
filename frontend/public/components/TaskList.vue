@@ -59,8 +59,7 @@
                                 "estimate":response.estimate,
                                 "due_date":response.due_date,
                                 "hash":response.hash,
-                                "status":response.status,
-                                "history":response.history
+                                "status":response.status
                             })
                         }
                         if (this.mine)

@@ -14,7 +14,6 @@
             </div>
             <div id="dashboard">
                 <Inbox v-if="focused == 'inbox'"></Inbox>
-                <History v-if="focused == 'history'"></History>
                 <TaskList v-if="focused == 'task-list'" ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
                 <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             </div>
@@ -29,7 +28,6 @@
     import Inbox from '../components/Inbox.vue';
     import TaskList from '../components/TaskList.vue';
     import TaskStatusModal from '../components/TaskStatusModal.vue';
-    import History from '../components/History.vue';
 
     export default {
         components: {
@@ -37,7 +35,6 @@
             Inbox,
             TaskList,
             TaskStatusModal,
-            History
         },
         data () {
             return {
@@ -48,7 +45,6 @@
                 focused: "inbox",
                 optionMap: {
                     "Inbox":"inbox",
-                    "Reporting":"history"
                 }
             }
         },

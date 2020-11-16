@@ -87,13 +87,6 @@ class Tasks(Resource):
             list(filter(lambda item: item["hash"] != task_hash, cursor["tasks"]))
         }})
 
-        task["history"].append(
-            {
-                "event":"Request Assigned to " + userTo,
-                "user":userFrom,
-                "time":time
-            }
-        )
         task.status = "new"
         cursor = collection.find_one({"user": userTo})
         doc_id = cursor["_id"]
@@ -121,14 +114,6 @@ class Tasks(Resource):
 
         task = cursor["tasks"][index]
         task["estimate"] = estimate
-        task["status"] = "In Progress"
-        task["history"].append(
-            {
-                "event":"Estimate submitted",
-                "user":user,
-                "time":time
-            }
-        )
         task["status"] = status
         collection.update_one({"_id":ObjectId(doc_id)},{"$set": { "tasks." + str(index): task}})
         return "success " + task["status"] + " " + str(index)

@@ -42,7 +42,6 @@
                     event.comment = comment;
 
                 this.task.status = status;
-                this.task.history.push(event);
                 requests.updateTask(this.$store.state.user,this.task).then(
                     () => {
                         this.$parent.$refs.taskList.updateTaskList();

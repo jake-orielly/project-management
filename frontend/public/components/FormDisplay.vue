@@ -78,15 +78,7 @@
                     else
                         response.fields[i.dataset.label] = i.value;
                 }
-                console.log(response)
                 response.hash = Math.random().toString(36).substring(2, 15);
-                response.history =[
-                    {
-                        event:"Request Submitted",
-                        user:this.$store.state.user,
-                        time:String(new Date())
-                    }
-                ];
                 if (formComplete) {
                     response["time"] = String(new Date());
                     requests.submitResponse(this.$parent.currForm,this.$parent.user,response);
