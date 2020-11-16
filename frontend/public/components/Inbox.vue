@@ -47,7 +47,7 @@
         data() {
             return {
                 viewing: undefined,
-                tabs: ["New","In Progress","Blocked","Complete"],
+                tabs: ["Response Recieved","Response Requested","Recurring","Tracked Metrics"],
                 cols: {
                     "Project":"title",
                     "Task":"description",
@@ -55,7 +55,7 @@
                 },
                 sortBy:"Project",
                 sortOrder:"descending",
-                currTab: "New"
+                currTab: "Response Recieved"
             }
         },
         methods: {

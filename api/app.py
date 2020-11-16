@@ -87,7 +87,7 @@ class Tasks(Resource):
             list(filter(lambda item: item["hash"] != task_hash, cursor["tasks"]))
         }})
 
-        task.status = "new"
+        task.status = "Response Recieved"
         cursor = collection.find_one({"user": userTo})
         doc_id = cursor["_id"]
         collection.update_one({"_id":doc_id},{'$push': {'tasks': task}})
@@ -150,7 +150,7 @@ class Responses(Resource):
         cursor = collection.find_one({"user": form_owner})
         doc_id = cursor["_id"]
         req_data["form_title"] = form_title
-        req_data["status"] = "New"
+        req_data["status"] = "Response Recieved"
         collection.update_one({"_id":doc_id},{'$push': {'tasks': req_data}})
 
         return {"message":"success"}
