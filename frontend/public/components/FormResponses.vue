@@ -101,9 +101,11 @@
         computed: {
             filteredResponses: function () {
                 let filteredResponses = this.responses;
-
+                console.log(filteredResponses)
+                console.log(this.filters)
                 for (let f of this.filters)
                     filteredResponses = this.evalFilter(filteredResponses,f);
+                console.log(filteredResponses)
                 return filteredResponses;
             }
         },
@@ -125,7 +127,8 @@
                 }
                 
                 let operator = filterSplit[columnInd + 1];
-                let argument = filterSplit[columnInd + 2];
+                let argument = filterSplit.slice(columnInd + 2).join(" ");
+                console.log(operator,argument)
                 
                 let containsOperators = ["contains"];
                 let equalsOperators = ["is"];
