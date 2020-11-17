@@ -5,8 +5,10 @@
   "main": "server.js",
   "dependencies": {
     "express": "^4.17.1",
-    "node-sass":"",
-    "vue-router": "^2.7.0"
+    "keycloak-js": "^11.0.3",
+    "node-sass": "",
+    "vue-router": "^2.7.0",
+    "vuejs-logger": "^1.5.4"
   },
   "scripts": {
     "test": "test",
