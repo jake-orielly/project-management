@@ -15,6 +15,12 @@ services:
     volumes:
       - ./api/app.py:/app/app.py
       - ./api/mongo_url.py:/app/mongo_url.py
+  nginx:
+    image: nginx
+    ports:
+      - 8085:80
+    depends_on:
+      - api
   mongodb:
     image: mongo
     ports:
@@ -41,8 +47,6 @@ services:
         DB_DATABASE: keycloak
         DB_USER: keycloak
         DB_PASSWORD: password
-        KEYCLOAK_USER: admin
-        KEYCLOAK_PASSWORD: admin
       ports:
         - 8090:8080
         - 8443:8443

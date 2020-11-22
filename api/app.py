@@ -1,6 +1,5 @@
 from flask import Flask, request, session
 from flask_api import status
-from flask_cors import CORS
 
 from werkzeug.utils import cached_property
 from flask_restplus import Resource, Api
@@ -19,7 +18,6 @@ def check_password(plain_text_password, hashed_password):
     return bcrypt.checkpw(plain_text_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 app = Flask(__name__) 
-CORS(app)
 api = Api(app)
 
 app.secret_key = 'mysecret'
