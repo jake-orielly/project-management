@@ -30,8 +30,8 @@
                         <tr>
                             <th v-for="field in fields" v-bind:key="field" class="clickable" @click="setSort(field)">
                                 {{prettify(field)}}
-                                <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../images/sort-down.png">
-                                <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../images/sort-up.png">       
+                                <img v-if="sort == field && sortOrder == 'ascending'" class="sort-img" src="../assets/sort-down.png">
+                                <img v-if="sort == field && sortOrder == 'descending'" class="sort-img" src="../assets/sort-up.png">       
                             </th>
                         </tr>
                     </thead>

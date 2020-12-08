@@ -21,13 +21,11 @@
 </template>
 
 <script>
-    import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js'
     import Autocomplete from '../components/Autocomplete.vue';
 
     export default {
         components: {
-            FontAwesomeIcon,
             Autocomplete
         },
         data() {

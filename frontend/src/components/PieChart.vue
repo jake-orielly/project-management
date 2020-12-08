@@ -89,11 +89,9 @@
     }
 
     Chart.pluginService.register({
-        beforeDraw: function (chart, easing) {
+        beforeDraw: function (chart) {
             if (chart.config.options.chartArea && chart.config.options.chartArea.backgroundColor) {
-                var helpers = Chart.helpers;
                 var ctx = chart.chart.ctx;
-                var chartArea = chart.chartArea;
 
                 ctx.save();
                 ctx.fillStyle = chart.config.options.chartArea.backgroundColor;
