@@ -66,6 +66,13 @@
                 <input type="number" v-model="sliderInitial" id="slider-initial">
             </p>
         </div>
+        <div v-if="currField == 'db field'">
+            <select id="db-field-dropdown" v-model="selectedDbField">
+                <option v-bind:value="field.name" v-for="field in dbFields" v-bind:key="field.name">
+                    {{field.name}}
+                </option>
+            </select>
+        </div>
         <br>
         <button id="field-add" @click="fieldAdd">Add</button>
     </div>
@@ -73,6 +80,7 @@
 
 <script>
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+    import requests from '../services/requests.js';
 
     export default {
         components: {
@@ -80,8 +88,8 @@
         },
         data() {
             return {
-                fieldTypes: ['text','number','text (long)','date','binary','dropdown','multi-select','slider'],
-                currField: '',
+                fieldTypes: ["text","number","text (long)","date","binary","dropdown","multi-select","slider","db field"],
+                currField: "",
                 numDropdownFields: 0,
                 numMultiSelectFields: 0,
                 fieldLabel:"",
@@ -89,8 +97,17 @@
                 sliderMin:0,
                 sliderMax:0,
                 sliderStep:0,
-                sliderInitial:0
+                sliderInitial:0,
+                dbFields:[],
+                selectedDbField: ""
             }
+        },
+        mounted() {
+            requests.getDbFields().then(
+                response => {
+                    this.dbFields = JSON.parse(response.responseText);
+                }
+            );
         },
         methods: {
             fieldAdd: function() {

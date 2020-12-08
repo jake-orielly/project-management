@@ -1,10 +1,14 @@
 <template>
-    <input :data-label="toLabel(field.label)" type="range" 
-                :min="field.slider.min" 
-                :max="field.slider.max" 
-                :value="field.slider.initial" 
-                :step="field.slider.step" 
-                class="slider" id="myRange">
+    <input 
+        :data-label="toLabel(field.label)" 
+        :min="field.slider.min" 
+        :max="field.slider.max" 
+        :value="field.slider.initial" 
+        :step="field.slider.step" 
+        type="range"
+        class="slider" 
+        id="myRange"
+    >
 </template>
 
 <script>

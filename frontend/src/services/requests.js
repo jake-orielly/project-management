@@ -86,6 +86,9 @@ export default {
         let data = JSON.stringify(field);
         return this.genericRequest("/record-fields", "POST",data);
     },
+    getDbFields() {
+        return this.genericRequest("/db-fields", "GET");
+    },
     getTeamMembers(teamName) {
         return this.genericRequest("/team?name=" + teamName, "GET");
     },

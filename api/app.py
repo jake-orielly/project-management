@@ -522,3 +522,13 @@ class Record_Fields(Resource):
         req_data["forms"] = []
         collection.insert_one(req_data)
         return {"message":"success"}
+
+@api.route('/db-fields')
+class Db_Fields(Resource):
+    def get(self):
+        db=client.forms
+        collection = db.db_fields
+        results = [field for field in collection.find()]
+        for i in results:
+            i["_id"] = str(i["_id"])
+        return results

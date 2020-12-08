@@ -18,6 +18,7 @@
                 <Binary v-if="field.type == 'binary'" :field="field" />
                 <Dropdown v-if="field.type == 'dropdown'" :field="field" />
                 <Slider v-if="field.type == 'slider'" :field="field" />
+                <DbField v-if="field.type == 'db field'" :field="field" />
             </p>
         </div>
         <div id="submit-container">
@@ -30,6 +31,7 @@
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
     import Binary from './field-displays/BinaryDisplay';
+    import DbField from './field-displays/DbFieldDisplay';
     import Dropdown from './field-displays/DropdownDisplay';
     import Slider from './field-displays/SliderDisplay';
     
@@ -38,6 +40,7 @@
         components: {
             FontAwesomeIcon,
             Binary,
+            DbField,
             Dropdown,
             Slider
         },

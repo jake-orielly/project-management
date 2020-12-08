@@ -29,10 +29,25 @@
             ).then(
                 response => {
                     let form = JSON.parse(response.responseText)[0];
+                    let dbFields = form.fields.filter(f => f.type == "db field");
+                    let apiDbFields;
                     this.formTitle = form.title;
                     this.currForm = this.formTitle;
                     this.fields = form.fields;
-                    this.openFormPreview()
+                    if (dbFields.length) {
+                        requests.getDbFields().then(
+                            response => {
+                                apiDbFields = JSON.parse(response.responseText);
+                                for (let field of dbFields)
+                                    field.options = apiDbFields.filter(
+                                        apiField => apiField.name.toLowerCase() == field.label.toLowerCase()
+                                    )[0].options;
+                                this.openFormPreview()
+                            }
+                        )
+                    }
+                    else
+                        this.openFormPreview()
                 }
             )
         },
