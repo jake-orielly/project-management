@@ -14,7 +14,10 @@
                 <FieldAdd></FieldAdd>
                 <RecordFieldAdd></RecordFieldAdd>
             </div>
-            <FormCreation></FormCreation>
+            <FormCreation
+                @saveForm="saveForm"
+                @closeForm="closeForm"
+            ></FormCreation>
         </div>
         <FormDisplay v-bind:preview="true"></FormDisplay>
     </div>
@@ -83,6 +86,41 @@
             },
             showForm(formName) {
                 this.$refs.formResponses.loadForm(formName);
+            },
+            saveForm() {
+                let form = {};
+                form.title = this.formTitle;
+                form.fields = this.fields.slice();
+                form.record_fields = this.recordFields;
+                
+                requests.retrieveForm(
+                    {"title":this.formTitle},
+                    this.$store.state.user
+                ).then(
+                    response => {
+                        if (!JSON.parse(response.responseText).length) {
+                            requests.postForm(form,this.$store.state.user).then(
+                                () => {
+                                    this.formSaved = true;
+                                    this.$refs.FormList.updateFormList("mine"); 
+                                }
+                            );
+                        }
+                        else {
+                            requests.patchForm(form,this.$store.state.user).then(
+                                () => {
+                                    this.formSaved = true;
+                                }
+                            );
+                        }
+                        this.recordFields = [];
+                    }
+                );
+            },
+            closeForm() {
+                this.formSaved = true;
+                this.fields = [];
+                this.formTitle = "";
             },
             createForm() {
                 this.fields = [];

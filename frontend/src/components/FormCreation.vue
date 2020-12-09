@@ -4,6 +4,7 @@
             <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="$parent.formTitle">
             <font-awesome-icon icon="eye" @click="openFormPreview" class="eye-icon clickable"/>
             <font-awesome-icon icon="save" @click="saveForm" class="save-icon clickable"/>
+            <font-awesome-icon icon="times" @click="closeForm" class="close-icon-large clickable"/>
             <div v-if="!$parent.fields.length" class="no-content-div">
                 <p> Your form currently has no content </p>
             </div>
@@ -54,34 +55,10 @@
                 this.$parent.formPreview = true;
             },
             saveForm() {
-                let form = {};
-                form.title = this.$parent.formTitle;
-                form.fields = this.$parent.fields.slice();
-                form.record_fields = this.$parent.recordFields;
-                
-                requests.retrieveForm(
-                    {"title":this.$parent.formTitle},
-                    this.$store.state.user
-                ).then(
-                    response => {
-                        if (!JSON.parse(response.responseText).length) {
-                            requests.postForm(form,this.$store.state.user).then(
-                                () => {
-                                    this.$parent.formSaved = true;
-                                    this.$parent.$refs.FormList.updateFormList("mine"); 
-                                }
-                            );
-                        }
-                        else {
-                            requests.patchForm(form,this.$store.state.user).then(
-                                () => {
-                                    this.$parent.formSaved = true;
-                                }
-                            );
-                        }
-                        this.$parent.recordFields = [];
-                    }
-                )
+                this.$emit("saveForm");
+            },
+            closeForm() {
+                this.$emit("closeForm");
             },
             onDrag(item) {
                 for (let i = 0; i < this.$parent.fields.length; i++)
@@ -180,13 +157,19 @@
 
 .save-icon {
     position: absolute;
-    right: 3rem;
+    right: 4rem;
+    font-size: 2rem;
+}
+
+.close-icon-large {
+    position: absolute;
+    right: 1.5rem;
     font-size: 2rem;
 }
 
 .eye-icon {
     position: absolute;
-    right: 5.5rem;
+    right: 6.5rem;
 }
 
 .eye-icon, .save-icon {
