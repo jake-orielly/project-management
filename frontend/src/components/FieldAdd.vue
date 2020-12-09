@@ -4,16 +4,31 @@
         <p>
             Type:
             <select id="field-dropdown" v-model="currField">
-                <option v-bind:value="field" v-for="field in fieldTypes" v-bind:key="field">{{$parent.caps(field)}}</option>
+                <option 
+                    v-bind:value="field" 
+                    v-for="field in fieldTypes" 
+                    v-bind:key="field"
+                >
+                    {{$parent.caps(field)}}
+                </option>
             </select>
         </p>
         <p>
             Label: 
-            <input type="text" v-model="fieldLabel" id="field-label">
+            <input 
+                type="text" 
+                v-model="fieldLabel" 
+                id="field-label"
+            >
         </p>
         <p>
             Mandatory:
-            <input type="checkbox" v-model="fieldMandatory" id="field-mandatory" checked>
+            <input 
+                type="checkbox" 
+                v-model="fieldMandatory" 
+                id="field-mandatory" 
+                checked
+            >
         </p>
         <ul v-if="currField == 'binary'">
             <li>
@@ -35,13 +50,14 @@
             <li>
                 <button id="dropdown-add" @click="multiSelectAdd">Add Selection Option</button>
             </li>
-            <li v-for="selection in [...Array(numMultiSelectFields).keys()]" 
-            v-bind:key="selection"
-            draggable 
-            @dragstart='onDragMultiSelect(field)' 
-            @dragenter='onDragEnterMultiSelect($event)' 
-            @dragover.prevent 
-            @dragenter.prevent
+            <li 
+                v-for="selection in [...Array(numMultiSelectFields).keys()]" 
+                v-bind:key="selection"
+                draggable 
+                @dragstart='onDragMultiSelect(field)' 
+                @dragenter='onDragEnterMultiSelect($event)' 
+                @dragover.prevent 
+                @dragenter.prevent
             >
                 <input type="checkbox" class="multi-select-input">
                 <input type="text" class="multi-select-label" placeholder="New Item Label">
@@ -51,24 +67,44 @@
         <div v-if="currField == 'slider'">
             <p>
                 Min: 
-                <input type="number" v-model="sliderMin" id="slider-min">
+                <input 
+                    type="number" 
+                    v-model="sliderMin" 
+                    id="slider-min"
+                >
             </p>
             <p>
                 Max
-                <input type="number" v-model="sliderMax" id="slider-max">
+                <input 
+                    type="number" 
+                    v-model="sliderMax" 
+                    id="slider-max"
+                >
             </p>
             <p>
                 Step
-                <input type="number" v-model="sliderStep" id="slider-step">
+                <input
+                    type="number" 
+                    v-model="sliderStep" 
+                    id="slider-step"
+                >
             </p>
             <p>
                 Initial
-                <input type="number" v-model="sliderInitial" id="slider-initial">
+                <input 
+                    type="number" 
+                    v-model="sliderInitial" 
+                    id="slider-initial"
+                >
             </p>
         </div>
         <div v-if="currField == 'db field'">
             <select id="db-field-dropdown" v-model="selectedDbField">
-                <option v-bind:value="field.name" v-for="field in dbFields" v-bind:key="field.name">
+                <option 
+                    v-bind:value="field.name" 
+                    v-for="field in dbFields" 
+                    v-bind:key="field.name"
+                >
                     {{field.name}}
                 </option>
             </select>
