@@ -1,5 +1,5 @@
 <template>
-    <div style="position:relative" v-bind:class="{'open':openSuggestion}">
+    <div style="position:relative;" v-bind:class="{'open':openSuggestion}">
         <input class="form-control" type="text" v-model="$parent.autocompleteVal"
             @keydown.enter="enter"
             @keydown.down="down"
@@ -95,9 +95,6 @@
         font-size: 1.25rem;
     }
 
-    ul {
-        width:100%;
-    }
 
     li {
         padding: 0.25rem 0.5rem;

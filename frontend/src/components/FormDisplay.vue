@@ -99,6 +99,12 @@
 <style lang="scss" scoped>
     @import "../scss/_variables.scss";
 
+    .form-field {
+        margin: auto;
+        width: 17rem;
+        padding: 10px;
+    }
+
     .close-icon-container {
         text-align: right;
     }

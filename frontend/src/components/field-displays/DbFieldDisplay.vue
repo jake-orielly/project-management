@@ -1,21 +1,30 @@
 <template>
-    <select :data-label="toLabel(field.label)">
-        <option 
-            v-for="(option, ind) in field.options" 
-            :key="ind + ':' + field.options.indexOf(option)" 
-            :value="option"
-        >
-            {{option}}
-        </option>
-    </select>
+    <div>
+        <autocomplete 
+            :data-label="toLabel(field.label)"
+            :suggestions="field.options" 
+            :id="field.label + '-autocomplete'"
+            class="db-field-autocomplete"
+        ></autocomplete>
+    </div>
 </template>
 
 <script>
+    import Autocomplete from '../../components/Autocomplete.vue';
+
     export default {
+        components: {
+            Autocomplete
+        },
         props: {
             field: {
                 type: Object,
                 required: true
+            }
+        },
+        data() {
+            return {
+                autocompleteVal: ""
             }
         },
         methods: {
