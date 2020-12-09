@@ -152,33 +152,45 @@
 </script>
 
 <style lang="scss" scoped>
-    @import "../scss/_variables.scss";
+@import "../scss/_variables.scss";
 
-    .close-icon {
-        display: inline-block;
-    }
+#form-content {
+    display: inline-block;
+    position: relative;
+    border: 3px solid $buzz-blue;
+    border-radius: 1rem;
+    padding: 2rem;
+    overflow-y:auto;
+    min-width:80%;
+    min-height:30%;
+    max-height: 60%;
+}
 
-    .field-card-inner *{
-        margin-right: 0.5em;
-    }
+.close-icon {
+    display: inline-block;
+}
 
-    .field-label {
-        margin-right: 0;
-    }
+.field-card-inner *{
+    margin-right: 0.5em;
+}
 
-    .save-icon {
-        position: absolute;
-        right: 3rem;
-        font-size: 2rem;
-    }
+.field-label {
+    margin-right: 0;
+}
 
-    .eye-icon {
-        position: absolute;
-        right: 5.5rem;
-    }
+.save-icon {
+    position: absolute;
+    right: 3rem;
+    font-size: 2rem;
+}
 
-    .eye-icon, .save-icon {
-        font-size:2rem; 
-        color:$buzz-black;
-    }
+.eye-icon {
+    position: absolute;
+    right: 5.5rem;
+}
+
+.eye-icon, .save-icon {
+    font-size:2rem; 
+    color:$buzz-black;
+}
 </style>

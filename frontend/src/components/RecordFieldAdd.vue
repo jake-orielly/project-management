@@ -72,12 +72,14 @@
 </script>
 
 <style lang="scss" scoped>
+@import "../scss/_variables.scss";
+
 #record-field-container {
     display: inline-block;
     margin-left: 2em;
     margin-top: 1em;
     padding: 1rem;
-    border: 3px solid #2C666E;
+    border: 3px solid $buzz-blue;
     border-radius: 1rem;
 }
 

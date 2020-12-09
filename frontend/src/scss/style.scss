@@ -40,18 +40,6 @@ textarea {
 .field-card, .dashboard-card{
     display: table;
 }
-#field-input-container {
-    display: inline-block;
-    margin-left: 2em;
-    margin-top: 1em;
-    padding: 1rem;
-    border: 3px solid #2C666E;
-    border-radius: 1rem;
-
-    p {
-        margin: 0.25rem;
-    }
-}
 
 .field-card {
     width: 100%;
@@ -83,18 +71,6 @@ textarea {
 #form-container {
     text-align: center;
     margin-top:2rem;
-}
-
-#form-content {
-    display: inline-block;
-    position: relative;
-    border: 3px solid #2C666E;
-    border-radius: 1rem;
-    padding: 2rem;
-    overflow-y:auto;
-    min-width:80%;
-    min-height:30%;
-    max-height: 60%;
 }
 
 #form-title {

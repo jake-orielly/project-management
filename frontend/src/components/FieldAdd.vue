@@ -185,5 +185,18 @@
 </script>
 
 <style lang="scss" scoped>
+@import "../scss/_variables.scss";
 
+#field-input-container {
+    display: inline-block;
+    margin-left: 2em;
+    margin-top: 1em;
+    padding: 1rem;
+    border: 3px solid $buzz-blue;
+    border-radius: 1rem;
+
+    p {
+        margin: 0.25rem;
+    }
+}
 </style>
