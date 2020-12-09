@@ -32,7 +32,7 @@
     export default {
         components: {
             TopBanner,
-            Inbox,
+            UserInbox,
             TaskList,
             TaskStatusModal,
         },
