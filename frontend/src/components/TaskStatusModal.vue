@@ -1,7 +1,10 @@
 <template>
     <div id="modal-container" v-if="showing">
         <div id="task-status-modal">
-            <div class="close-icon-container" @click="closeModal">
+            <div 
+                class="close-icon-container" 
+                @click="closeModal"
+            >
                 <i class="fa fa-times clickable"></i>
             </div>
             <p id="status-text">

@@ -2,16 +2,30 @@
     <div id="taskList" :class="{'no-border' : !mine}">
         <p class="title" v-if="mine">My Tasks</p>
         <ul>
-            <li v-for="task in this.taskList.filter(task => task.status == 'In Progress')" v-bind:key="task.name">
-                <div class="dashboard-card" :class="[task.danger ? 'card-danger' : '']">
+            <li 
+                v-for="task in this.taskList.filter(task => task.status == 'In Progress')" 
+                :key="task.name"
+            >
+                <div 
+                    class="dashboard-card" 
+                    :class="[task.danger ? 'card-danger' : '']"
+                >
                     <div class="task-name">
                         <span class="clickable">
                             {{task.description + ': ' + task.estimate + ' hours, due: ' + formatDate(task.due_date)}}
                         </span>
-                        <div v-if="mine" class="task-icon" @click="setStatus(task,'Blocked')">
+                        <div 
+                            v-if="mine" 
+                            class="task-icon" 
+                            @click="setStatus(task,'Blocked')"
+                        >
                             <i class="fa fa-ban clickable"></i>
                         </div>
-                        <div v-if="mine" class="task-icon" @click="setStatus(task,'Completed')">
+                        <div 
+                            v-if="mine" 
+                            class="task-icon" 
+                            @click="setStatus(task,'Completed')"
+                        >
                             <i class="fa fa-check clickable"></i>
                         </div>
                     </div>
