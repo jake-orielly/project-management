@@ -1,7 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <Banner active="team-workload"></Banner>
+        <TopBanner active="team-workload"></TopBanner>
         <div id="team-container" v-if="!formPreview">
             <div class="clickable">
                 <div class="user-forms-container" v-for="team in myTeams" v-bind:key="team.name">
@@ -37,13 +37,13 @@
     import '@fortawesome/fontawesome-free/js/all.js'
 
     import requests from '../services/requests.js';
-    import Banner from '../components/Banner.vue';
+    import TopBanner from '../components/TopBanner.vue';
     import FormDisplay from '../components/FormDisplay.vue';
     import TaskList from '../components/TaskList.vue';
 
     export default {
         components: {
-            Banner,
+            TopBanner,
             FormDisplay,
             TaskList
         },

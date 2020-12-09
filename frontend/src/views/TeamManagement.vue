@@ -1,7 +1,7 @@
 <!-- eslint-disable -->
 <template>
     <div>
-        <Banner active="team-management"></Banner>
+        <TopBanner active="team-management"></TopBanner>
         <div id="main-container">
             <p class="title">My Teams</p>
             <div v-for="team in myTeams" class="team-container">
@@ -28,7 +28,7 @@
                     <span>team</span>
                 </p>
                 <div class="team-header">
-                    <autocomplete :suggestions="orgMembers"></autocomplete>
+                    <AutocompleteInput :suggestions="orgMembers"></AutocompleteInput>
                 </div>
                 <font-awesome-icon icon="user-plus" @click="addTeamMember()" class="team-header clickable"/>
                 <font-awesome-icon icon="times" @click="closeAddTeamModal" class="team-header clickable"/>
@@ -44,14 +44,14 @@
 
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
-    import Autocomplete from '../components/Autocomplete.vue';
-    import Banner from '../components/Banner.vue';
+    import AutocompleteInput from '../components/AutocompleteInput.vue';
+    import TopBanner from '../components/TopBanner.vue';
 
     export default {
         components: {
             FontAwesomeIcon,
-            Autocomplete,
-            Banner
+            AutocompleteInput,
+            TopBanner
         },
         data () {
             return {

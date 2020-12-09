@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="modalTint" id="modal-tint"></div>
-        <Banner active="forms"></Banner>
+        <TopBanner active="forms"></TopBanner>
         <div v-if="!formPreview" id="form-creation">
             <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
             <FormResponses ref="formResponses"></FormResponses>
@@ -16,7 +16,7 @@
 <script>
     import '../css/style.css'
     import requests from '../services/requests.js';
-    import Banner from '../components/Banner.vue';
+    import TopBanner from '../components/TopBanner.vue';
     import FieldAdd from '../components/FieldAdd.vue';
     import FormCreation from '../components/FormCreation.vue';
     import FormDisplay from '../components/FormDisplay.vue';
@@ -26,7 +26,7 @@
 
     export default {
         components: {
-            Banner,
+            TopBanner,
             FieldAdd,
             FormCreation,
             FormDisplay,

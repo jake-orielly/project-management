@@ -1,7 +1,7 @@
 <template>
     <div id="record-field-container">
         <p>Add a record field:</p>
-        <autocomplete :suggestions="recordFields.map(field => field.label)"></autocomplete>
+        <AutocompleteInput :suggestions="recordFields.map(field => field.label)"></AutocompleteInput>
         <div v-if="fieldInput">
             <p v-for="(field, ind) in matchingFields" 
                 v-bind:key="field.id"
@@ -22,11 +22,11 @@
 
 <script>
     import requests from '../services/requests.js'
-    import Autocomplete from '../components/Autocomplete.vue';
+    import AutocompleteInput from '../components/AutocompleteInput.vue';
 
     export default {
         components: {
-            Autocomplete
+            AutocompleteInput
         },
         data() {
             return {

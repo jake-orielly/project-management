@@ -1,7 +1,7 @@
 <template>
     <div>
         <p>
-            <autocomplete :suggestions="sortedForms.map(form => form.name)" id="search-bar"></autocomplete>
+            <AutocompleteInput :suggestions="sortedForms.map(form => form.name)" id="search-bar"></AutocompleteInput>
         </p>
         <div id="form-container">
             <div id="scope-container">
@@ -37,12 +37,12 @@
 <script>
     import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
     import requests from '../services/requests.js';
-    import Autocomplete from '../components/Autocomplete.vue';
+    import AutocompleteInput from '../components/AutocompleteInput.vue';
 
     export default {
         components: {
             FontAwesomeIcon,
-            Autocomplete
+            AutocompleteInput
         },
         props: {
             targetUser: {

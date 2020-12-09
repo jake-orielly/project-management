@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="modalTint" id="modal-tint"></div>
-        <Banner active="dashboard"></Banner>
+        <TopBanner active="dashboard"></TopBanner>
         <div id="dashboard-container">
             <div id="focus-container">
                 <p class="title">{{$store.state.user + "'s Dashboard"}}</p>
@@ -13,7 +13,7 @@
                 </p>
             </div>
             <div id="dashboard">
-                <Inbox v-if="focused == 'inbox'"></Inbox>
+                <UserInbox v-if="focused == 'inbox'"></UserInbox>
                 <TaskList v-if="focused == 'task-list'" ref="taskList" v-bind:user="$store.state.user" v-bind:mine="true"></TaskList>
                 <TaskStatusModal ref="taskStatusModal"></TaskStatusModal>
             </div>
@@ -24,14 +24,14 @@
 <script>
     import '../css/style.css'
     import requests from '../services/requests.js';
-    import Banner from '../components/Banner.vue';
-    import Inbox from '../components/Inbox.vue';
+    import TopBanner from '../components/TopBanner.vue';
+    import UserInbox from '../components/UserInbox.vue';
     import TaskList from '../components/TaskList.vue';
     import TaskStatusModal from '../components/TaskStatusModal.vue';
 
     export default {
         components: {
-            Banner,
+            TopBanner,
             Inbox,
             TaskList,
             TaskStatusModal,

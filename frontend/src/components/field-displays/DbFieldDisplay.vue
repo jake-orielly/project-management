@@ -1,20 +1,20 @@
 <template>
     <div>
-        <autocomplete 
+        <AutocompleteInput 
             :data-label="toLabel(field.label)"
             :suggestions="field.options" 
             :id="field.label + '-autocomplete'"
             class="db-field-autocomplete"
-        ></autocomplete>
+        ></AutocompleteInput>
     </div>
 </template>
 
 <script>
-    import Autocomplete from '../../components/Autocomplete.vue';
+    import AutocompleteInput from '../../components/AutocompleteInput.vue';
 
     export default {
         components: {
-            Autocomplete
+            AutocompleteInput
         },
         props: {
             field: {
