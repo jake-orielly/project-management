@@ -88,7 +88,7 @@
         },
         data() {
             return {
-                fieldTypes: ["text","number","text (long)","date","binary","dropdown","multi-select","slider","db field"],
+                fieldTypes: ["text","number","text (long)","date","binary","dropdown","multi-select","slider","db field", "file upload"],
                 currField: "",
                 numDropdownFields: 0,
                 numMultiSelectFields: 0,
