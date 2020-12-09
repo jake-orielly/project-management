@@ -4,6 +4,9 @@
             <input placeholder="Form Title" type="text" id="form-title" autocomplete="off" v-model="$parent.formTitle">
             <font-awesome-icon icon="eye" @click="openFormPreview" class="eye-icon clickable"/>
             <font-awesome-icon icon="save" @click="saveForm" class="save-icon clickable"/>
+            <div v-if="!$parent.fields.length" class="no-content-div">
+                <p> Your form currently has no content </p>
+            </div>
             <div v-for="field in $parent.fields" class="field-card" v-bind:key="$parent.fields.indexOf(field)"
             draggable 
             @dragstart='onDrag(field)' 
@@ -156,6 +159,11 @@
     min-width:80%;
     min-height:30%;
     max-height: 60%;
+}
+
+.no-content-div {
+    margin: 2rem;
+    font-size: 1.5rem;
 }
 
 .close-icon {
