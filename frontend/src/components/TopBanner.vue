@@ -1,12 +1,34 @@
 <template>
     <div id="topbar">
         <img src="../assets/logo.svg" id="logo-img">
-        <router-link to="/dashboard" :class="{'buzz-bold': active == 'dashboard'}">Dashboard</router-link>
-        <router-link to="/my-forms" :class="{'buzz-bold': active == 'forms'}">Forms</router-link>
-        <router-link to="/dashboard" :class="{'buzz-bold': active == 'insights'}">Insights</router-link>
-        <router-link to="/team-management" :class="{'buzz-bold': active == 'team-management'}">My Team</router-link>
+        <router-link 
+            to="/dashboard" 
+            :class="{'buzz-bold': active == 'dashboard'}"
+        >
+            Dashboard
+        </router-link>
+        <router-link 
+            to="/my-forms" 
+            :class="{'buzz-bold': active == 'forms'}"
+        >
+            Forms
+        </router-link>
+        <router-link 
+            to="/dashboard" 
+            :class="{'buzz-bold': active == 'insights'}"
+        >
+            Insights
+        </router-link>
+        <router-link 
+            to="/team-management" 
+            :class="{'buzz-bold': active == 'team-management'}"
+        >
+            My Team
+        </router-link>
         <img src="../assets/avatar.png" id="avatar-img">
-        <p id="user-name">{{$store.state.user}}</p>
+        <p id="user-name">
+            {{$store.state.user}}
+        </p>
     </div>
 </template>
 
