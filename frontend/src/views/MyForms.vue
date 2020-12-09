@@ -3,10 +3,17 @@
         <div v-if="modalTint" id="modal-tint"></div>
         <TopBanner active="forms"></TopBanner>
         <div v-if="!formPreview" id="form-creation">
-            <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
-            <FormResponses ref="formResponses"></FormResponses>
-            <FieldAdd v-if="!formSaved"></FieldAdd>
-            <RecordFieldAdd v-if="!formSaved"></RecordFieldAdd>
+            <div v-if="formSaved">
+                <FormList ref="FormList" v-bind:targetUser="$store.state.user"></FormList>
+                <FormResponses ref="formResponses"></FormResponses>
+                <div class="create-button-container">
+                    <button @click="createForm">Create Form</button>
+                </div>
+            </div>
+            <div v-if="!formSaved">
+                <FieldAdd></FieldAdd>
+                <RecordFieldAdd></RecordFieldAdd>
+            </div>
             <FormCreation></FormCreation>
         </div>
         <FormDisplay v-bind:preview="true"></FormDisplay>
@@ -77,6 +84,11 @@
             showForm(formName) {
                 this.$refs.formResponses.loadForm(formName);
             },
+            createForm() {
+                this.fields = [];
+                this.formSaved = false;
+                this.formTitle = "";
+            },
             caps: function(text) {
                 if (!text)
                     return text;
@@ -106,5 +118,9 @@
         height: 100%;
         background-color: #00000066;
         z-index: 1;
+    }
+
+    .create-button-container {
+        text-align: center;
     }
 </style>

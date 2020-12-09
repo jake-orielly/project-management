@@ -31,9 +31,6 @@
                 </div>
             </div>
         </div>
-        <div v-if="$parent.formSaved">
-            <button @click="createForm">Create Form</button>
-        </div>
     </div>
 </template>
 
@@ -126,11 +123,6 @@
             },
             deleteField(field) {
                 this.$parent.fields.splice(this.$parent.fields.indexOf(field),1);
-            },
-            createForm() {
-                this.$parent.fields = [];
-                this.$parent.formSaved = false;
-                this.$parent.formTitle = "";
             },
             makeRecordField(field) {
                 let confirmation = confirm("Create a new record field based on " + field.label + "?")
