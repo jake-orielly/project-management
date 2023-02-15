@@ -4,6 +4,6 @@ flask_cors
 bcrypt
 
 # Prevents flask_restplus from installing problematic newer version
-Werkzeug==0.16.0
+Werkzeug==2.2.3
 flask_restplus
 pymongo
